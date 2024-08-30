@@ -1,0 +1,8 @@
+body {
+	display: flex;
+	flex-direction: row;
+	margin: 1;
+	padding: 1;
+	font-family: Arial, sans-serif;
+	height: 98vh; /* Set the body height to full viewport height */
+}

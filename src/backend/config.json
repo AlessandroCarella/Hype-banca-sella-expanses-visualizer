@@ -1,5 +1,5 @@
 {
-    "output_folder": "generatedFiles",
+    "output_folder": "../data/generatedFiles",
     "csv_encoding": "unicode_escape",
     "cleaned_csv_file": "cleaned_csv.csv",
     "names_file": "names list.txt",

@@ -1,3 +1,18 @@
+run the program:
+To start the Flask server using the command line (cmd), follow these steps:
+    1. Open a command prompt or terminal.
+    2. Navigate to the directory containing your repository (Hype-banca-sella-expanses-visualizer).
+    3. Run the following command:
+        python src/backend/uploadCsv.py
+
+To start the npm app (frontend), follow these steps:
+    1. Open a command prompt or terminal.
+    2. Navigate to the directory containing your repository (Hype-banca-sella-expanses-visualizer).
+    3. Run the following command:
+        npm install
+        npm start
+
+------------------------------------------
 todo:
 implement the backend part (check last chat in cursor)
 implement a more sfisticated csv in the folder search, the pattern in the csv file from the bank is always the same, find the most recent files and do not consider any other csv file in the folder other than the bank one

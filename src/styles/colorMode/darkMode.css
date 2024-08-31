@@ -1,20 +1,8 @@
 .dark-mode {
-    background-color: #333333;
+    background-color: #121212;
     color: #ffffff;
 }
 
-.dark-mode .switch {
-    background-color: #555555;
-}
-
-.dark-mode .switch-slider {
-    background-color: #888888;
-}
-
-.dark-mode .switch-slider:before {
-    background-color: #333333;
-}
-
-.dark-mode input:checked + .switch-slider {
-    background-color: #4CAF50;
+.dark-mode .color-mode-switch__label{
+    background-color: #212121;
 }

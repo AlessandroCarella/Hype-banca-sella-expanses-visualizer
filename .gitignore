@@ -6,6 +6,7 @@
 .ipynb
 old/
 names list.txt
+descriptions list.txt
 
 ##################################################
 #python gitignore

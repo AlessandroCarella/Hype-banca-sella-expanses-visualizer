@@ -1,8 +1,12 @@
 body {
+    font-family: "Mulish", sans-serif !important;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+
 	display: flex;
-	flex-direction: row;
-	margin: 1;
-	padding: 1;
-	font-family: Arial, sans-serif;
-	height: 98vh; /* Set the body height to full viewport height */
+    flex-direction: row;
+    margin: 10px;
+    padding: 10px;
+    height: 98vh;
 }

@@ -1,20 +1,8 @@
 .light-mode {
-    background-color: #ffffff;
-    color: #333333;
+    background-color: #f5f4f7;
+    color: #000;
 }
 
-.light-mode .switch {
-    background-color: #f0f0f0;
-}
-
-.light-mode .switch-slider {
-    background-color: #cccccc;
-}
-
-.light-mode .switch-slider:before {
-    background-color: #ffffff;
-}
-
-.light-mode input:checked + .switch-slider {
-    background-color: #2196F3;
+.light-mode .color-mode-switch__label{
+    background-color: #fff;
 }

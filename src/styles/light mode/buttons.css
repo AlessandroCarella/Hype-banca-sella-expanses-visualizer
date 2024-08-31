@@ -1,0 +1,9 @@
+.light-mode .button{
+    background-color: #fff;
+    color: #284bff;
+}
+
+.light-mode .button:hover{
+    background-color: #ffffff93;
+    color: #284bff;
+}

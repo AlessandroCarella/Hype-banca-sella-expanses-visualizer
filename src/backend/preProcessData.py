@@ -1,16 +1,11 @@
 import pandas as pd
 import os
 import json
-from typing import Dict, List
+from typing import List
 
-current_dir = os.path.dirname(os.path.abspath(__file__))
+from utils import current_dir, load_config
+config = load_config()
 
-def load_config() -> Dict:
-    """Load and return the configuration from config.json file."""
-    
-    with open(os.path.join(current_dir, 'config.json'), 'r') as config_file:
-        return json.load(config_file)
-    
 #jupyter file 1
 def clean_csv(df: pd.DataFrame, output_file: str) -> None:
     """Clean and process the CSV data, then write it to the output file."""
@@ -110,12 +105,7 @@ def save_expanses_names_and_descriptions_to_file(df: pd.DataFrame) -> None:
         for item in getDfColumnUniqueValues(df, "Descrizione"):
             file.write(str(item) + '\n')
 
-def preProcessData():
-    config = load_config()
-
-    csv_file = find_csv_file_in_directory(current)
-    df = pd.read_csv(csv_file, encoding=config['csv_encoding'])
-
+def preProcessData(df):
     #jupyter file 1
     output_file = f"{os.path.join(current_dir, config['output_folder'])}/{config['cleaned_csv_file']}"
     clean_csv(df, output_file)

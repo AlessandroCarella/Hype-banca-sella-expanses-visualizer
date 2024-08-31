@@ -10,27 +10,61 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <!-- styles -->
         <link rel="stylesheet" href="styles/main.css" />
-        <link rel="stylesheet" href="styles/colorMode/colorModeSwitch.css" />
-        <link rel="stylesheet" href="styles/colorMode/darkMode.css" />
-        <link rel="stylesheet" href="styles/colorMode/lightMode.css" />
+        <link rel="stylesheet" href="styles/colorModeSwitch.css" />
+        
+        <link rel="stylesheet" href="styles/dark mode/main.css" />
+        <link rel="stylesheet" href="styles/dark mode/buttons.css" />
+        
+        <link rel="stylesheet" href="styles/light mode/main.css" />
+        <link rel="stylesheet" href="styles/light mode/buttons.css" />
         <!-- font -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Mulish&display=swap" rel="stylesheet">
     </head>
     <body>
-        <div class="position-absolute top-0 end-0 p-3">
-            <div class="color-mode-switch">
-                <input type="checkbox" id="colorModeSwitch" class="color-mode-switch__checkbox">
-                <label for="colorModeSwitch" class="color-mode-switch__label">
-                    <span class="color-mode-switch__icon"></span>
-                </label>
-            </div>
+        <div class="color-mode-switch position-absolute top-0 end-0 p-3">
+            <input type="checkbox" id="colorModeSwitch" class="color-mode-switch__checkbox">
+            <label for="colorModeSwitch" class="color-mode-switch__label">
+                <span class="color-mode-switch__icon"></span>
+            </label>
         </div>
 
-        <div class="command-column">
-            <p>Hello world</p>
+        <div class="container d-flex justify-content-center align-items-center vh-100">
+            <div class="load-csv">
+                <input type="file" id="csvFile" accept=".csv" style="display: none;">
+                <button type="button" class="btn button" onclick="document.getElementById('csvFile').click()">Upload CSV</button>
+            </div>
         </div>
+        <script>
+            document.getElementById('csvFile').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    
+                    fetch('http://127.0.0.1:5000/upload', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            return response.json().then(err => { throw err; });
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Success:', data);
+                        // Handle the response from the server
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                        // Display error message to user
+                        alert('An error occurred: ' + (error.error || 'Unknown error'));
+                    });
+                }
+            });
+        </script>
         <script type="module" src="index.js"></script>
     </body>
 </html>

@@ -175,3 +175,24 @@ def preProcessData(df: pd.DataFrame, fileName: str) -> None:
  
     # Step 4: Save unique expense names and descriptions to files
     save_expanses_names_and_descriptions_to_file(df)
+
+def preProcessDataPreviouslyUploadedFile(df: pd.DataFrame, newFilePath:str) -> None:
+    """
+    Orchestrates the preprocessing of data by changing file extension, cleaning the CSV, 
+    splitting data by month, and saving expense names and descriptions.
+
+    Args:
+        df (pd.DataFrame): DataFrame to be processed.
+        fileName (str): Name of the input file.
+    """
+    # Step 1: Skipped since the files are already in the right extension
+
+    # Step 2: Clean the CSV and save it to the specified paths
+    output_file = f"{os.path.join(current_dir, config['output_folder'])}/{config['cleaned_csv_file']}"
+    df = clean_csv(df, output_file, newFilePath)
+
+    # Step 3: Split the DataFrame into separate CSV files by month
+    splitCsvByMonth(df)
+ 
+    # Step 4: Save unique expense names and descriptions to files
+    save_expanses_names_and_descriptions_to_file(df)

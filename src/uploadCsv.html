@@ -30,10 +30,15 @@
             </label>
         </div>
 
-        <div class="container d-flex justify-content-center align-items-center vh-100">
-            <div class="load-csv">
+        <div class="container d-flex flex-column justify-content-center align-items-center vh-100">
+            <div class="load-csv mb-3">
                 <input type="file" id="csvFile" accept=".csv" style="display: none;">
                 <button type="button" class="btn button" onclick="document.getElementById('csvFile').click()">Upload CSV</button>
+            </div>
+            <div class="select-previous-file">
+                <select id="previousFiles" class="form-control">
+                    <option value="">Select a previously uploaded file</option>
+                </select>
             </div>
         </div>
         <script type="module" src="index.js"></script>

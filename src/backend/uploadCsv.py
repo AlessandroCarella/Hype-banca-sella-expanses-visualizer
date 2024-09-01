@@ -23,8 +23,7 @@ def home():
     Returns:
         The rendered HTML template for the home page.
     """
-    # Render an HTML template for the home page; ensure 'index.html' is in the templates folder
-    return render_template('index.html')
+    return render_template('uploadCsv.html')
 
 @app.route('/upload', methods=['POST', 'OPTIONS'])
 def upload_file():
@@ -39,23 +38,8 @@ def upload_file():
     if request.method == 'OPTIONS':
         return jsonify({'success': True}), 200
 
-    # Check if the file is included in the request
-    if 'file' not in request.files:
-        return jsonify({'error': ERROR_MESSAGE_NO_FILE_PART}), 400
-    
     file = request.files['file']
-    
-    # Check if the uploaded file has a filename
-    if file.filename == '':
-        return jsonify({'error': ERROR_MESSAGE_NO_FILE_SELECTED}), 400
-
-    # Validate the filename against a predefined pattern
-    if not re.match(BANK_FILE_PATTERN, file.filename):
-        # Send an error response if the filename does not match the expected pattern
-        return jsonify({'error': ERROR_MESSAGE_FILE_PATTERN}), 400
-    else:
-        # Process the file if it passes validation
-        return process_file(file)
+    return process_file(file)
 
 def process_file(file):
     """

@@ -8,20 +8,5 @@ document.getElementById('csvFile').addEventListener('change', function(e) {
             method: 'POST',
             body: formData
         })
-        .then(response => {
-            if (!response.ok) {
-                return response.json().then(err => { throw err; });
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Success:', data);
-            // Handle the response from the server
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-            // Display error message to user
-            alert('An error occurred: ' + (error.error || 'Unknown error'));
-        });
     }
 });

@@ -7,6 +7,7 @@
 old/
 names list.txt
 descriptions list.txt
+.A A deleteGeneratedFiles.py
 
 ##################################################
 #python gitignore

@@ -14,6 +14,8 @@ To start the npm app (frontend), follow these steps:
 
 ------------------------------------------
 todo:
+if you try to change the extension of the file to xlsx the file opens stright aay, that means that the file is actually an excel file which the extension of has been changed, just need to convert from xlsx to csv
+
 implement the backend part (check last chat in cursor)
 implement a more sfisticated csv in the folder search, the pattern in the csv file from the bank is always the same, find the most recent files and do not consider any other csv file in the folder other than the bank one
 
@@ -92,4 +94,3 @@ data exploration:
 to remember:
 the csv file given by the bank is kinda currupted, or at least it is if you send it to telegram and download it back.
 just open the file in excel and save it back as a csv file.
-

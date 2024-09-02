@@ -1,23 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { initColorModeSwitch } from "./colorMode";
 
 import 'bootstrap/dist/css/bootstrap.css';
-
-import '../styles/main.css';
-import '../styles/colorModeSwitch.css';
-
-import '../styles/dark mode/main.css';
-import '../styles/dark mode/buttons.css';
-
-import '../styles/light mode/main.css';
-import '../styles/light mode/buttons.css';
 
 function UploadCsv() {
     const [file, setFile] = useState(null);
     const [previousFiles, setPreviousFiles] = useState([]);
 
     useEffect(() => {
-        initColorModeSwitch();
         // Fetch previously uploaded files
         fetch("/api/getPreviousFilesNames")
             .then(response => response.json())
@@ -111,13 +100,7 @@ function UploadCsv() {
     };
 
     return (
-        <div className="UploadCsv container d-flex flex-column  align-items-center justify-content-center vh-100">
-            <div className="color-mode-switch position-absolute top-0 end-0 p-3">
-                <input type="checkbox" id="colorModeSwitch" className="color-mode-switch__checkbox" />
-                <label htmlFor="colorModeSwitch" className="color-mode-switch__label">
-                    <span className="color-mode-switch__icon"></span>
-                </label>
-            </div>
+        <div className="UploadCsv container d-flex flex-column align-items-center justify-content-center vh-100">
             <div className="load-csv mb-3">
                 <input type="file" accept=".csv" onChange={handleFileChange} style={{ display: "none" }} id="csvFile" />
                 <button type="button" className="btn button" onClick={() => document.getElementById('csvFile').click()}>Upload CSV</button>

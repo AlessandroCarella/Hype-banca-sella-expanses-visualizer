@@ -17,20 +17,14 @@ C:\Users\alex1\Desktop\Hype-banca-sella-expanses-visualizer\backend\venv\Scripts
 
 ------------------------------------------
 todo:
-if you try to change the extension of the file to xlsx the file opens stright aay, that means that the file is actually an excel file which the extension of has been changed, just need to convert from xlsx to csv
-
-implement the backend part (check last chat in cursor)
-implement a more sfisticated csv in the folder search, the pattern in the csv file from the bank is always the same, find the most recent files and do not consider any other csv file in the folder other than the bank one
+implement more checks on the file type, name (check for bank default), columns in it and implement the fact that the file does not get saved if it is not valid.
+The errors must be informative to the user so that they know what to do after and they can correct the error or override it.
 
 fai prelievo da atm per vedere come viene registrato sul csv
 
 everything that is not "Risparmi" in the column tipologia must be personalized by the user to split the type of transaction in various categories (like "fun", "food", "health", etc...)
 
-automatically move the cleaned_csv file to the data folder in the src/data folder and rename it to data.csv
-
 create install guide for python, node etc (i think only the node installer is necessary because it installs python by default)
-
-use this font in the app: https://fonts.google.com/specimen/Mulish?query=Mulish
 
 make 2 views, one let you choose between months and the other one let you choose between years.
 when the month visualization each category is in a different color and the color is the same for the same category in different months.
@@ -47,8 +41,6 @@ pages:
     graphs
     user settings
     error page
-
-understand how to give the path of the csv file to the backend part and where to store the csv file when it gets loaded
 
 ------------------------------------------
 colors:

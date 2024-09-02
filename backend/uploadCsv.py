@@ -74,8 +74,11 @@ def process_file():
 @app.route('/api/getPreviousFilesNames', methods=['GET'])
 def get_previous_files():
     upload_folder = os.path.join(app.config['ROOT_FROM_BACKEND'], app.config['USER_FILES_FOLDER_NAME'])
-    files = os.listdir(upload_folder)
-    return jsonify({"files": files}), 200
+    if not os.path.exists(upload_folder):
+        return jsonify({"files": []}), 200
+    else:
+        files = os.listdir(upload_folder)
+        return jsonify({"files": files}), 200
 
 @app.route('/api/getFile', methods=['GET'])
 def get_file():

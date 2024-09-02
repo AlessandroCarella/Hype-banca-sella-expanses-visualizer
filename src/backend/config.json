@@ -1,9 +1,0 @@
-{
-    "output_folder": "../data/generatedFiles",
-    "csv_encoding": "unicode_escape",
-    "cleaned_csv_file": "cleaned_csv.csv",
-    "names_file": "names list.txt",
-    "descriptions_file": "descriptions list.txt",
-    "user_files_folder_name": "user files",
-    "user_files_previously_uploaded_files_folder_name": "previously uploaded files"
-}

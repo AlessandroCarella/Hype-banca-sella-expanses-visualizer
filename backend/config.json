@@ -1,0 +1,10 @@
+{
+    "FLASK_DEBUG": true,
+    "USER_FILES_FOLDER_NAME": "user files",
+    "ROOT_FROM_BACKEND": "..",
+    "FRONTEND_FROM_BACKEND": "../frontend",
+    "GENERATED_FILES_OUTPUT_FOLDER": "generated files",
+    "CLEANED_CSV_FILE_NAME": "cleaned_csv.csv",
+    "NAME_LIST_FILE_NAME": "names list.txt",
+    "DESCRIPTION_LIST_FILE_NAME": "descriptions list.txt"
+}

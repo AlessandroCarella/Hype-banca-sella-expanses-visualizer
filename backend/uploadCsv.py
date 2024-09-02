@@ -1,11 +1,11 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 import os
 import json
 from werkzeug.utils import secure_filename
 
 from constants import ALLOWED_EXTENSIONS
 from utils import get_config
-from preProcessData import preProcessData
+from uploadCsvModules.preProcessData import preProcessData
 
 app = Flask(__name__)
 
@@ -70,6 +70,26 @@ def process_file():
         return jsonify({"error": f"Error processing file: the key {str(e)} is not in the uploaded file. Please check the file and upload one from the bank."}), 500
     except Exception as e:
         return jsonify({"error": f"Error processing file: {str(e)}; {str(e.__class__)}"}), 500
+
+@app.route('/api/getPreviousFilesNames', methods=['GET'])
+def get_previous_files():
+    upload_folder = os.path.join(app.config['ROOT_FROM_BACKEND'], app.config['USER_FILES_FOLDER_NAME'])
+    files = os.listdir(upload_folder)
+    return jsonify({"files": files}), 200
+
+@app.route('/api/getFile', methods=['GET'])
+def get_file():
+    filename = request.args.get('filename')
+    if not filename:
+        return jsonify({"error": "No filename provided"}), 400
+    
+    upload_folder = os.path.join(app.config['ROOT_FROM_BACKEND'], app.config['USER_FILES_FOLDER_NAME'])
+    filepath = os.path.join(upload_folder, filename)
+    
+    if not os.path.exists(filepath):
+        return jsonify({"error": "File not found"}), 404
+    
+    return send_file(filepath)
 
 if __name__ == '__main__':
     app.run(debug=app.config['FLASK_DEBUG'])

@@ -3,10 +3,14 @@
   "version": "1.0.0",
   "scripts": {
     "start": "concurrently \"npm run start-backend\" \"npm run start-frontend\"",
-    "start-backend": "cd backend && .\\venv\\Scripts\\python app.py",
+    "start-backend": "cd backend && .\\venv\\Scripts\\python uploadCsv.py",
     "start-frontend": "cd frontend && npm start"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.3",
+    "react-bootstrap": "^2.10.4"
   }
 }

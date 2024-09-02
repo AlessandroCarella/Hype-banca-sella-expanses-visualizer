@@ -12,6 +12,9 @@ To start the npm app (frontend), follow these steps:
         npm install
         npm start
 
+To install libraries in the venv:
+C:\Users\alex1\Desktop\Hype-banca-sella-expanses-visualizer\backend\venv\Scripts\python.exe -m pip install *package*
+
 ------------------------------------------
 todo:
 if you try to change the extension of the file to xlsx the file opens stright aay, that means that the file is actually an excel file which the extension of has been changed, just need to convert from xlsx to csv

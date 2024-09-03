@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import FoldableListItem from "./FoldableListItem";
-import { initializeOpenItems } from "./helpers/FoldableList";
+import { initializeOpenItems, updateSelections, updateData } from "./helpers/FoldableList";
 import "../styles/components/FoldableList.css";
 
 const FoldableList = ({ data, namesList, isInnermost = false, onSelect, onDataUpdate }) => {
@@ -20,37 +20,16 @@ const FoldableList = ({ data, namesList, isInnermost = false, onSelect, onDataUp
     };
 
     const handleSelect = (key, selectedOption) => {
-        let updatedData = { ...data };
-        
-        if (selectedOption === "Free") {
-            // Remove the selection
-            setSelections((prevSelections) => {
-                const { [key]: removed, ...rest } = prevSelections;
-                return rest;
-            });
-            setSelectedOptions((prevOptions) =>
-                prevOptions.filter((option) => option !== selections[key])
-            );
-            delete updatedData[key];
-        } else {
-            // Add or update the selection
-            setSelections((prevSelections) => ({
-                ...prevSelections,
-                [key]: selectedOption,
-            }));
-            setSelectedOptions((prevOptions) => [
-                ...prevOptions.filter((option) => option !== selections[key]),
-                selectedOption,
-            ]);
-            updatedData[key] = selectedOption;
-        }
+        const { updatedSelections, updatedSelectedOptions } = updateSelections(key, selectedOption, selections, selectedOptions);
+        setSelections(updatedSelections);
+        setSelectedOptions(updatedSelectedOptions);
 
-        // Call the onDataUpdate prop with the updated data
+        const updatedData = updateData(key, selectedOption, data);
+        
         if (onDataUpdate && typeof onDataUpdate === "function") {
             onDataUpdate(updatedData);
         }
 
-        // Existing onSelect call
         if (onSelect && typeof onSelect === "function") {
             onSelect(key, selectedOption);
         }

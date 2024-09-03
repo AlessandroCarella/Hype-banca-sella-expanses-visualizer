@@ -10,3 +10,34 @@ export const initializeOpenItems = (data, isInnermost) => {
     }
     return {};
 };
+
+export const updateSelections = (key, selectedOption, selections, selectedOptions) => {
+    let updatedSelections = { ...selections };
+    let updatedSelectedOptions = [...selectedOptions];
+
+    if (selectedOption === "Free") {
+        const { [key]: removed, ...rest } = updatedSelections;
+        updatedSelections = rest;
+        updatedSelectedOptions = updatedSelectedOptions.filter((option) => option !== selections[key]);
+    } else {
+        updatedSelections[key] = selectedOption;
+        updatedSelectedOptions = [
+            ...updatedSelectedOptions.filter((option) => option !== selections[key]),
+            selectedOption,
+        ];
+    }
+
+    return { updatedSelections, updatedSelectedOptions };
+};
+
+export const updateData = (key, selectedOption, data) => {
+    let updatedData = { ...data };
+    
+    if (selectedOption === "Free") {
+        delete updatedData[key];
+    } else {
+        updatedData[key] = selectedOption;
+    }
+
+    return updatedData;
+};

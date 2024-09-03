@@ -12,26 +12,33 @@ export const handleClickOutside = (ref, callback) => {
 };
 
 export const renderOptions = (options, disabled, onSelect, selectedValues, allSelectedOptions) => {
-    // Sort options based on their selection status across all selects
-    const sortedOptions = [...options].sort((a, b) => {
-        const aSelected = allSelectedOptions.includes(a);
-        const bSelected = allSelectedOptions.includes(b);
-        if (aSelected === bSelected) return 0;
-        return aSelected ? 1 : -1;
-    });
+    const sortedOptions = sortOptions(options, allSelectedOptions);
 
     return sortedOptions.map(option => (
         <li
             key={option}
             onClick={() => onSelect(option)}
-            className={`
-                ${disabled.includes(option) ? "disabled" : ""}
-                ${selectedValues.includes(option) ? "selected" : ""}
-            `}
+            className={getOptionClassName(option, disabled, selectedValues)}
         >
             {option}
         </li>
     ));
+};
+
+export const sortOptions = (options, allSelectedOptions) => {
+    return [...options].sort((a, b) => {
+        const aSelected = allSelectedOptions.includes(a);
+        const bSelected = allSelectedOptions.includes(b);
+        if (aSelected === bSelected) return 0;
+        return aSelected ? 1 : -1;
+    });
+};
+
+export const getOptionClassName = (option, disabled, selectedValues) => {
+    return `
+        ${disabled.includes(option) ? "disabled" : ""}
+        ${selectedValues.includes(option) ? "selected" : ""}
+    `;
 };
 
 export const calculatePosition = (element) => {
@@ -44,4 +51,15 @@ export const calculatePosition = (element) => {
     } else {
         return { top: '100%', bottom: 'auto' };
     }
+};
+
+export const toggleOption = (option, value) => {
+    const newValue = Array.isArray(value) ? [...value] : [];
+    const index = newValue.indexOf(option);
+    if (index === -1) {
+        newValue.push(option);
+    } else {
+        newValue.splice(index, 1);
+    }
+    return newValue;
 };

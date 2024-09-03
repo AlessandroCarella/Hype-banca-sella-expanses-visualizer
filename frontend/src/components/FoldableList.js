@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import SelectValue from './SelectValue';
+import SelectWithHoverDictValToHoveValAsInput from './SelectWithHoverDictValToHoveValAsInput';
 import '../styles/components/FoldableList.css';
 
 const FoldableList = ({ data, namesDescriptionsDict, isInnermost = false }) => {
@@ -30,7 +30,13 @@ const FoldableList = ({ data, namesDescriptionsDict, isInnermost = false }) => {
           >
             {key}
             {isLastItem(value) && (
-              <SelectValue namesDescriptionsDict={namesDescriptionsDict} />
+              <SelectWithHoverDictValToHoveValAsInput
+                options={namesDescriptionsDict}
+                onChange={(selectedOption) => {
+                  // Handle the selected option here if needed
+                  console.log(`Selected option for ${key}:`, selectedOption);
+                }}
+              />
             )}
           </div>
           {openItems[key] && !isLastItem(value) && (

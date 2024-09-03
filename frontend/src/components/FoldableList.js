@@ -3,7 +3,8 @@ import FoldableListItem from "./FoldableListItem";
 import { initializeOpenItems } from "./helpers/FoldableList";
 import "../styles/components/FoldableList.css";
 
-const FoldableList = ({ data, namesList, isInnermost = false, onSelect }) => {
+const FoldableList = ({ data, namesList, isInnermost = false, onSelect, onDataUpdate }) => {
+    console.log("data", data)
     const [openItems, setOpenItems] = useState({});
     const [selections, setSelections] = useState({});
     const [selectedOptions, setSelectedOptions] = useState([]);
@@ -20,24 +21,35 @@ const FoldableList = ({ data, namesList, isInnermost = false, onSelect }) => {
     };
 
     const handleSelect = (key, selectedOption) => {
-        if (selectedOption === "Free") {
-            setSelections((prevSelections) => {
-                const { [key]: removed, ...rest } = prevSelections;
-                return rest;
-            });
-            setSelectedOptions((prevOptions) =>
-                prevOptions.filter((option) => option !== selections[key])
-            );
-        } else {
-            setSelections((prevSelections) => ({
-                ...prevSelections,
-                [key]: selectedOption,
-            }));
-            setSelectedOptions((prevOptions) => [
-                ...prevOptions,
-                selectedOption,
-            ]);
+        let updatedData = { ...data };
+        let currentObj = updatedData;
+        const keys = key.split('.');
+
+        // Traverse the nested structure
+        for (let i = 0; i < keys.length - 1; i++) {
+            currentObj = currentObj[keys[i]];
         }
+
+        // Update the value at the final key
+        currentObj[keys[keys.length - 1]] = selectedOption;
+
+        setSelections((prevSelections) => ({
+            ...prevSelections,
+            [key]: selectedOption,
+        }));
+        setSelectedOptions((prevOptions) => [
+            ...prevOptions.filter((option) => option !== selections[key]),
+            selectedOption,
+        ]);
+
+        // Call the onDataUpdate prop with the updated data
+        if (onDataUpdate && typeof onDataUpdate === "function") {
+            onDataUpdate(updatedData);
+        }
+
+        console.log("Updated data:", updatedData);
+
+        // Existing onSelect call
         if (onSelect && typeof onSelect === "function") {
             onSelect(key, selectedOption);
         }

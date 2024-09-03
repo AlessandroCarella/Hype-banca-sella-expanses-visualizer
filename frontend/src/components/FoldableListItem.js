@@ -16,7 +16,7 @@ const FoldableListItem = ({
 }) => {
     const renderCustomSelect = () => (
         <CustomSelect
-            options={["Free", ...namesList]}
+            options={namesList} // Remove "Free" from the options
             value={selections[itemKey] || []}
             onChange={(selectedOptions) => handleSelect(itemKey, selectedOptions)}
             disabled={selectedOptions}

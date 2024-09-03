@@ -4,6 +4,7 @@ import FoldableList from '../components/FoldableList';
 const SelectOptions = () => {
   const [expenseDictionary, setExpenseDictionary] = useState({});
   const [namesList, setNamesList] = useState([]);
+  const [data, setData] = useState(/* your initial data structure */);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,14 +27,14 @@ const SelectOptions = () => {
     fetchData();
   }, []);
 
-  const handleSelect = (key, value) => {
-    console.log(`Selected ${value} for ${key}`);
-    // Handle the selection as needed
-  };
+  const handleDataUpdate = (updatedData) => {
+    setData(updatedData);
+    console.log("Data updated in parent:", updatedData);
+};
 
   return (
     <div className='foldable-list-container'>
-      <FoldableList data={expenseDictionary} namesList={namesList} onSelect={handleSelect}/>
+      <FoldableList data={expenseDictionary} namesList={namesList} onSelect={handleDataUpdate}/>
     </div>
   );
 };

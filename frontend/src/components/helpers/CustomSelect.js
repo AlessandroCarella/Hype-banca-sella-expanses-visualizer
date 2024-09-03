@@ -12,18 +12,30 @@ export const handleClickOutside = (ref, callback) => {
 };
 
 export const renderOptions = (options, disabled, onSelect, selectedValues) => {
-    return options.map((option) => (
-        <li
-            key={option}
-            onClick={() => onSelect(option)}
-            className={`
-                ${disabled.includes(option) ? "disabled" : ""}
-                ${selectedValues && selectedValues.includes(option) ? "selected" : ""}
-            `}
-        >
-            {option}
-        </li>
-    ));
+    // Separate selected and unselected options
+    const selectedOptions = options.filter(option => selectedValues.includes(option));
+    const unselectedOptions = options.filter(option => !selectedValues.includes(option));
+
+    // Render unselected options first, then selected options
+    return [
+        ...unselectedOptions.map(renderOption),
+        ...selectedOptions.map(renderOption)
+    ];
+
+    function renderOption(option) {
+        return (
+            <li
+                key={option}
+                onClick={() => onSelect(option)}
+                className={`
+                    ${disabled.includes(option) ? "disabled" : ""}
+                    ${selectedValues.includes(option) ? "selected" : ""}
+                `}
+            >
+                {option}
+            </li>
+        );
+    }
 };
 
 export const calculatePosition = (element) => {

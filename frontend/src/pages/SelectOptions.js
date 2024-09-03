@@ -1,10 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, createContext, useContext } from 'react';
 import FoldableList from '../components/FoldableList';
+
+// Create the context
+const SelectedOptionsContext = createContext();
+
+// Create a custom hook for using the context
+const useSelectedOptions = () => useContext(SelectedOptionsContext);
 
 const SelectOptions = () => {
   const [expenseDictionary, setExpenseDictionary] = useState({});
   const [namesList, setNamesList] = useState([]);
   const [data, setData] = useState(/* your initial data structure */);
+  const [selectedOptions, setSelectedOptions] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,13 +36,19 @@ const SelectOptions = () => {
 
   const handleDataUpdate = (updatedData) => {
     setData(updatedData);
-};
+  };
 
   return (
-    <div className='foldable-list-container'>
-      <FoldableList data={expenseDictionary} namesList={namesList} onSelect={handleDataUpdate}/>
-    </div>
+    <SelectedOptionsContext.Provider value={{ selectedOptions, setSelectedOptions }}>
+      <div className='foldable-list-container'>
+        <FoldableList 
+          data={expenseDictionary} 
+          namesList={namesList} 
+          onSelect={handleDataUpdate}
+        />
+      </div>
+    </SelectedOptionsContext.Provider>
   );
 };
 
-export default SelectOptions;
+export { SelectOptions as default, useSelectedOptions };

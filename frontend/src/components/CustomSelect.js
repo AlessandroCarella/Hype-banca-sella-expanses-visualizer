@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { handleClickOutside, renderOptions } from "./helpers/CustomSelect";
 
-const CustomSelect = ({ options, value, onChange, disabled, selectedOptions }) => {
+const CustomSelect = ({ options, value, onChange, disabled, selectedOptions, onOptionSelect }) => {
     const [isOpen, setIsOpen] = useState(false);
     const selectRef = useRef(null);
 
@@ -11,8 +11,10 @@ const CustomSelect = ({ options, value, onChange, disabled, selectedOptions }) =
             const index = newValue.indexOf(option);
             if (index === -1) {
                 newValue.push(option);
+                onOptionSelect(option); // Notify parent about the newly selected option
             } else {
                 newValue.splice(index, 1);
+                onOptionSelect(option, true); // Notify parent about the deselected option
             }
             onChange(newValue);
         }

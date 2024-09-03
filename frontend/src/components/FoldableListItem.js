@@ -2,6 +2,7 @@ import React from "react";
 import CustomSelect from "./CustomSelect";
 import FoldableList from "./FoldableList";
 import { isLastItem } from "./helpers/FoldableList";
+import { useSelectedOptions } from "../pages/SelectOptions";
 
 const FoldableListItem = ({
     itemKey,
@@ -11,17 +12,28 @@ const FoldableListItem = ({
     selections,
     handleSelect,
     namesList,
-    selectedOptions,
     onSelect,
-    updatedValue,
 }) => {
+    const { selectedOptions, setSelectedOptions } = useSelectedOptions();
+
+    const handleOptionSelect = (option, isDeselect = false) => {
+        setSelectedOptions(prev => {
+            if (isDeselect) {
+                return prev.filter(item => item !== option);
+            } else {
+                return [...prev, option];
+            }
+        });
+    };
+
     const renderCustomSelect = () => (
         <CustomSelect
-            options={namesList} // Remove "Free" from the options
+            options={namesList}
             value={selections[itemKey] || []}
             onChange={(selectedOptions) => handleSelect(itemKey, selectedOptions)}
             disabled={selectedOptions}
             selectedOptions={selections[itemKey] || []}
+            onOptionSelect={handleOptionSelect}
         />
     );
 

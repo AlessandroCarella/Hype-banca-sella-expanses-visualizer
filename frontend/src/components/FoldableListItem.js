@@ -20,6 +20,7 @@ const FoldableListItem = ({
             value={selections[itemKey] || ""}
             onChange={(selectedOption) => handleSelect(itemKey, selectedOption)}
             disabled={selectedOptions}
+            selectedOptions={selectedOptions} // Pass the selectedOptions prop here
         />
     );
 

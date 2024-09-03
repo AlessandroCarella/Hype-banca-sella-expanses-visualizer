@@ -55,3 +55,24 @@
     color: #ccc;
     cursor: not-allowed;
   }
+  
+  .custom-select-container {
+    width: 100%;
+  }
+  
+  .selected-options-box {
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+  }
+  
+  .selected-option {
+    display: inline-block;
+    margin: 2px;
+    padding: 2px 6px;
+    background-color: #e0e0e0;
+    border-radius: 3px;
+    font-size: 0.9em;
+  }

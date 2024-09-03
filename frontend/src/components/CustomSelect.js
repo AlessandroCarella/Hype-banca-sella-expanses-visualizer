@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { handleClickOutside, renderOptions } from "./helpers/CustomSelect";
 
-const CustomSelect = ({ options, value, onChange, disabled }) => {
+const CustomSelect = ({ options, value, onChange, disabled, selectedOptions }) => {
     const [isOpen, setIsOpen] = useState(false);
     const selectRef = useRef(null);
 
@@ -17,20 +17,29 @@ const CustomSelect = ({ options, value, onChange, disabled }) => {
     }, []);
 
     return (
-        <div className="custom-select" ref={selectRef}>
-            <div
-                className={`select-header ${isOpen ? "open" : ""}`}
-                onClick={(e) => {
-                    e.stopPropagation();
-                    setIsOpen(!isOpen);
-                }}
-            >
-                {value || "Select an option"}
+        <div className="custom-select-container">
+            <div className="custom-select" ref={selectRef}>
+                <div
+                    className={`select-header ${isOpen ? "open" : ""}`}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setIsOpen(!isOpen);
+                    }}
+                >
+                    {value || "Select an option"}
+                </div>
+                {isOpen && (
+                    <ul className="options-list">
+                        {renderOptions(options, disabled, handleSelect)}
+                    </ul>
+                )}
             </div>
-            {isOpen && (
-                <ul className="options-list">
-                    {renderOptions(options, disabled, handleSelect)}
-                </ul>
+            {selectedOptions && selectedOptions.length > 0 && (
+                <div className="selected-options-box">
+                    {selectedOptions.map((option, index) => (
+                        <span key={index} className="selected-option">{option}</span>
+                    ))}
+                </div>
             )}
         </div>
     );

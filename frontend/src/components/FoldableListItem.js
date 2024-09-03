@@ -13,6 +13,7 @@ const FoldableListItem = ({
     namesList,
     selectedOptions,
     onSelect,
+    updatedValue,
 }) => {
     const renderCustomSelect = () => (
         <CustomSelect

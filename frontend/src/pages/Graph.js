@@ -12,12 +12,6 @@ function Graphs() {
         setSelectedDate(getInitialSelectedDate(dates));
     }, [dates]);
 
-    useEffect(() => {
-        if (selectedDate) {
-            console.log("Selected date:", selectedDate);
-        }
-    }, [selectedDate]);
-
     return (
         <div>
             <DatesCarousel

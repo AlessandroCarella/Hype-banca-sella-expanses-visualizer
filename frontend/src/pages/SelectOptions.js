@@ -29,7 +29,6 @@ const SelectOptions = () => {
 
   const handleDataUpdate = (updatedData) => {
     setData(updatedData);
-    console.log("Data updated in parent:", updatedData);
 };
 
   return (

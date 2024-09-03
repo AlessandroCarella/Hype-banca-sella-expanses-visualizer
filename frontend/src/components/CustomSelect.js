@@ -5,12 +5,10 @@ import {
     calculatePosition, 
     toggleOption 
 } from "./helpers/CustomSelect";
-import { useSelectedOptions } from "../pages/SelectOptions";
 
-const CustomSelect = ({ options, value, onChange, disabled, onOptionSelect }) => {
+const CustomSelect = ({ options, value, onChange, disabled, onOptionSelect, selectedOptions }) => {
     const [isOpen, setIsOpen] = useState(false);
     const selectRef = useRef(null);
-    const { selectedOptions } = useSelectedOptions();
 
     useEffect(() => {
         return handleClickOutside(selectRef, () => setIsOpen(false));

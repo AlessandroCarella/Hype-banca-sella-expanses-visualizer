@@ -3,31 +3,12 @@ export const isLastItem = (value) =>
 
 export const initializeOpenItems = (data, isInnermost) => {
     if (isInnermost) {
-        return Object.keys(data).reduce(
+        return Object.keys(data || {}).reduce(
             (acc, key) => ({ ...acc, [key]: true }),
             {}
         );
     }
     return {};
-};
-
-export const updateSelections = (key, selectedOption, selections, selectedOptions) => {
-    let updatedSelections = { ...selections };
-    let updatedSelectedOptions = [...selectedOptions];
-
-    if (selectedOption === "Free") {
-        const { [key]: removed, ...rest } = updatedSelections;
-        updatedSelections = rest;
-        updatedSelectedOptions = updatedSelectedOptions.filter((option) => option !== selections[key]);
-    } else {
-        updatedSelections[key] = selectedOption;
-        updatedSelectedOptions = [
-            ...updatedSelectedOptions.filter((option) => option !== selections[key]),
-            selectedOption,
-        ];
-    }
-
-    return { updatedSelections, updatedSelectedOptions };
 };
 
 export const updateData = (key, selectedOption, data) => {

@@ -6,8 +6,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 //Pages
 import UploadCsv from "./pages/UploadCsv";
 import Graphs from "./pages/Graph";
-import SelectOptions from "./pages/SelectOptions";
-
+import SelectOptions, { useSelectedOptions, SelectedOptionsProvider } from './pages/SelectOptions';
 //Components
 import { ColorModeSwitch } from "./components/colorModeSwitch";
 
@@ -24,13 +23,15 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
     <React.StrictMode>
-        <Router>
-            <ColorModeSwitch />
-            <Routes>
-                <Route path="/" element={<UploadCsv />} />
-                <Route path="/graphs" element={<Graphs />} />
-                <Route path="/select-options" element={<SelectOptions />} />
-            </Routes>
-        </Router>
+        <SelectedOptionsProvider>
+            <Router>
+                <ColorModeSwitch />
+                <Routes>
+                    <Route path="/" element={<UploadCsv />} />
+                    <Route path="/graphs" element={<Graphs />} />
+                    <Route path="/select-options" element={<SelectOptions />} />
+                </Routes>
+            </Router>
+        </SelectedOptionsProvider>
     </React.StrictMode>
 );

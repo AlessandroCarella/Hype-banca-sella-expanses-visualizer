@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import FoldableListItem from "./FoldableListItem";
-import { initializeOpenItems, updateSelections, updateData } from "./helpers/FoldableList";
+import { initializeOpenItems, updateData } from "./helpers/FoldableList";
 import "../styles/components/FoldableList.css";
 
-const FoldableList = ({ data, namesList, isInnermost = false, onSelect, onDataUpdate }) => {
+const FoldableList = ({ data, namesList, isInnermost = false, onDataUpdate, selectedOptions }) => {
     const [openItems, setOpenItems] = useState({});
-    const [selections, setSelections] = useState({});
-    const [selectedOptions, setSelectedOptions] = useState([]);
 
     useEffect(() => {
         setOpenItems(initializeOpenItems(data, isInnermost));
@@ -20,35 +18,24 @@ const FoldableList = ({ data, namesList, isInnermost = false, onSelect, onDataUp
     };
 
     const handleSelect = (key, selectedOption) => {
-        const { updatedSelections, updatedSelectedOptions } = updateSelections(key, selectedOption, selections, selectedOptions);
-        setSelections(updatedSelections);
-        setSelectedOptions(updatedSelectedOptions);
-
-        const updatedData = updateData(key, selectedOption, data);
-        
-        if (onDataUpdate && typeof onDataUpdate === "function") {
-            onDataUpdate(updatedData);
-        }
-
-        if (onSelect && typeof onSelect === "function") {
-            onSelect(key, selectedOption);
-        }
+        const updatedData = updateData(key, selectedOption, selectedOptions);
+        onDataUpdate(updatedData);
     };
 
     return (
         <div className="foldable-list">
-            {Object.entries(data).map(([key, value]) => (
+            {Object.entries(data || {}).map(([key, value]) => (
                 <FoldableListItem
                     key={key}
                     itemKey={key}
                     value={value}
                     isOpen={openItems[key]}
                     toggleOpen={() => toggleOpen(key)}
-                    selections={selections}
+                    selections={selectedOptions}
                     handleSelect={handleSelect}
                     namesList={namesList}
+                    onDataUpdate={onDataUpdate}
                     selectedOptions={selectedOptions}
-                    onSelect={onSelect}
                 />
             ))}
         </div>

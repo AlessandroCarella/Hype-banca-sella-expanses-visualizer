@@ -31,11 +31,8 @@ const expenseDictionary = {
   }
 }
 
-
-// Extract names and descriptions from the dictionary
-const names = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
-
-const descriptions = {
+// Replace the separate names and descriptions with a single dictionary
+const namesDescriptionsDict = {
   "1": "10",
   "2": "20",
   "3": "30",
@@ -52,7 +49,7 @@ const SelectOptions = () => {
   return (
     <div>
       <h2>Select Options</h2>
-      <FoldableList data={expenseDictionary} names={names} descriptions={descriptions} />
+      <FoldableList data={expenseDictionary} namesDescriptionsDict={namesDescriptionsDict} />
     </div>
   );
 };

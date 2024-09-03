@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import SelectValue from './SelectValue';
 import '../styles/components/FoldableList.css';
 
-const FoldableList = ({ data, names, descriptions, isInnermost = false }) => {
+const FoldableList = ({ data, namesDescriptionsDict, isInnermost = false }) => {
   const [openItems, setOpenItems] = useState({});
 
   useEffect(() => {
@@ -30,15 +30,14 @@ const FoldableList = ({ data, names, descriptions, isInnermost = false }) => {
           >
             {key}
             {isLastItem(value) && (
-              <SelectValue names={names} descriptions={descriptions} />
+              <SelectValue namesDescriptionsDict={namesDescriptionsDict} />
             )}
           </div>
           {openItems[key] && !isLastItem(value) && (
             <div className="foldable-list-content">
               <FoldableList 
                 data={value} 
-                names={names} 
-                descriptions={descriptions} 
+                namesDescriptionsDict={namesDescriptionsDict} 
                 isInnermost={isLastItem(Object.values(value)[0])}
               />
             </div>

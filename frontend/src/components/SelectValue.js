@@ -1,29 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import '../styles/components/SelectValue.css';
 
-const SelectValue = ({ names, descriptions }) => {
-  const [selected, setSelected] = useState('');
-
+const SelectValue = ({ namesDescriptionsDict }) => {
   return (
-    <div className="select-value-container">
-      <select 
-        className="select-value-select"
-        onChange={(e) => setSelected(e.target.value)} 
-        value={selected}
-      >
-        <option value="">Select</option>
-        {names.map((name) => (
-          <option key={name} value={name}>
-            {name}
-          </option>
-        ))}
-      </select>
-      {selected && (
-        <div className="select-value-description">
-          <strong>Description:</strong> {descriptions[selected]}
-        </div>
-      )}
-    </div>
+    <select className="select-value">
+      <option value="">Select a value</option>
+      {Object.entries(namesDescriptionsDict).map(([key, value]) => (
+        <option key={key} value={key}>
+          {value}
+        </option>
+      ))}
+    </select>
   );
 };
 

@@ -9,6 +9,7 @@ from routes.selectPreviousCsv import get_previous_files, get_file
 
 # User categories setted
 from routes.userCategoriesSetted import user_categories_setted
+from routes.getElementsSettingPage import getUserExpenseDictionary, getNamesList
 
 app = Flask(__name__)
 
@@ -33,10 +34,18 @@ def getFile():
     return get_file(app)
 ########################################################
 ########################################################
-# User categories setted
+# User categories
 @app.route('/api/userCategoriesSetted', methods=['GET'])
 def check_user_categories_setted():
     return user_categories_setted(app)
+
+@app.route('/api/getUserExpenseDictionary', methods=['GET'])
+def get_user_expense_dictionary():
+    return getUserExpenseDictionary(app)
+
+@app.route('/api/getExpansesNamesList', methods=['GET'])
+def get_expanses_names_list():
+    return getNamesList(app)
 
 ########################################################
 

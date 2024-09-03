@@ -1,6 +1,8 @@
-.foldable-list {
+.foldable-list-container{
+    margin-top: 60px;
+    margin-right: 20px;
     margin-left: 20px;
-    width: 100%;
+    width: calc(100% - 40px);
 }
 
 .foldable-list-item {
@@ -17,7 +19,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 30px;
+    height: 50px; /* Increased from 30px to 40px */
     padding: 0 10px;
     box-sizing: border-box;
     flex-grow: 1;
@@ -43,7 +45,7 @@
 }
 
 .foldable-list-content {
-    padding-left: 10px;
+    padding-left: 50px;
     width: 100%;
 }
 
@@ -63,6 +65,7 @@
     background-color: #323a64;
     color: #284bff;
     border: 1px solid #284bff;
+    padding: 0 10px; /* Added padding */
 }
 
 .dark-mode .foldable-list-toggle:hover {
@@ -74,6 +77,7 @@
     background-color: #fff;
     color: #284bff;
     border: 1px solid #284bff;
+    padding: 0 10px; /* Added padding */
 }
 
 .light-mode .foldable-list-toggle:hover {

@@ -11,12 +11,15 @@ export const handleClickOutside = (ref, callback) => {
     };
 };
 
-export const renderOptions = (options, disabled, onSelect) => {
+export const renderOptions = (options, disabled, onSelect, selectedValues) => {
     return options.map((option) => (
         <li
             key={option}
             onClick={() => onSelect(option)}
-            className={disabled.includes(option) ? "disabled" : ""}
+            className={`
+                ${disabled.includes(option) ? "disabled" : ""}
+                ${selectedValues && selectedValues.includes(option) ? "selected" : ""}
+            `}
         >
             {option}
         </li>

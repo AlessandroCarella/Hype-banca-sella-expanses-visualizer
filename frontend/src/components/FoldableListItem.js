@@ -17,10 +17,10 @@ const FoldableListItem = ({
     const renderCustomSelect = () => (
         <CustomSelect
             options={["Free", ...namesList]}
-            value={selections[itemKey] || ""}
-            onChange={(selectedOption) => handleSelect(itemKey, selectedOption)}
+            value={selections[itemKey] || []}
+            onChange={(selectedOptions) => handleSelect(itemKey, selectedOptions)}
             disabled={selectedOptions}
-            selectedOptions={selectedOptions} // Pass the selectedOptions prop here
+            selectedOptions={selections[itemKey] || []}
         />
     );
 

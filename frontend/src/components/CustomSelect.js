@@ -7,8 +7,14 @@ const CustomSelect = ({ options, value, onChange, disabled, selectedOptions }) =
 
     const handleSelect = (option) => {
         if (!disabled.includes(option)) {
-            onChange(option);
-            setIsOpen(false);
+            const newValue = Array.isArray(value) ? [...value] : [];
+            const index = newValue.indexOf(option);
+            if (index === -1) {
+                newValue.push(option);
+            } else {
+                newValue.splice(index, 1);
+            }
+            onChange(newValue);
         }
     };
 
@@ -26,18 +32,22 @@ const CustomSelect = ({ options, value, onChange, disabled, selectedOptions }) =
                         setIsOpen(!isOpen);
                     }}
                 >
-                    {value || "Select an option"}
+                    {Array.isArray(value) && value.length > 0
+                        ? value.join(", ")
+                        : "Select options"}
                 </div>
                 {isOpen && (
                     <ul className="options-list">
-                        {renderOptions(options, disabled, handleSelect)}
+                        {renderOptions(options, disabled, handleSelect, value)}
                     </ul>
                 )}
             </div>
-            {selectedOptions && selectedOptions.length > 0 && (
+            {Array.isArray(value) && value.length > 0 && (
                 <div className="selected-options-box">
-                    {selectedOptions.map((option, index) => (
-                        <span key={index} className="selected-option">{option}</span>
+                    {value.map((option) => (
+                        <span key={option} className="selected-option">
+                            {option}
+                        </span>
                     ))}
                 </div>
             )}

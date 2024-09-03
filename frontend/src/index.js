@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import UploadCsv from "./modules/UploadCsv";
-import Graphs from "./modules/Graph";
-import { ColorModeSwitch } from "./modules/colorModeSwitch";
+import UploadCsv from "./pages/UploadCsv";
+import Graphs from "./pages/Graph";
+import { ColorModeSwitch } from "./components/colorModeSwitch";
 
 import "./styles/main.css";
 import "./styles/colorModeSwitch.css";

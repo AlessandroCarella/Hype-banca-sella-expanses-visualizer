@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 const easeInOutCubic = (t) =>
     t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
 
@@ -31,4 +33,13 @@ export const animateScrollToSelected = (carouselElement, selectedIndex) => {
             window.requestAnimationFrame(step);
         }
     }
+};
+
+export const useCarouselEffect = (carouselRef, selectedDate, dates) => {
+    useEffect(() => {
+        const selectedIndex = dates.indexOf(selectedDate);
+        if (selectedIndex !== -1) {
+            animateScrollToSelected(carouselRef.current, selectedIndex);
+        }
+    }, [selectedDate, dates, carouselRef]);
 };

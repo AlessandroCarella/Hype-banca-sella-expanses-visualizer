@@ -77,7 +77,7 @@ function UploadCsv() {
             }
 
             const result = await processResponse.json();
-            navigate("/graphs", { state: { processedData: result } });
+            navigate("/graphs", {});
             return result;
         } catch (error) {
             console.error(error.message);

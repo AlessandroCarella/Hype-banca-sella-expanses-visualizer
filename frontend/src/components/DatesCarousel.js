@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import TextCapsule from "./TextCapsule";
-import { animateScrollToSelected } from "./helpers/DatesCarouselHelpers";
+import { animateScrollToSelected, useCarouselEffect } from "./helpers/DatesCarouselHelpers";
 import "../styles/components/DatesCarousel.css";
 import "../styles/components/DatesCarousel light mode.css";
 import "../styles/components/DatesCarousel dark mode.css";
@@ -8,16 +8,7 @@ import "../styles/components/DatesCarousel dark mode.css";
 const DatesCarousel = ({ dates, onDateSelect, selectedDate }) => {
     const carouselRef = useRef(null);
 
-    useEffect(() => {
-        const selectedIndex = dates.indexOf(selectedDate);
-        if (selectedIndex !== -1) {
-            animateScrollToSelected(carouselRef.current, selectedIndex);
-        }
-    }, [selectedDate, dates]);
-
-    const handleClick = (date) => {
-        onDateSelect(date);
-    };
+    useCarouselEffect(carouselRef, selectedDate, dates);
 
     return (
         <div className="container-fluid">
@@ -29,7 +20,7 @@ const DatesCarousel = ({ dates, onDateSelect, selectedDate }) => {
                                 <div key={date} className="px-2">
                                     <TextCapsule
                                         text={date}
-                                        onClick={() => handleClick(date)}
+                                        onClick={() => onDateSelect(date)}
                                         isSelected={date === selectedDate}
                                     />
                                 </div>

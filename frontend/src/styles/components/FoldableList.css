@@ -19,15 +19,15 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    height: 50px;
-    padding: 0 10px;
+    min-height: 50px; /* Changed from fixed height to min-height */
+    padding: 10px; /* Changed padding to be equal on all sides */
     box-sizing: border-box;
     flex-grow: 1;
 }
 
 .foldable-list-toggle .toggle-text {
-    flex: 0 1 30%; /* Takes up 30% of the space */
-    white-space: wrap;
+    flex: 0 1 30%;
+    white-space: normal; /* Changed from wrap to normal */
     overflow: hidden;
     text-overflow: ellipsis;
 }

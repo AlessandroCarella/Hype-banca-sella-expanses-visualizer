@@ -3,6 +3,32 @@ body {
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
+    font-size: 16px; /* Base font size */
+}
+
+/* Responsive font sizes */
+@media screen and (max-width: 1200px) {
+    body {
+        font-size: 15px;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    body {
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    body {
+        font-size: 13px;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    body {
+        font-size: 12px;
+    }
 }
 
 /* Dark mode */

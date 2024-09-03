@@ -1,0 +1,14 @@
+.dark-mode .text-capsule {
+    background-color: #323a64;
+    color: #284bff;
+}
+
+.dark-mode .text-capsule:hover {
+    background-color: rgba(40, 76, 255, 0.632);
+    color: #284bff;
+}
+
+.dark-mode .text-capsule.selected {
+    background-color: #284bff;
+    color: #fff;
+}

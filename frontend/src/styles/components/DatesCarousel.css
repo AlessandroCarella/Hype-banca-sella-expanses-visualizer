@@ -1,0 +1,18 @@
+.dates-carousel-container {
+    max-width: 100%;
+    position: relative;
+    overflow: hidden;
+    margin-top: 60px;
+}
+
+.dates-carousel {
+    display: flex;
+    scroll-behavior: smooth;
+    overflow-x: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.dates-carousel::-webkit-scrollbar {
+    display: none;
+}

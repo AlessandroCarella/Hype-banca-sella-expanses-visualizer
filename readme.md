@@ -17,6 +17,12 @@ C:\Users\alex1\Desktop\Hype-banca-sella-expanses-visualizer\backend\venv\Scripts
 
 ------------------------------------------
 todo:
+implement 2 differnt possible views to set the categories of expanses (and a toggle to switch between them):
+    1. the list of the expanses names and a select next to it to choose the category.
+    2. the list of the categories and a select next to it to choose the expanses that are left without a category.
+
+implement a custom dates interval seleter, the user already has it by the bank app (since it asks for an interval before downloading the csv file) but maybe the user wants to analyze a subinterval
+
 implement more checks on the file type, name (check for bank default), columns in it and implement the fact that the file does not get saved if it is not valid.
 The errors must be informative to the user so that they know what to do after and they can correct the error or override it.
 

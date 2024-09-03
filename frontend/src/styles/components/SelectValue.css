@@ -1,0 +1,50 @@
+.select-value-container {
+    margin-top: 10px;
+}
+
+.select-value-select {
+    width: 100%;
+    padding: 5px;
+    font-size: 14px;
+}
+
+.select-value-description {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.select-value-description strong {
+    font-weight: bold;
+}
+
+/* Dark mode */
+.dark-mode .select-value-select {
+    background-color: #323a64;
+    color: #fff;
+    border-color: #4a4a4a;
+}
+
+.dark-mode .select-value-select:hover,
+.dark-mode .select-value-select:focus {
+    border-color: #284bff;
+}
+
+.dark-mode .select-value-description {
+    color: #fff;
+}
+
+/* Light mode */
+.light-mode .select-value-select {
+    background-color: #fff;
+    color: #000;
+    border-color: #ccc;
+}
+
+.light-mode .select-value-select:hover,
+.light-mode .select-value-select:focus {
+    border-color: #284bff;
+}
+
+.light-mode .select-value-description {
+    color: #000;
+}

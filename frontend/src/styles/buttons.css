@@ -1,0 +1,21 @@
+/* Dark mode */
+.dark-mode .button{
+    background-color: #323a64;
+    color: #284bff;
+}
+
+.dark-mode .button:hover{
+    background-color: rgba(40, 76, 255, 0.632);
+    color: #284bff;
+}
+
+/* Light mode */
+.light-mode .button{
+    background-color: #fff;
+    color: #284bff;
+}
+
+.light-mode .button:hover{
+    background-color: #ffffff93;
+    color: #284bff;
+}

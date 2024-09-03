@@ -1,9 +1,0 @@
-.dark-mode .button{
-    background-color: #323a64;
-    color: #284bff;
-}
-
-.dark-mode .button:hover{
-    background-color: rgba(40, 76, 255, 0.632);
-    color: #284bff;
-}

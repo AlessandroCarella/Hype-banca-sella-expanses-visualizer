@@ -16,3 +16,35 @@
 .dates-carousel::-webkit-scrollbar {
     display: none;
 }
+
+/* Dark mode */
+.dark-mode .text-capsule {
+    background-color: #323a64;
+    color: #284bff;
+}
+
+.dark-mode .text-capsule:hover {
+    background-color: rgba(40, 76, 255, 0.632);
+    color: #284bff;
+}
+
+.dark-mode .text-capsule.selected {
+    background-color: #284bff;
+    color: #fff;
+}
+
+/* Light mode */
+.light-mode .text-capsule {
+    background-color: #fff;
+    color: #284bff;
+}
+
+.light-mode .text-capsule:hover {
+    background-color: #ffffff93;
+    color: #284bff;
+}
+
+.light-mode .text-capsule.selected {
+    background-color: #284bff;
+    color: #fff;
+}

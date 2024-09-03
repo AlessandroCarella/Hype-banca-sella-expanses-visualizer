@@ -1,9 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import TextCapsule from "./TextCapsule";
 import { animateScrollToSelected, useCarouselEffect } from "./helpers/DatesCarouselHelpers";
-import "../styles/components/DatesCarousel.css";
-import "../styles/components/DatesCarousel light mode.css";
-import "../styles/components/DatesCarousel dark mode.css";
 
 const DatesCarousel = ({ dates, onDateSelect, selectedDate }) => {
     const carouselRef = useRef(null);

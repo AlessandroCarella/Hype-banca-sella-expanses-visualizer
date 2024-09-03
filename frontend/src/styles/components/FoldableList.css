@@ -1,0 +1,49 @@
+.foldable-list {
+    margin-left: 20px;
+}
+
+.foldable-list-item {
+    margin: 5px 0;
+}
+
+.foldable-list-toggle {
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+
+.foldable-list-toggle::before {
+    content: '▶';
+    display: inline-block;
+    margin-right: 5px;
+    transition: transform 0.3s;
+}
+
+.foldable-list-toggle.open::before {
+    transform: rotate(90deg);
+}
+
+.foldable-list-content {
+    padding-left: 10px;
+}
+
+/* Dark mode */
+.dark-mode .foldable-list-toggle {
+    background-color: #323a64;
+    color: #284bff;
+}
+
+.dark-mode .foldable-list-toggle:hover {
+    background-color: rgba(40, 76, 255, 0.632);
+}
+
+/* Light mode */
+.light-mode .foldable-list-toggle {
+    background-color: #fff;
+    color: #284bff;
+}
+
+.light-mode .foldable-list-toggle:hover {
+    background-color: #ffffff93;
+}

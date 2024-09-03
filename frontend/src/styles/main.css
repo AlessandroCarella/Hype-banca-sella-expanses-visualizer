@@ -4,3 +4,23 @@ body {
     font-weight: 400;
     font-style: normal;
 }
+
+/* Dark mode */
+.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+.dark-mode .color-mode-switch__label{
+    background-color: #212121;
+}
+
+/* Light mode */
+.light-mode {
+    background-color: #f5f4f7;
+    color: #000;
+}
+
+.light-mode .color-mode-switch__label{
+    background-color: #fff;
+}

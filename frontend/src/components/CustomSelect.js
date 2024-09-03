@@ -20,6 +20,13 @@ const CustomSelect = ({ options, value, onChange, disabled, selectedOptions, onO
         }
     };
 
+    const handleRemoveOption = (option, e) => {
+        e.stopPropagation(); // Prevent the click from toggling the select open
+        const newValue = value.filter(item => item !== option);
+        onChange(newValue);
+        onOptionSelect(option, true); // Notify parent about the deselected option
+    };
+
     useEffect(() => {
         return handleClickOutside(selectRef, () => setIsOpen(false));
     }, []);
@@ -47,8 +54,13 @@ const CustomSelect = ({ options, value, onChange, disabled, selectedOptions, onO
             {Array.isArray(value) && value.length > 0 && (
                 <div className="selected-options-box">
                     {value.map((option) => (
-                        <span key={option} className="selected-option">
+                        <span 
+                            key={option} 
+                            className="selected-option"
+                            onClick={(e) => handleRemoveOption(option, e)}
+                        >
                             {option}
+                            <span className="remove-option">×</span>
                         </span>
                     ))}
                 </div>

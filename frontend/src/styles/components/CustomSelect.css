@@ -67,6 +67,8 @@
   }
   
   .selected-option {
+    cursor: pointer;
+    user-select: none;
     display: inline-block;
     margin: 2px;
     padding: 2px 6px;
@@ -74,3 +76,11 @@
     border-radius: 3px;
     font-size: 0.9em;
   }
+  .remove-option {
+    margin-left: 5px;
+    font-weight: bold;
+}
+
+.selected-option:hover {
+    opacity: 0.8;
+}

@@ -24,6 +24,12 @@ const FoldableListItem = ({
                 return [...prev, option];
             }
         });
+
+        // Update the selections for this specific item
+        handleSelect(itemKey, isDeselect ? 
+            selections[itemKey].filter(item => item !== option) : 
+            [...(selections[itemKey] || []), option]
+        );
     };
 
     const renderCustomSelect = () => (
@@ -31,7 +37,7 @@ const FoldableListItem = ({
             options={namesList}
             value={selections[itemKey] || []}
             onChange={(selectedOptions) => handleSelect(itemKey, selectedOptions)}
-            disabled={selectedOptions}
+            disabled={selectedOptions.filter(option => !selections[itemKey]?.includes(option))}
             selectedOptions={selections[itemKey] || []}
             onOptionSelect={handleOptionSelect}
         />

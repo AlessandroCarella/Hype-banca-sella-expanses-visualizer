@@ -2,7 +2,7 @@ from flask import request, jsonify
 import os
 from werkzeug.utils import secure_filename
 
-from routes.modules.constants import ALLOWED_EXTENSIONS
+from routes.helpers.constants import ALLOWED_EXTENSIONS
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS

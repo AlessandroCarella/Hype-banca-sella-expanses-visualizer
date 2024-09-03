@@ -61,6 +61,19 @@ function UploadCsv() {
         }
     };
 
+    const checkUserCategoriesSetted = async () => {
+        try {
+            const response = await fetch("/api/userCategoriesSetted");
+            if (!response.ok) {
+                throw new Error("Failed to check user categories settings");
+            }
+            return await response.json();
+        } catch (error) {
+            console.error("Error checking user categories settings:", error);
+            return false;
+        }
+    };
+
     const processFile = async (filepath) => {
         try {
             const processResponse = await fetch("/api/process", {
@@ -77,7 +90,15 @@ function UploadCsv() {
             }
 
             const result = await processResponse.json();
-            navigate("/graphs", {});
+            
+            // Check user categories settings before navigating
+            const userCategoriesSetted = await checkUserCategoriesSetted();
+            if (userCategoriesSetted) {
+                navigate("/graphs");
+            } else {
+                navigate("/select-options");
+            }
+            
             return result;
         } catch (error) {
             console.error(error.message);

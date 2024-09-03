@@ -1,6 +1,6 @@
 from flask import request, jsonify
 
-from routes.modules.preProcessData import preProcessData
+from routes.helpers.preProcessData import preProcessData
 
 def process_file(app):
     data = request.json

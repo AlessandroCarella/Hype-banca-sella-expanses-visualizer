@@ -2,9 +2,13 @@ from flask import Flask
 
 from utils import get_config
 
+# Upload csv page
 from routes.uploadCsv import upload_file
 from routes.processCsv import process_file
 from routes.selectPreviousCsv import get_previous_files, get_file
+
+# User categories setted
+from routes.userCategoriesSetted import user_categories_setted
 
 app = Flask(__name__)
 
@@ -29,7 +33,10 @@ def getFile():
     return get_file(app)
 ########################################################
 ########################################################
-#
+# User categories setted
+@app.route('/api/userCategoriesSetted', methods=['GET'])
+def check_user_categories_setted():
+    return user_categories_setted(app)
 
 ########################################################
 

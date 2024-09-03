@@ -1,0 +1,114 @@
+{
+    "Living Expenses": {
+      "Housing": {
+        "Rent": [],
+        "Mortgage": [],
+        "Property Taxes": [],
+        "Home Insurance": [],
+        "Repairs & Maintenance": []
+      },
+      "Utilities": {
+        "Electricity": [],
+        "Water & Sewer": [],
+        "Gas": [],
+        "Internet": [],
+        "Cable & Streaming": [],
+        "Trash Removal": []
+      },
+      "Food & Dining": {
+        "Groceries": [],
+        "Restaurants": [],
+        "Cafes": [],
+        "Fast Food": [],
+        "Delivery Services": []
+      },
+      "Personal Care": {
+        "Haircuts": [],
+        "Beauty Products": [],
+        "Spa & Massage": [],
+        "Skincare": [],
+        "Personal Hygiene": []
+      }
+    },
+    "Transportation & Travel": {
+      "Transportation": {
+        "Fuel": [],
+        "Public Transport": [],
+        "Car Payment": [],
+        "Car Insurance": [],
+        "Repairs & Maintenance": [],
+        "Parking & Tolls": []
+      },
+      "Travel": {
+        "Airfare": [],
+        "Accommodation": [],
+        "Car Rental": [],
+        "Public Transportation": [],
+        "Tours & Activities": []
+      }
+    },
+    "Health & Wellness": {
+      "Health & Fitness": {
+        "Gym Memberships": [],
+        "Health Insurance": [],
+        "Medical Bills": [],
+        "Pharmacy": [],
+        "Fitness Classes": []
+      },
+      "Insurance": {
+        "Life Insurance": [],
+        "Health Insurance": [],
+        "Car Insurance": [],
+        "Home Insurance": [],
+        "Pet Insurance": []
+      }
+    },
+    "Financial Obligations": {
+      "Debt Repayment": {
+        "Credit Card Payments": [],
+        "Student Loans": [],
+        "Personal Loans": [],
+        "Mortgage": [],
+        "Car Loans": []
+      },
+      "Savings & Investments": {
+        "Retirement Contributions": [],
+        "Savings Account Deposits": [],
+        "Stocks & Bonds": [],
+        "Real Estate Investments": [],
+        "Mutual Funds": []
+      }
+    },
+    "Leisure & Entertainment": {
+      "Entertainment": {
+        "Movies": [],
+        "Concerts": [],
+        "Streaming Subscriptions": [],
+        "Games": [],
+        "Events & Activities": []
+      },
+      "Gifts & Donations": {
+        "Charitable Donations": [],
+        "Gifts": [],
+        "Fundraising": [],
+        "Sponsorships": []
+      }
+    },
+    "Education & Learning": {
+      "Education": {
+        "Tuition": [],
+        "Books & Supplies": [],
+        "Online Courses": [],
+        "Workshops": [],
+        "Student Loans": []
+      }
+    },
+    "Miscellaneous": {
+      "Miscellaneous": {
+        "Pet Care": [],
+        "Subscriptions": [],
+        "Office Supplies": [],
+        "Miscellaneous Purchases": []
+      }
+    }
+  }

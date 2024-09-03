@@ -63,18 +63,11 @@ def splitCsvByMonth(df: pd.DataFrame, output_folder: str) -> None:
     )
 
 def save_expanses_names_and_descriptions_to_file(df: pd.DataFrame, output_folder: str, app) -> None:
-    def getDfColumnUniqueValues(df: pd.DataFrame, columnName: str) -> List[str]:
-        return list(df[columnName].unique())
-    
     # Save unique expense names to a file
     with open(os.path.join(output_folder, app.config['NAME_LIST_FILE_NAME']), 'w') as file:
-        for item in getDfColumnUniqueValues(df, "Nome"):
+        for item in list(df["Nome"].unique()):
             file.write(str(item) + '\n')
 
-    # Save unique expense descriptions to a file
-    with open(os.path.join(output_folder, app.config['DESCRIPTION_LIST_FILE_NAME']), 'w') as file:
-        for item in getDfColumnUniqueValues(df, "Descrizione"):
-            file.write(str(item) + '\n')
 
 def preProcessData(filePath, app) -> None:
     try:
@@ -83,9 +76,8 @@ def preProcessData(filePath, app) -> None:
         df = pd.read_csv(filePath)
         # possible exception not handled since the allowed extensions are already checked in the frontend
     
-    output_folder = os.path.normpath(os.path.join(app.config['FRONTEND_FROM_BACKEND'], app.config['GENERATED_FILES_OUTPUT_FOLDER']))
-    output_file = os.path.join(output_folder, app.config['CLEANED_CSV_FILE_NAME'])
-    os.makedirs(output_folder, exist_ok=True)
+    os.makedirs(app.config['GENERATED_FILES_OUTPUT_FOLDER'], exist_ok=True)
+    output_file = os.path.join(app.config['GENERATED_FILES_OUTPUT_FOLDER'], app.config['CLEANED_CSV_FILE_NAME'])
     
     # Step 1: Change file extension and save the cleaned DataFrame
     df, newFilePath = change_file_extension (df, output_file)
@@ -94,8 +86,8 @@ def preProcessData(filePath, app) -> None:
     df = clean_csv(df, filePathsToSaveAt=[output_file])
 
     # Step 3: Split the DataFrame into separate CSV files by month
-    splitCsvByMonth(df, output_folder)
+    splitCsvByMonth(df, app.config['GENERATED_FILES_OUTPUT_FOLDER'])
  
     # Step 4: Save unique expense names and descriptions to files
-    save_expanses_names_and_descriptions_to_file(df, output_folder, app)
+    save_expanses_names_and_descriptions_to_file(df, app.config['GENERATED_FILES_OUTPUT_FOLDER'], app)
     

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import SelectWithHoverDictValToHoveValAsInput from './SelectWithHoverDictValToHoveValAsInput';
+import CustomSelect from './CustomSelect';
 import '../styles/components/FoldableList.css';
 
-const FoldableList = ({ data, namesDescriptionsDict, isInnermost = false }) => {
+const FoldableList = ({ data, namesList, isInnermost = false, onSelect }) => {
   const [openItems, setOpenItems] = useState({});
+  const [selections, setSelections] = useState({});
 
   useEffect(() => {
     if (isInnermost) {
@@ -20,6 +21,16 @@ const FoldableList = ({ data, namesDescriptionsDict, isInnermost = false }) => {
 
   const isLastItem = (value) => typeof value !== 'object' || Object.keys(value).length === 0;
 
+  const handleSelect = (key, selectedOption) => {
+    setSelections(prevSelections => ({
+      ...prevSelections,
+      [key]: selectedOption
+    }));
+    onSelect(key, selectedOption);
+  };
+
+  const disabledOptions = Object.values(selections);
+
   return (
     <div className="foldable-list">
       {Object.entries(data).map(([key, value]) => (
@@ -30,12 +41,11 @@ const FoldableList = ({ data, namesDescriptionsDict, isInnermost = false }) => {
           >
             {key}
             {isLastItem(value) && (
-              <SelectWithHoverDictValToHoveValAsInput
-                options={namesDescriptionsDict}
-                onChange={(selectedOption) => {
-                  // Handle the selected option here if needed
-                  console.log(`Selected option for ${key}:`, selectedOption);
-                }}
+              <CustomSelect
+                options={namesList}
+                value={selections[key] || ''}
+                onChange={(selectedOption) => handleSelect(key, selectedOption)}
+                disabled={disabledOptions}
               />
             )}
           </div>
@@ -43,8 +53,9 @@ const FoldableList = ({ data, namesDescriptionsDict, isInnermost = false }) => {
             <div className="foldable-list-content">
               <FoldableList 
                 data={value} 
-                namesDescriptionsDict={namesDescriptionsDict} 
+                namesList={namesList} 
                 isInnermost={isLastItem(Object.values(value)[0])}
+                onSelect={(subKey, subValue) => handleSelect(`${key}.${subKey}`, subValue)}
               />
             </div>
           )}

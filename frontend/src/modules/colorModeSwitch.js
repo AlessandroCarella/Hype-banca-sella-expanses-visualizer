@@ -1,5 +1,15 @@
 import React, { useEffect, useState } from 'react';
 
+function setLightMode() {
+    document.body.classList.remove("dark-mode");
+    document.body.classList.add("light-mode");
+}
+
+function setDarkMode() {
+    document.body.classList.remove("light-mode");
+    document.body.classList.add("dark-mode");
+}
+
 export function ColorModeSwitch() {
     const [isDarkMode, setIsDarkMode] = useState(false);
 
@@ -24,16 +34,6 @@ export function ColorModeSwitch() {
             setLightMode();
         }
     };
-
-    function setLightMode() {
-        document.body.classList.remove("dark-mode");
-        document.body.classList.add("light-mode");
-    }
-
-    function setDarkMode() {
-        document.body.classList.remove("light-mode");
-        document.body.classList.add("dark-mode");
-    }
 
     return (
         <div className="color-mode-switch position-absolute top-0 end-0 p-3">

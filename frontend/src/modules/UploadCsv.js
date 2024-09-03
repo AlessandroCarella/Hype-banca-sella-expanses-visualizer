@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-
+import { useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.css';
 
 function UploadCsv() {
     const [file, setFile] = useState(null);
     const [previousFiles, setPreviousFiles] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         // Fetch previously uploaded files
@@ -75,7 +76,9 @@ function UploadCsv() {
                 throw new Error(`Process error! ${errorData.error}`);
             }
 
-            return await processResponse.json();
+            const result = await processResponse.json();
+            navigate("/graphs", { state: { processedData: result } });
+            return result;
         } catch (error) {
             console.error(error.message);
             return null;

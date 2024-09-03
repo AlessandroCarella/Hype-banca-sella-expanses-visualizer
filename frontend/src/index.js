@@ -1,6 +1,8 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import UploadCsv from "./modules/UploadCsv";
+import Graphs from "./modules/Graph";
 import { ColorModeSwitch } from "./modules/colorModeSwitch";
 
 import "./styles/main.css";
@@ -12,10 +14,16 @@ import "./styles/dark mode/buttons.css";
 import "./styles/light mode/main.css";
 import "./styles/light mode/buttons.css";
 
-ReactDOM.render(
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+root.render(
     <React.StrictMode>
-        <ColorModeSwitch />
-        <UploadCsv />
-    </React.StrictMode>,
-    document.getElementById("root")
+        <Router>
+            <ColorModeSwitch />
+            <Routes>
+                <Route path="/" element={<UploadCsv />} />
+                <Route path="/graphs" element={<Graphs />} />
+            </Routes>
+        </Router>
+    </React.StrictMode>
 );

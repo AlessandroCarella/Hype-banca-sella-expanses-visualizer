@@ -7,10 +7,15 @@
     "start-frontend": "cd frontend && npm start"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "concurrently": "^8.2.2"
   },
   "dependencies": {
     "bootstrap": "^5.3.3",
-    "react-bootstrap": "^2.10.4"
-  }
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.10.4",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.26.1"
+  },
+  "workspaces": ["frontend"]
 }

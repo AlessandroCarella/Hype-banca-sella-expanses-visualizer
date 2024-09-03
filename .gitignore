@@ -8,12 +8,16 @@ old/
 names list.txt
 descriptions list.txt
 .A A deleteGeneratedFiles.py
+*/generated files/
+*/user files/
+user files/
 
 ##################################################
 #python gitignore
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
+*__pycache__/
 *.py[cod]
 *$py.class
 

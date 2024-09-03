@@ -1,14 +1,7 @@
 import pandas as pd
 import csv
 import os
-import json
 from typing import List, Tuple
-from flask import Flask
-
-from utils import get_config
-
-app = Flask(__name__)
-app.config.update(get_config())
 
 def change_file_extension(df: pd.DataFrame, filePath: str) -> (pd.DataFrame, str):
     def strip_extension_and_apply_csv(filePath: str) -> str:
@@ -69,7 +62,7 @@ def splitCsvByMonth(df: pd.DataFrame, output_folder: str) -> None:
         lambda x: save_to_csv(x, x.name[0], x.name[1])
     )
 
-def save_expanses_names_and_descriptions_to_file(df: pd.DataFrame, output_folder: str) -> None:
+def save_expanses_names_and_descriptions_to_file(df: pd.DataFrame, output_folder: str, app) -> None:
     def getDfColumnUniqueValues(df: pd.DataFrame, columnName: str) -> List[str]:
         return list(df[columnName].unique())
     
@@ -83,8 +76,7 @@ def save_expanses_names_and_descriptions_to_file(df: pd.DataFrame, output_folder
         for item in getDfColumnUniqueValues(df, "Descrizione"):
             file.write(str(item) + '\n')
 
-def preProcessData(filePath) -> None:
-    print ("filePath: ", filePath)
+def preProcessData(filePath, app) -> None:
     try:
         df = pd.read_excel(filePath, engine="openpyxl")
     except Exception as e:
@@ -105,5 +97,5 @@ def preProcessData(filePath) -> None:
     splitCsvByMonth(df, output_folder)
  
     # Step 4: Save unique expense names and descriptions to files
-    save_expanses_names_and_descriptions_to_file(df, output_folder)
+    save_expanses_names_and_descriptions_to_file(df, output_folder, app)
     

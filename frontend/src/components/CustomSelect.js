@@ -1,55 +1,39 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from "react";
+import { handleClickOutside, renderOptions } from "./helpers/CustomSelect";
 
 const CustomSelect = ({ options, value, onChange, disabled }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const selectRef = useRef(null);
+    const [isOpen, setIsOpen] = useState(false);
+    const selectRef = useRef(null);
 
-  const handleSelect = (option) => {
-    if (!disabled.includes(option)) {
-      onChange(option);
-      setIsOpen(false);
-    }
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (selectRef.current && !selectRef.current.contains(event.target)) {
-        setIsOpen(false);
-      }
+    const handleSelect = (option) => {
+        if (!disabled.includes(option)) {
+            onChange(option);
+            setIsOpen(false);
+        }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+    useEffect(() => {
+        return handleClickOutside(selectRef, () => setIsOpen(false));
+    }, []);
 
-  return (
-    <div className="custom-select" ref={selectRef}>
-      <div
-        className={`select-header ${isOpen ? 'open' : ''}`}
-        onClick={(e) => {
-          e.stopPropagation();
-          setIsOpen(!isOpen);
-        }}
-      >
-        {value || 'Select an option'}
-      </div>
-      {isOpen && (
-        <ul className="options-list">
-          {options.map((option) => (
-            <li
-              key={option}
-              onClick={() => handleSelect(option)}
-              className={disabled.includes(option) ? 'disabled' : ''}
+    return (
+        <div className="custom-select" ref={selectRef}>
+            <div
+                className={`select-header ${isOpen ? "open" : ""}`}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    setIsOpen(!isOpen);
+                }}
             >
-              {option}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
+                {value || "Select an option"}
+            </div>
+            {isOpen && (
+                <ul className="options-list">
+                    {renderOptions(options, disabled, handleSelect)}
+                </ul>
+            )}
+        </div>
+    );
 };
 
 export default CustomSelect;

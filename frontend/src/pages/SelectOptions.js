@@ -26,9 +26,14 @@ const SelectOptions = () => {
     fetchData();
   }, []);
 
+  const handleSelect = (key, value) => {
+    console.log(`Selected ${value} for ${key}`);
+    // Handle the selection as needed
+  };
+
   return (
     <div className='foldable-list-container'>
-      <FoldableList data={expenseDictionary} namesList={namesList} />
+      <FoldableList data={expenseDictionary} namesList={namesList} onSelect={handleSelect}/>
     </div>
   );
 };

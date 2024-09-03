@@ -36,6 +36,7 @@ const SelectOptions = () => {
 
   const handleDataUpdate = (updatedData) => {
     setData(updatedData);
+    console.log('Updated data structure:', updatedData);
   };
 
   return (
@@ -45,6 +46,7 @@ const SelectOptions = () => {
           data={expenseDictionary} 
           namesList={namesList} 
           onSelect={handleDataUpdate}
+          onDataUpdate={handleDataUpdate}
         />
       </div>
     </SelectedOptionsContext.Provider>

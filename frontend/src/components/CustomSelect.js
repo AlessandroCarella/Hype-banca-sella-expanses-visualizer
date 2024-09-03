@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { handleClickOutside, renderOptions } from "./helpers/CustomSelect";
+import { useSelectedOptions } from "../pages/SelectOptions";
 
-const CustomSelect = ({ options, value, onChange, disabled, selectedOptions, onOptionSelect }) => {
+const CustomSelect = ({ options, value, onChange, disabled, onOptionSelect }) => {
     const [isOpen, setIsOpen] = useState(false);
     const selectRef = useRef(null);
+    const { selectedOptions } = useSelectedOptions();
 
     const handleSelect = (option) => {
         if (!disabled.includes(option)) {
@@ -41,7 +43,7 @@ const CustomSelect = ({ options, value, onChange, disabled, selectedOptions, onO
             <div className="custom-select" ref={selectRef}>
                 {isOpen && (
                     <ul className="options-list">
-                        {renderOptions(options, disabled, handleSelect, value)}
+                        {renderOptions(options, disabled, handleSelect, value, selectedOptions)}
                     </ul>
                 )}
                 <div

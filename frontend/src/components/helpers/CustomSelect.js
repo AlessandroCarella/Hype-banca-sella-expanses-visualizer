@@ -11,31 +11,27 @@ export const handleClickOutside = (ref, callback) => {
     };
 };
 
-export const renderOptions = (options, disabled, onSelect, selectedValues) => {
-    // Separate selected and unselected options
-    const selectedOptions = options.filter(option => selectedValues.includes(option));
-    const unselectedOptions = options.filter(option => !selectedValues.includes(option));
+export const renderOptions = (options, disabled, onSelect, selectedValues, allSelectedOptions) => {
+    // Sort options based on their selection status across all selects
+    const sortedOptions = [...options].sort((a, b) => {
+        const aSelected = allSelectedOptions.includes(a);
+        const bSelected = allSelectedOptions.includes(b);
+        if (aSelected === bSelected) return 0;
+        return aSelected ? 1 : -1;
+    });
 
-    // Render unselected options first, then selected options
-    return [
-        ...unselectedOptions.map(renderOption),
-        ...selectedOptions.map(renderOption)
-    ];
-
-    function renderOption(option) {
-        return (
-            <li
-                key={option}
-                onClick={() => onSelect(option)}
-                className={`
-                    ${disabled.includes(option) ? "disabled" : ""}
-                    ${selectedValues.includes(option) ? "selected" : ""}
-                `}
-            >
-                {option}
-            </li>
-        );
-    }
+    return sortedOptions.map(option => (
+        <li
+            key={option}
+            onClick={() => onSelect(option)}
+            className={`
+                ${disabled.includes(option) ? "disabled" : ""}
+                ${selectedValues.includes(option) ? "selected" : ""}
+            `}
+        >
+            {option}
+        </li>
+    ));
 };
 
 export const calculatePosition = (element) => {

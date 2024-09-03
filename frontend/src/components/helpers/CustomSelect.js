@@ -25,3 +25,15 @@ export const renderOptions = (options, disabled, onSelect, selectedValues) => {
         </li>
     ));
 };
+
+export const calculatePosition = (element) => {
+    const rect = element.getBoundingClientRect();
+    const spaceAbove = rect.top;
+    const spaceBelow = window.innerHeight - rect.bottom;
+    
+    if (spaceAbove > spaceBelow) {
+        return { top: 'auto', bottom: '100%' };
+    } else {
+        return { top: '100%', bottom: 'auto' };
+    }
+};

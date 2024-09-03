@@ -22,25 +22,25 @@ const CustomSelect = ({ options, value, onChange, disabled, selectedOptions }) =
         return handleClickOutside(selectRef, () => setIsOpen(false));
     }, []);
 
+    const toggleOpen = (e) => {
+        e.stopPropagation();
+        setIsOpen(!isOpen);
+    };
+
     return (
         <div className="custom-select-container">
             <div className="custom-select" ref={selectRef}>
-                <div
-                    className={`select-header ${isOpen ? "open" : ""}`}
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        setIsOpen(!isOpen);
-                    }}
-                >
-                    {Array.isArray(value) && value.length > 0
-                        ? value.join(", ")
-                        : "Select options"}
-                </div>
                 {isOpen && (
                     <ul className="options-list">
                         {renderOptions(options, disabled, handleSelect, value)}
                     </ul>
                 )}
+                <div
+                    className={`select-header ${isOpen ? "open" : ""}`}
+                    onClick={toggleOpen}
+                >
+                    Select options
+                </div>
             </div>
             {Array.isArray(value) && value.length > 0 && (
                 <div className="selected-options-box">

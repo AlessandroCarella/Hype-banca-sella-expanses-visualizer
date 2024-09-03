@@ -1,6 +1,7 @@
 .custom-select {
     position: relative;
     display: inline-block;
+    width: 100%; /* This ensures it takes up all of its allocated space */
   }
   
   .select-header {
@@ -8,6 +9,12 @@
     padding: 5px 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    white-space: nowrap;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   
   .select-header.open {
@@ -19,7 +26,7 @@
     position: absolute;
     top: 100%;
     left: 0;
-    right: 0;
+    width: 100%; /* Changed from min-width to width */
     background-color: white;
     border: 1px solid #ccc;
     border-top: none;

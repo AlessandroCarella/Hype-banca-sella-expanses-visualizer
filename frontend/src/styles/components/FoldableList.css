@@ -18,11 +18,23 @@
     font-weight: bold;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    height: 50px; /* Increased from 30px to 40px */
+    justify-content: flex-start;
+    height: 50px;
     padding: 0 10px;
     box-sizing: border-box;
     flex-grow: 1;
+}
+
+.foldable-list-toggle .toggle-text {
+    flex: 0 1 30%; /* Takes up 30% of the space */
+    white-space: wrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.foldable-list-toggle .custom-select {
+    flex: 0 0 70%; /* Fixed width of 70% */
+    max-width: 70%; /* Ensures it doesn't grow beyond 70% */
 }
 
 .foldable-list-toggle::before {

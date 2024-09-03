@@ -39,7 +39,7 @@ const FoldableList = ({ data, namesList, isInnermost = false, onSelect }) => {
             onClick={() => toggleOpen(key)}
             className={`foldable-list-toggle ${openItems[key] ? 'open' : ''} ${isLastItem(value) ? 'last-item' : ''}`}
           >
-            {key}
+            <span className="toggle-text">{key}</span>
             {isLastItem(value) && (
               <CustomSelect
                 options={namesList}

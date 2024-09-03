@@ -43,11 +43,11 @@ root.render(
     <React.StrictMode>
         <Router>
             <ColorModeSwitch />
-            <SelectOptions />
-            {/* <Routes>
+            {/* <SelectOptions /> */}
+            <Routes>
                 <Route path="/" element={<UploadCsv />} />
                 <Route path="/graphs" element={<Graphs />} />
-            </Routes> */}
+            </Routes>
         </Router>
     </React.StrictMode>
 );

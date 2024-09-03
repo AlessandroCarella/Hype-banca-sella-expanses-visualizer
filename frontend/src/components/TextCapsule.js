@@ -10,6 +10,13 @@ const TextCapsule = ({ text, onClick, isSelected }) => {
         ${isSelected ? 'selected' : ''}
         text-capsule
       `}
+      style={{ 
+        cursor: 'pointer',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        maxWidth: '100%'
+      }}
     >
       {text}
     </div>

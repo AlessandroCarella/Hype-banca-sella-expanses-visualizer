@@ -1,11 +1,14 @@
 .select-value-container {
-    margin-top: 10px;
+    margin-top: 0;
+    padding: 5px 10px;
 }
 
 .select-value-select {
     width: 100%;
     padding: 5px;
     font-size: 14px;
+    border: none;
+    background-color: transparent;
 }
 
 .select-value-description {
@@ -18,33 +21,19 @@
 }
 
 /* Dark mode */
-.dark-mode .select-value-select {
+.dark-mode .select-value-container {
     background-color: #323a64;
-    color: #fff;
-    border-color: #4a4a4a;
 }
 
-.dark-mode .select-value-select:hover,
-.dark-mode .select-value-select:focus {
-    border-color: #284bff;
-}
-
-.dark-mode .select-value-description {
+.dark-mode .select-value-select {
     color: #fff;
 }
 
 /* Light mode */
-.light-mode .select-value-select {
+.light-mode .select-value-container {
     background-color: #fff;
-    color: #000;
-    border-color: #ccc;
 }
 
-.light-mode .select-value-select:hover,
-.light-mode .select-value-select:focus {
-    border-color: #284bff;
-}
-
-.light-mode .select-value-description {
+.light-mode .select-value-select {
     color: #000;
 }

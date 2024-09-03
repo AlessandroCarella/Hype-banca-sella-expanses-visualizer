@@ -1,9 +1,14 @@
 .foldable-list {
     margin-left: 20px;
+    width: 100%;
 }
 
 .foldable-list-item {
     margin: 5px 0;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
 }
 
 .foldable-list-toggle {
@@ -11,6 +16,11 @@
     font-weight: bold;
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    height: 30px;
+    padding: 0 10px;
+    box-sizing: border-box;
+    flex-grow: 1;
 }
 
 .foldable-list-toggle::before {
@@ -24,14 +34,35 @@
     transform: rotate(90deg);
 }
 
+.foldable-list-toggle.last-item::before {
+    content: none;
+}
+
+.foldable-list-toggle.last-item {
+    cursor: default;
+}
+
 .foldable-list-content {
     padding-left: 10px;
+    width: 100%;
+}
+
+.foldable-list-content.last-item {
+    width: 100%;
+    flex-grow: 1;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.foldable-list-content.last-item .select-value-container {
+    margin-top: 0;
 }
 
 /* Dark mode */
 .dark-mode .foldable-list-toggle {
     background-color: #323a64;
     color: #284bff;
+    border: 1px solid #284bff;
 }
 
 .dark-mode .foldable-list-toggle:hover {
@@ -42,6 +73,7 @@
 .light-mode .foldable-list-toggle {
     background-color: #fff;
     color: #284bff;
+    border: 1px solid #284bff;
 }
 
 .light-mode .foldable-list-toggle:hover {

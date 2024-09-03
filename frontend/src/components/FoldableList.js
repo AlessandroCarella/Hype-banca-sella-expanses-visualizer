@@ -1,27 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SelectValue from './SelectValue';
+import '../styles/components/FoldableList.css';
 
-const FoldableList = ({ data, names, descriptions }) => {
-  const [isOpen, setIsOpen] = useState(false);
+const FoldableList = ({ data, names, descriptions, isInnermost = false }) => {
+  const [openItems, setOpenItems] = useState({});
 
-  const toggleOpen = () => {
-    setIsOpen(!isOpen);
+  useEffect(() => {
+    if (isInnermost) {
+      setOpenItems(Object.keys(data).reduce((acc, key) => ({ ...acc, [key]: true }), {}));
+    }
+  }, [isInnermost, data]);
+
+  const toggleOpen = (key) => {
+    setOpenItems(prevState => ({
+      ...prevState,
+      [key]: !prevState[key]
+    }));
   };
 
+  const isLastItem = (value) => typeof value !== 'object' || Object.keys(value).length === 0;
+
   return (
-    <div style={{ marginLeft: 20 }}>
+    <div className="foldable-list">
       {Object.entries(data).map(([key, value]) => (
-        <div key={key}>
-          <div onClick={toggleOpen} style={{ cursor: 'pointer', fontWeight: 'bold', margin: '5px 0' }}>
+        <div key={key} className="foldable-list-item">
+          <div
+            onClick={() => toggleOpen(key)}
+            className={`foldable-list-toggle ${openItems[key] ? 'open' : ''} ${isLastItem(value) ? 'last-item' : ''}`}
+          >
             {key}
+            {isLastItem(value) && (
+              <SelectValue names={names} descriptions={descriptions} />
+            )}
           </div>
-          {isOpen && (
-            <div style={{ paddingLeft: 10 }}>
-              {typeof value === 'object' && Object.keys(value).length > 0 ? (
-                <FoldableList data={value} names={names} descriptions={descriptions} />
-              ) : (
-                <SelectValue names={names} descriptions={descriptions} />
-              )}
+          {openItems[key] && !isLastItem(value) && (
+            <div className="foldable-list-content">
+              <FoldableList 
+                data={value} 
+                names={names} 
+                descriptions={descriptions} 
+                isInnermost={isLastItem(Object.values(value)[0])}
+              />
             </div>
           )}
         </div>

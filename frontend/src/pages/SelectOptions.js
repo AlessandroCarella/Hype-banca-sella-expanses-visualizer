@@ -39,6 +39,8 @@ const SelectOptions = () => {
         userMissingNamesData, setUserMissingNamesData
     } = useSelectedOptions();
 
+    const [availableOptions, setAvailableOptions] = useState([]);
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -67,26 +69,31 @@ const SelectOptions = () => {
         fetchData();
     }, []);
 
+    useEffect(() => {
+        updateAvailableOptions(userExpenseData);
+    }, [namesData, userExpenseData]);
+
+    const updateAvailableOptions = (data) => {
+        const allSelectedNames = getAllSelectedNames(data);
+        const newAvailableOptions = namesData.filter(name => !allSelectedNames.includes(name));
+        setAvailableOptions(newAvailableOptions);
+    };
+
     const handleDataUpdate = (updatedData) => {
         setUserExpenseData(updatedData);
+        updateAvailableOptions(updatedData);
         
-        // Update userMissingNamesData
-        const allSelectedNames = getAllSelectedNames(updatedData);
-        const newUserMissingNamesData = namesData.filter(name => !allSelectedNames.includes(name));
-        setUserMissingNamesData(newUserMissingNamesData);
-
-        console.log('Updated userExpenseData:', updatedData);
-        console.log('Updated userMissingNamesData:', newUserMissingNamesData);
+        console.log('Updated userExpenseData:', JSON.stringify(updatedData, null, 2));
     };
 
     const getAllSelectedNames = (data) => {
         const selectedNames = [];
         const traverse = (obj) => {
             for (const key in obj) {
-                if (typeof obj[key] === 'object') {
-                    traverse(obj[key]);
-                } else if (Array.isArray(obj[key])) {
+                if (Array.isArray(obj[key])) {
                     selectedNames.push(...obj[key]);
+                } else if (typeof obj[key] === 'object') {
+                    traverse(obj[key]);
                 }
             }
         };
@@ -98,7 +105,7 @@ const SelectOptions = () => {
         <div className='foldable-list-container'>
             <FoldableList 
                 data={expenseData} 
-                namesList={namesData} 
+                availableOptions={availableOptions}
                 onDataUpdate={handleDataUpdate}
                 userExpenseData={userExpenseData}
             />

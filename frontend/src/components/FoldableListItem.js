@@ -2,8 +2,6 @@ import React from "react";
 import CustomSelect from "./CustomSelect";
 import FoldableList from "./FoldableList";
 import { isLastItem } from "./helpers/FoldableListHelpers";
-import { handleOptionSelect, renderCustomSelect } from "./helpers/FoldableListItemHelpers";
-import { useSelectedOptions } from "../pages/SelectOptions";
 
 const FoldableListItem = ({
     itemKey,
@@ -13,7 +11,6 @@ const FoldableListItem = ({
     handleSelect,
     availableOptions,
     userExpenseData,
-    namesList,  // Add this line
 }) => {
     const renderContent = () => {
         if (isOpen && !isLastItem(value)) {
@@ -22,7 +19,7 @@ const FoldableListItem = ({
                     <FoldableList 
                         data={value} 
                         isInnermost={isLastItem(Object.values(value)[0])}
-                        namesList={namesList}  // Pass namesList here
+                        availableOptions={availableOptions}
                         onDataUpdate={(updatedData) => handleSelect(itemKey, updatedData)}
                         userExpenseData={userExpenseData[itemKey] || {}}
                     />

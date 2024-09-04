@@ -1,21 +1,13 @@
 import React, { useState, useEffect } from "react";
 import FoldableListItem from "./FoldableListItem";
-import { initializeOpenItems, updateData } from "./helpers/FoldableListHelpers";
-import { useSelectedOptions } from "../pages/SelectOptions";
-import "../styles/components/FoldableList.css";
+import { initializeOpenItems } from "./helpers/FoldableListHelpers";
 
-const FoldableList = ({ data, isInnermost = false, namesList, onDataUpdate, userExpenseData }) => {
+const FoldableList = ({ data, isInnermost = false, availableOptions, onDataUpdate, userExpenseData }) => {
     const [openItems, setOpenItems] = useState({});
-    const [availableOptions, setAvailableOptions] = useState(namesList);
 
     useEffect(() => {
         setOpenItems(initializeOpenItems(data, isInnermost));
     }, [isInnermost, data]);
-
-    useEffect(() => {
-        const allSelectedOptions = Object.values(userExpenseData).flat();
-        setAvailableOptions(namesList.filter(option => !allSelectedOptions.includes(option)));
-    }, [userExpenseData, namesList]);
 
     const toggleOpen = (key) => {
         setOpenItems((prevState) => ({
@@ -41,7 +33,6 @@ const FoldableList = ({ data, isInnermost = false, namesList, onDataUpdate, user
                     handleSelect={handleSelect}
                     availableOptions={availableOptions}
                     userExpenseData={userExpenseData}
-                    namesList={namesList}  // Add this line
                 />
             ))}
         </div>

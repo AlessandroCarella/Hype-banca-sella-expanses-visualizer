@@ -51,27 +51,43 @@ const SelectOptions = () => {
         setNamesData,
         userExpenseData,
         setUserExpenseData,
-        userMissingNamesData,
-        setUserMissingNamesData,
     } = useSelectedOptions();
 
     const [availableOptions, setAvailableOptions] = useState([]);
+    const [preSelectedOptions, setPreSelectedOptions] = useState([]);
+    const [isDataLoaded, setIsDataLoaded] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [expenseResponse, namesResponse] = await Promise.all([
+                const [expenseResponse, namesResponse, preSelectedOptionsResponse] = await Promise.all([
                     fetch("/api/getUserExpenseDictionary"),
                     fetch("/api/getExpansesNamesList"),
+                    fetch("/api/getUserPreSelectedOptions"),
                 ]);
 
                 const expenseData = await expenseResponse.json();
-                const namesData = await namesResponse.json();
+                let namesData = await namesResponse.json();
+                const preSelectedOptionsData = await preSelectedOptionsResponse.json();
+
+                setPreSelectedOptions(preSelectedOptionsData);
+
+                // Remove pre-selected options from namesData
+                namesData = namesData.filter(name => !preSelectedOptionsData.includes(name));
 
                 setExpenseData(expenseData);
                 setNamesData(namesData);
-                setUserExpenseData(expenseData);
-                setUserMissingNamesData(namesData);
+
+                // Initialize userExpenseData with pre-selected options
+                const initialUserExpenseData = { ...expenseData };
+                Object.keys(initialUserExpenseData).forEach(key => {
+                    if (Array.isArray(initialUserExpenseData[key])) {
+                        initialUserExpenseData[key] = preSelectedOptionsData;
+                    }
+                });
+                setUserExpenseData(initialUserExpenseData);
+
+                setIsDataLoaded(true);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -81,12 +97,14 @@ const SelectOptions = () => {
     }, []);
 
     useEffect(() => {
-        updateAvailableOptions(userExpenseData);
-    }, [namesData, userExpenseData]);
+        if (isDataLoaded) {
+            updateAvailableOptions(userExpenseData, [...namesData, ...preSelectedOptions]);
+        }
+    }, [isDataLoaded, userExpenseData, namesData, preSelectedOptions]);
 
-    const updateAvailableOptions = (data) => {
+    const updateAvailableOptions = (data, names) => {
         const allSelectedNames = getAllSelectedNames(data);
-        const newAvailableOptions = namesData.filter(
+        const newAvailableOptions = names.filter(
             (name) => !allSelectedNames.includes(name)
         );
         setAvailableOptions(newAvailableOptions);
@@ -94,7 +112,7 @@ const SelectOptions = () => {
 
     const handleDataUpdate = (updatedData) => {
         setUserExpenseData(updatedData);
-        updateAvailableOptions(updatedData);
+        updateAvailableOptions(updatedData, [...namesData, ...preSelectedOptions]);
 
         console.log(
             "Updated userExpenseData:",
@@ -102,20 +120,9 @@ const SelectOptions = () => {
         );
     };
 
-    const getAllSelectedNames = (data) => {
-        const selectedNames = [];
-        const traverse = (obj) => {
-            for (const key in obj) {
-                if (Array.isArray(obj[key])) {
-                    selectedNames.push(...obj[key]);
-                } else if (typeof obj[key] === "object") {
-                    traverse(obj[key]);
-                }
-            }
-        };
-        traverse(data);
-        return selectedNames;
-    };
+    if (!isDataLoaded) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div className="foldable-list-container">

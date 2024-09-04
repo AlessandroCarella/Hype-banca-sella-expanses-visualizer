@@ -29,6 +29,11 @@ export const renderOptions = (options, disabled, onSelect, selectedValues, allSe
 
 export const sortOptions = (options, allSelectedOptions) => {
     return [...options].sort((a, b) => {
+        // First, sort alphabetically
+        const alphabeticalOrder = a.localeCompare(b);
+        if (alphabeticalOrder !== 0) return alphabeticalOrder;
+
+        // If alphabetically equal, prioritize non-selected options
         const aSelected = allSelectedOptions.includes(a);
         const bSelected = allSelectedOptions.includes(b);
         if (aSelected === bSelected) return 0;

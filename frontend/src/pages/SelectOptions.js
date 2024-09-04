@@ -6,10 +6,18 @@ const SelectedOptionsContext = createContext();
 
 // Create a custom hook for using the context
 export const SelectedOptionsProvider = ({ children }) => {
-    const [selectedOptions, setSelectedOptions] = useState({});
+    const [expenseData, setExpenseData] = useState({});
+    const [namesData, setNamesData] = useState([]);
+    const [userExpenseData, setUserExpenseData] = useState({});
+    const [userMissingNamesData, setUserMissingNamesData] = useState([]);
 
     return (
-        <SelectedOptionsContext.Provider value={{ selectedOptions, setSelectedOptions }}>
+        <SelectedOptionsContext.Provider value={{ 
+            expenseData, setExpenseData,
+            namesData, setNamesData,
+            userExpenseData, setUserExpenseData,
+            userMissingNamesData, setUserMissingNamesData
+        }}>
             {children}
         </SelectedOptionsContext.Provider>
     );
@@ -24,9 +32,12 @@ export const useSelectedOptions = () => {
 };
 
 const SelectOptions = () => {
-    const [expenseDictionary, setExpenseDictionary] = useState({});
-    const [namesList, setNamesList] = useState([]);
-    const { selectedOptions, setSelectedOptions } = useSelectedOptions();
+    const { 
+        expenseData, setExpenseData,
+        namesData, setNamesData,
+        userExpenseData, setUserExpenseData,
+        userMissingNamesData, setUserMissingNamesData
+    } = useSelectedOptions();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -39,8 +50,15 @@ const SelectOptions = () => {
                 const expenseData = await expenseResponse.json();
                 const namesData = await namesResponse.json();
 
-                setExpenseDictionary(expenseData);
-                setNamesList(namesData);
+                setExpenseData(expenseData);
+                setNamesData(namesData);
+                setUserExpenseData(expenseData);
+                setUserMissingNamesData(namesData);
+
+                console.log('Initial expenseData:', expenseData);
+                console.log('Initial namesData:', namesData);
+                console.log('Initial userExpenseData:', expenseData);
+                console.log('Initial userMissingNamesData:', namesData);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -50,17 +68,39 @@ const SelectOptions = () => {
     }, []);
 
     const handleDataUpdate = (updatedData) => {
-        setSelectedOptions(updatedData);
-        console.log('Updated data structure:', updatedData);
+        setUserExpenseData(updatedData);
+        
+        // Update userMissingNamesData
+        const allSelectedNames = getAllSelectedNames(updatedData);
+        const newUserMissingNamesData = namesData.filter(name => !allSelectedNames.includes(name));
+        setUserMissingNamesData(newUserMissingNamesData);
+
+        console.log('Updated userExpenseData:', updatedData);
+        console.log('Updated userMissingNamesData:', newUserMissingNamesData);
+    };
+
+    const getAllSelectedNames = (data) => {
+        const selectedNames = [];
+        const traverse = (obj) => {
+            for (const key in obj) {
+                if (typeof obj[key] === 'object') {
+                    traverse(obj[key]);
+                } else if (Array.isArray(obj[key])) {
+                    selectedNames.push(...obj[key]);
+                }
+            }
+        };
+        traverse(data);
+        return selectedNames;
     };
 
     return (
         <div className='foldable-list-container'>
             <FoldableList 
-                data={expenseDictionary} 
-                namesList={namesList} 
+                data={expenseData} 
+                namesList={namesData} 
                 onDataUpdate={handleDataUpdate}
-                selectedOptions={selectedOptions}
+                userExpenseData={userExpenseData}
             />
         </div>
     );

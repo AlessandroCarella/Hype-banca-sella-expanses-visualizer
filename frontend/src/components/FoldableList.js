@@ -1,14 +1,21 @@
 import React, { useState, useEffect } from "react";
 import FoldableListItem from "./FoldableListItem";
-import { initializeOpenItems, updateData } from "./helpers/FoldableList";
+import { initializeOpenItems, updateData } from "./helpers/FoldableListHelpers";
+import { useSelectedOptions } from "../pages/SelectOptions";
 import "../styles/components/FoldableList.css";
 
-const FoldableList = ({ data, namesList, isInnermost = false, onDataUpdate, selectedOptions }) => {
+const FoldableList = ({ data, isInnermost = false, namesList, onDataUpdate, userExpenseData }) => {
     const [openItems, setOpenItems] = useState({});
+    const [availableOptions, setAvailableOptions] = useState(namesList);
 
     useEffect(() => {
         setOpenItems(initializeOpenItems(data, isInnermost));
     }, [isInnermost, data]);
+
+    useEffect(() => {
+        const allSelectedOptions = Object.values(userExpenseData).flat();
+        setAvailableOptions(namesList.filter(option => !allSelectedOptions.includes(option)));
+    }, [userExpenseData, namesList]);
 
     const toggleOpen = (key) => {
         setOpenItems((prevState) => ({
@@ -17,8 +24,8 @@ const FoldableList = ({ data, namesList, isInnermost = false, onDataUpdate, sele
         }));
     };
 
-    const handleSelect = (key, selectedOption) => {
-        const updatedData = updateData(key, selectedOption, selectedOptions);
+    const handleSelect = (key, selectedOptions) => {
+        const updatedData = { ...userExpenseData, [key]: selectedOptions };
         onDataUpdate(updatedData);
     };
 
@@ -31,11 +38,10 @@ const FoldableList = ({ data, namesList, isInnermost = false, onDataUpdate, sele
                     value={value}
                     isOpen={openItems[key]}
                     toggleOpen={() => toggleOpen(key)}
-                    selections={selectedOptions}
                     handleSelect={handleSelect}
-                    namesList={namesList}
-                    onDataUpdate={onDataUpdate}
-                    selectedOptions={selectedOptions}
+                    availableOptions={availableOptions}
+                    userExpenseData={userExpenseData}
+                    namesList={namesList}  // Add this line
                 />
             ))}
         </div>

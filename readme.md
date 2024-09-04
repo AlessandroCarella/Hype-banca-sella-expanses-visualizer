@@ -17,6 +17,9 @@ C:\Users\alex1\Desktop\Hype-banca-sella-expanses-visualizer\backend\venv\Scripts
 
 ------------------------------------------
 todo:
+in the select-options page put a box similarly looking to the ones to choose the category of the expanses but with a different behavior:
+call it "expanses to categorize" and when the box is unfolded it shows just a list of all the expanses that have not been categorized yet.
+
 implement 2 differnt possible views to set the categories of expanses (and a toggle to switch between them):
     1. the list of the expanses names and a select next to it to choose the category.
     2. the list of the categories and a select next to it to choose the expanses that are left without a category.

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { setDarkMode, setLightMode } from "./helpers/colorModeSwitch";
+import { setDarkMode, setLightMode } from "./helpers/colorModeSwitchHelpers";
 
 export function ColorModeSwitch() {
     const [isDarkMode, setIsDarkMode] = useState(false);

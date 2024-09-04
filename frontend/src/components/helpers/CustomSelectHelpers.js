@@ -1,3 +1,5 @@
+import React, { useState, useEffect, useRef } from "react";
+
 export const handleClickOutside = (ref, callback) => {
     const handleClick = (event) => {
         if (ref.current && !ref.current.contains(event.target)) {
@@ -41,18 +43,6 @@ export const getOptionClassName = (option, disabled, selectedValues) => {
     `;
 };
 
-export const calculatePosition = (element) => {
-    const rect = element.getBoundingClientRect();
-    const spaceAbove = rect.top;
-    const spaceBelow = window.innerHeight - rect.bottom;
-    
-    if (spaceAbove > spaceBelow) {
-        return { top: 'auto', bottom: '100%' };
-    } else {
-        return { top: '100%', bottom: 'auto' };
-    }
-};
-
 export const toggleOption = (option, value) => {
     const newValue = Array.isArray(value) ? [...value] : [];
     const index = newValue.indexOf(option);
@@ -63,3 +53,65 @@ export const toggleOption = (option, value) => {
     }
     return newValue;
 };
+
+export const useCustomSelect = (itemKey, userExpenseData, onChange, onOptionSelect) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const selectRef = useRef(null);
+    const value = userExpenseData[itemKey] || [];
+
+    useEffect(() => {
+        return handleClickOutside(selectRef, () => setIsOpen(false));
+    }, []);
+
+    const handleSelect = (option) => {
+        const newValue = toggleOption(option, value);
+        onChange(itemKey, newValue);
+        onOptionSelect(option, value.includes(option));
+    };
+
+    const handleRemoveOption = (option, e) => {
+        e.stopPropagation();
+        const newValue = value.filter(item => item !== option);
+        onChange(itemKey, newValue);
+        onOptionSelect(option, true);
+    };
+
+    const toggleOpen = (e) => {
+        e.stopPropagation();
+        setIsOpen(!isOpen);
+    };
+
+    return { isOpen, setIsOpen, selectRef, value, handleSelect, handleRemoveOption, toggleOpen };
+};
+
+export const SelectHeader = ({ isOpen, toggleOpen }) => (
+    <div
+        className={`select-header ${isOpen ? "open" : ""}`}
+        onClick={toggleOpen}
+    >
+        Select options
+    </div>
+);
+
+export const OptionsList = ({ options, handleSelect, value }) => (
+    <ul className="options-list">
+        {renderOptions(options, [], handleSelect, value, value)}
+    </ul>
+);
+
+export const SelectedOptionsBox = ({ value, handleRemoveOption }) => (
+    Array.isArray(value) && value.length > 0 && (
+        <div className="selected-options-box">
+            {value.map((option) => (
+                <span 
+                    key={option} 
+                    className="selected-option"
+                    onClick={(e) => handleRemoveOption(option, e)}
+                >
+                    {option}
+                    <span className="remove-option">×</span>
+                </span>
+            ))}
+        </div>
+    )
+);

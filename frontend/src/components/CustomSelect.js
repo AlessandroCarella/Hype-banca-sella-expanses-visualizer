@@ -1,37 +1,20 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import { 
-    handleClickOutside, 
-    renderOptions, 
-    calculatePosition, 
-    toggleOption 
+    useCustomSelect,
+    SelectHeader,
+    OptionsList,
+    SelectedOptionsBox
 } from "./helpers/CustomSelectHelpers";
 
 const CustomSelect = ({ options, itemKey, userExpenseData, onChange, onOptionSelect }) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const selectRef = useRef(null);
-    const value = userExpenseData[itemKey] || [];
-
-    useEffect(() => {
-        return handleClickOutside(selectRef, () => setIsOpen(false));
-    }, []);
-
-    const handleSelect = (option) => {
-        const newValue = toggleOption(option, value);
-        onChange(itemKey, newValue);
-        onOptionSelect(option, value.includes(option));
-    };
-
-    const handleRemoveOption = (option, e) => {
-        e.stopPropagation();
-        const newValue = value.filter(item => item !== option);
-        onChange(itemKey, newValue);
-        onOptionSelect(option, true);
-    };
-
-    const toggleOpen = (e) => {
-        e.stopPropagation();
-        setIsOpen(!isOpen);
-    };
+    const { 
+        isOpen, 
+        selectRef, 
+        value, 
+        handleSelect, 
+        handleRemoveOption, 
+        toggleOpen 
+    } = useCustomSelect(itemKey, userExpenseData, onChange, onOptionSelect);
 
     return (
         <div className="custom-select-container">
@@ -47,37 +30,5 @@ const CustomSelect = ({ options, itemKey, userExpenseData, onChange, onOptionSel
         </div>
     );
 };
-
-const SelectHeader = ({ isOpen, toggleOpen }) => (
-    <div
-        className={`select-header ${isOpen ? "open" : ""}`}
-        onClick={toggleOpen}
-    >
-        Select options
-    </div>
-);
-
-const OptionsList = ({ options, handleSelect, value }) => (
-    <ul className="options-list">
-        {renderOptions(options, [], handleSelect, value, value)}
-    </ul>
-);
-
-const SelectedOptionsBox = ({ value, handleRemoveOption }) => (
-    Array.isArray(value) && value.length > 0 && (
-        <div className="selected-options-box">
-            {value.map((option) => (
-                <span 
-                    key={option} 
-                    className="selected-option"
-                    onClick={(e) => handleRemoveOption(option, e)}
-                >
-                    {option}
-                    <span className="remove-option">×</span>
-                </span>
-            ))}
-        </div>
-    )
-);
 
 export default CustomSelect;

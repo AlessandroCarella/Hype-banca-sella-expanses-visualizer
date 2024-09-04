@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios"; // Add this import
 import FoldableList from "../components/FoldableList";
 import BulletListLookalikeFoldableList from "../components/BulletListLookalikeFoldableList";
 import { updateAvailableOptions, useSelectedOptions, fetchAllData, processInitialData } from "./helpers/SelectOptionsHelpers";
@@ -46,11 +47,12 @@ const SelectOptions = () => {
     const handleDataUpdate = (updatedData) => {
         setUserExpenseData(updatedData);
         updateAvailableOptionsEffect();
-        logUpdatedData(updatedData);
+        saveDataToFile(updatedData);
     };
 
-    const logUpdatedData = (data) => {
-        console.log("Updated userExpenseData:", JSON.stringify(data, null, 2));
+    const saveDataToFile = (data) => {
+        //make an api call to save the data to the user's file
+        axios.post("/api/saveUserCategories", { data: JSON.stringify(data, null, 4) })
     };
 
     return (

@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request, jsonify
 
 from utils import get_config
 
@@ -8,7 +8,7 @@ from routes.processCsv import process_file
 from routes.selectPreviousCsv import get_previous_files, get_file
 
 # User categories setted
-from routes.userCategoriesSetted import is_user_categories_setted, get_user_pre_selected_options
+from routes.userCategoriesSetted import is_user_categories_setted, get_user_pre_selected_options, save_user_categories
 from routes.getElementsSettingPage import get_user_expense_dictionary, get_expanses_names_list
 
 app = Flask(__name__)
@@ -50,6 +50,11 @@ def getExpansesNamesList():
 @app.route('/api/getUserPreSelectedOptions', methods=['GET'])
 def getUserPreSelectedOptions():
     return get_user_pre_selected_options(app)
+
+@app.route('/api/saveUserCategories', methods=['POST'])
+def saveUserCategories():
+    data = request.json.get('data')
+    return save_user_categories(app, data)
 
 ########################################################
 

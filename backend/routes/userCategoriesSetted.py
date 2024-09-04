@@ -60,3 +60,11 @@ def get_user_pre_selected_options(app):
         categories = json.load(file)
 
     return jsonify(getAllNamesInCategories(categories))
+
+def save_user_categories(app, categories):
+    try:
+        print (categories)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    return jsonify({"message": "Categories saved successfully"}), 200
+

@@ -1,8 +1,49 @@
-import React, { useEffect, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios"; // Add this import
 import FoldableList from "../components/FoldableList";
+import {
+    updateAvailableOptions,
+    getAllSelectedNames,
+} from "./helpers/SelectOptionsHelpers";
 import BulletListLookalikeFoldableList from "../components/BulletListLookalikeFoldableList";
-import { updateAvailableOptions, useSelectedOptions, fetchAllData, processInitialData } from "./helpers/SelectOptionsHelpers";
+
+// Create the context
+const SelectedOptionsContext = createContext();
+
+// Create a custom hook for using the context
+export const SelectedOptionsProvider = ({ children }) => {
+    const [expenseData, setExpenseData] = useState({});
+    const [namesData, setNamesData] = useState([]);
+    const [userExpenseData, setUserExpenseData] = useState({});
+    const [userMissingNamesData, setUserMissingNamesData] = useState([]);
+
+    return (
+        <SelectedOptionsContext.Provider
+            value={{
+                expenseData,
+                setExpenseData,
+                namesData,
+                setNamesData,
+                userExpenseData,
+                setUserExpenseData,
+                userMissingNamesData,
+                setUserMissingNamesData,
+            }}
+        >
+            {children}
+        </SelectedOptionsContext.Provider>
+    );
+};
+
+export const useSelectedOptions = () => {
+    const context = useContext(SelectedOptionsContext);
+    if (!context) {
+        throw new Error(
+            "useSelectedOptions must be used within a SelectedOptionsProvider"
+        );
+    }
+    return context;
+};
 
 const SelectOptions = () => {
     const {
@@ -19,40 +60,82 @@ const SelectOptions = () => {
     const [isDataLoaded, setIsDataLoaded] = useState(false);
 
     useEffect(() => {
-        fetchInitialData();
+        const fetchData = async () => {
+            try {
+                const [
+                    expenseResponse,
+                    namesResponse,
+                    preSelectedOptionsResponse,
+                ] = await Promise.all([
+                    fetch("/api/getUserExpenseDictionary"),
+                    fetch("/api/getExpansesNamesList"),
+                    fetch("/api/getUserPreSelectedOptions"),
+                ]);
+
+                const expenseData = await expenseResponse.json();
+                let namesData = await namesResponse.json();
+                const preSelectedOptionsData =
+                    await preSelectedOptionsResponse.json();
+
+                setPreSelectedOptions(preSelectedOptionsData);
+
+                // Remove pre-selected options from namesData
+                namesData = namesData.filter(
+                    (name) => !preSelectedOptionsData.includes(name)
+                );
+
+                setExpenseData(expenseData);
+                setNamesData(namesData);
+
+                // Initialize userExpenseData with pre-selected options
+                const initialUserExpenseData = { ...expenseData };
+                Object.keys(initialUserExpenseData).forEach((key) => {
+                    if (Array.isArray(initialUserExpenseData[key])) {
+                        initialUserExpenseData[key] = preSelectedOptionsData;
+                    }
+                });
+                setUserExpenseData(initialUserExpenseData);
+
+                setIsDataLoaded(true);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        fetchData();
     }, []);
 
     useEffect(() => {
         if (isDataLoaded) {
-            updateAvailableOptionsEffect();
+            updateAvailableOptions(userExpenseData, [
+                ...namesData,
+                ...preSelectedOptions,
+            ]);
         }
     }, [isDataLoaded, userExpenseData, namesData, preSelectedOptions]);
 
-    const fetchInitialData = async () => {
-        try {
-            const [expenseData, namesData, preSelectedOptionsData] = await fetchAllData();
-            processInitialData(expenseData, namesData, preSelectedOptionsData, setExpenseData, setNamesData, setPreSelectedOptions, setUserExpenseData);
-            setIsDataLoaded(true);
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        }
-    };
-
-    const updateAvailableOptionsEffect = () => {
-        const allNames = [...namesData, ...preSelectedOptions];
-        const newAvailableOptions = updateAvailableOptions(userExpenseData, allNames);
+    const updateAvailableOptions = (data, names) => {
+        const allSelectedNames = getAllSelectedNames(data);
+        const newAvailableOptions = names.filter(
+            (name) => !allSelectedNames.includes(name)
+        );
         setAvailableOptions(newAvailableOptions);
     };
 
     const handleDataUpdate = (updatedData) => {
         setUserExpenseData(updatedData);
-        updateAvailableOptionsEffect();
+        updateAvailableOptions(updatedData, [
+            ...namesData,
+            ...preSelectedOptions,
+        ]);
         saveDataToFile(updatedData);
     };
 
     const saveDataToFile = (data) => {
         //make an api call to save the data to the user's file
-        axios.post("/api/saveUserCategories", { data: JSON.stringify(data, null, 4) })
+        axios.post("/api/saveUserCategories", {
+            data: JSON.stringify(data, null, 4),
+        });
     };
 
     return (

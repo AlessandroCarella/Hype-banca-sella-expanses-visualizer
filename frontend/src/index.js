@@ -7,7 +7,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import UploadCsv from "./pages/UploadCsv";
 import Graphs from "./pages/Graph";
 import SelectOptions, { useSelectedOptions } from './pages/SelectOptions';
-import {SelectedOptionsProvider} from './pages/helpers/SelectOptionsHelpers'
+import {SelectedOptionsProvider} from './pages/SelectOptions'
 //Components
 import { ColorModeSwitch } from "./components/colorModeSwitch";
 

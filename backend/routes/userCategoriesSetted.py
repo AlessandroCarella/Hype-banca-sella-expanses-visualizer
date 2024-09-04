@@ -63,7 +63,8 @@ def get_user_pre_selected_options(app):
 
 def save_user_categories(app, categories):
     try:
-        print (categories)
+        with open (getCategoriesFilePath(app), "w") as file:
+            file.writelines(categories)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     return jsonify({"message": "Categories saved successfully"}), 200

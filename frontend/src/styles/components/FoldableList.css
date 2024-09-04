@@ -50,11 +50,11 @@
     transform: rotate(90deg);
 }
 
-.foldable-list-toggle.last-item::before {
+.foldable-list-toggle.array-item::before {
     content: none;
 }
 
-.foldable-list-toggle.last-item {
+.foldable-list-toggle.array-item {
     cursor: default;
 }
 
@@ -63,14 +63,14 @@
     width: 100%;
 }
 
-.foldable-list-content.last-item {
+.foldable-list-content.array-item {
     width: 100%;
     flex-grow: 1;
     margin-left: 0;
     padding-left: 0;
 }
 
-.foldable-list-content.last-item .select-value-container {
+.foldable-list-content.array-item .select-value-container {
     margin-top: 0;
 }
 

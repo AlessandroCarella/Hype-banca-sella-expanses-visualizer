@@ -2,17 +2,17 @@ import React, { useState, useEffect } from "react";
 import FoldableListItem from "./FoldableListItem";
 import { initializeOpenItems } from "./helpers/FoldableListHelpers";
 
-const FoldableList = ({ data, isInnermost = false, availableOptions, onDataUpdate, userExpenseData }) => {
+const FoldableList = ({ data, availableOptions, onDataUpdate, userExpenseData }) => {
     const [openItems, setOpenItems] = useState({});
 
     useEffect(() => {
-        setOpenItems(initializeOpenItems(data, isInnermost));
-    }, [isInnermost, data]);
+        setOpenItems(initializeOpenItems(data, Array.isArray(data)));
+    }, [Array.isArray(data), data]);
 
     const toggleOpen = (key) => {
-        setOpenItems((prevState) => ({
-            ...prevState,
-            [key]: !prevState[key],
+        setOpenItems((prevOpenItems) => ({
+            ...prevOpenItems,
+            [key]: !prevOpenItems[key],
         }));
     };
 
@@ -23,7 +23,7 @@ const FoldableList = ({ data, isInnermost = false, availableOptions, onDataUpdat
 
     return (
         <div className="foldable-list">
-            {Object.entries(data || {}).map(([key, value]) => (
+            {Object.entries(data).map(([key, value]) => (
                 <FoldableListItem
                     key={key}
                     itemKey={key}

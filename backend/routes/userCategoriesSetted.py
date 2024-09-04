@@ -3,15 +3,21 @@ from os import path
 import json
 import shutil
 
+def getCategoriesFilePath(app):
+    return path.join (app.config["ROOT_FROM_BACKEND"], app.config["USER_FILES_FOLDER_NAME"], app.config["USER_CATEGORIES_FILE_NAME"])
+
+def getNamesFilePath(app):
+    return path.join (app.config["GENERATED_FILES_OUTPUT_FOLDER"], app.config["NAME_LIST_FILE_NAME"])
+
 def userCategoriesFileAndNamesAndDescriptionsFiles(app):
     def checkForCategoriesFile(categoriesFile, app):
         if not path.exists(categoriesFile):
             defaultCategoriesFile = path.join (app.config["DEFAULT_FILES_FOLDER_NAME"], app.config["DEFAULT_USER_CATEGORIES_FILE_NAME"])
             shutil.copy(defaultCategoriesFile, categoriesFile)
 
-    categoriesFile = path.join (app.config["ROOT_FROM_BACKEND"], app.config["USER_FILES_FOLDER_NAME"], app.config["USER_CATEGORIES_FILE_NAME"])
-    namesFile = path.join (app.config["GENERATED_FILES_OUTPUT_FOLDER"], app.config["NAME_LIST_FILE_NAME"])
-    
+    categoriesFile = getCategoriesFilePath(app)
+    namesFile = getNamesFilePath(app)
+
     checkForCategoriesFile(categoriesFile, app)
     
     with open (categoriesFile, "r") as file:
@@ -21,7 +27,7 @@ def userCategoriesFileAndNamesAndDescriptionsFiles(app):
 
     return categories, names
 
-def userCategoriesFileFilled(categories, names):
+def getAllNamesInCategories(categories):
     categoriesNames = []
     
     def traverse(item):
@@ -36,10 +42,21 @@ def userCategoriesFileFilled(categories, names):
     
     traverse(categories)
 
-    return all(name in categoriesNames for name in names)
+    return categoriesNames
 
-def user_categories_setted(app):
+def userCategoriesFileFilled(categories, names):
+    return all(name in getAllNamesInCategories(categories) for name in names)
+
+def is_user_categories_setted(app):
     categories, names = userCategoriesFileAndNamesAndDescriptionsFiles(app)
     if not userCategoriesFileFilled(categories, names):
         return jsonify(False)
     return jsonify(True)
+
+def get_user_pre_selected_options(app):
+    categoriesFilePath = getCategoriesFilePath(app)
+    
+    with open(categoriesFilePath, "r") as file:
+        categories = json.load(file)
+
+    return jsonify(getAllNamesInCategories(categories))

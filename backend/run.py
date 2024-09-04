@@ -8,8 +8,8 @@ from routes.processCsv import process_file
 from routes.selectPreviousCsv import get_previous_files, get_file
 
 # User categories setted
-from routes.userCategoriesSetted import user_categories_setted
-from routes.getElementsSettingPage import getUserExpenseDictionary, getNamesList
+from routes.userCategoriesSetted import is_user_categories_setted, get_user_pre_selected_options
+from routes.getElementsSettingPage import get_user_expense_dictionary, get_expanses_names_list
 
 app = Flask(__name__)
 
@@ -36,16 +36,20 @@ def getFile():
 ########################################################
 # User categories
 @app.route('/api/userCategoriesSetted', methods=['GET'])
-def check_user_categories_setted():
-    return user_categories_setted(app)
+def isUserCategoriesSetted():
+    return is_user_categories_setted(app)
 
 @app.route('/api/getUserExpenseDictionary', methods=['GET'])
-def get_user_expense_dictionary():
-    return getUserExpenseDictionary(app)
+def getUserExpenseDictionary():
+    return get_user_expense_dictionary(app)
 
 @app.route('/api/getExpansesNamesList', methods=['GET'])
-def get_expanses_names_list():
-    return getNamesList(app)
+def getExpansesNamesList():
+    return get_expanses_names_list(app)
+
+@app.route('/api/getUserPreSelectedOptions', methods=['GET'])
+def getUserPreSelectedOptions():
+    return get_user_pre_selected_options(app)
 
 ########################################################
 

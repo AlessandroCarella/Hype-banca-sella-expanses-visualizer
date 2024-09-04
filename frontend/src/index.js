@@ -6,8 +6,8 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 //Pages
 import UploadCsv from "./pages/UploadCsv";
 import Graphs from "./pages/Graph";
-import SelectOptions, { useSelectedOptions, SelectedOptionsProvider } from './pages/SelectOptions';
-
+import SelectOptions, { useSelectedOptions } from './pages/SelectOptions';
+import {SelectedOptionsProvider} from './pages/helpers/SelectOptionsHelpers'
 //Components
 import { ColorModeSwitch } from "./components/colorModeSwitch";
 
@@ -19,6 +19,7 @@ import "./styles/components/FoldableList.css";
 import "./styles/components/DatesCarousel.css";
 import "./styles/pages/SelectOptions.css";
 import "./styles/components/CustomSelect.css";
+import "./styles/components/BulletListLookalikeFoldableList.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 

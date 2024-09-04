@@ -1,47 +1,7 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import FoldableList from "../components/FoldableList";
-import {
-    updateAvailableOptions,
-    getAllSelectedNames,
-} from "./helpers/SelectOptionsHelpers";
-
-// Create the context
-const SelectedOptionsContext = createContext();
-
-// Create a custom hook for using the context
-export const SelectedOptionsProvider = ({ children }) => {
-    const [expenseData, setExpenseData] = useState({});
-    const [namesData, setNamesData] = useState([]);
-    const [userExpenseData, setUserExpenseData] = useState({});
-    const [userMissingNamesData, setUserMissingNamesData] = useState([]);
-
-    return (
-        <SelectedOptionsContext.Provider
-            value={{
-                expenseData,
-                setExpenseData,
-                namesData,
-                setNamesData,
-                userExpenseData,
-                setUserExpenseData,
-                userMissingNamesData,
-                setUserMissingNamesData,
-            }}
-        >
-            {children}
-        </SelectedOptionsContext.Provider>
-    );
-};
-
-export const useSelectedOptions = () => {
-    const context = useContext(SelectedOptionsContext);
-    if (!context) {
-        throw new Error(
-            "useSelectedOptions must be used within a SelectedOptionsProvider"
-        );
-    }
-    return context;
-};
+import BulletListLookalikeFoldableList from "../components/BulletListLookalikeFoldableList";
+import { updateAvailableOptions, useSelectedOptions, fetchAllData, processInitialData } from "./helpers/SelectOptionsHelpers";
 
 const SelectOptions = () => {
     const {
@@ -58,74 +18,45 @@ const SelectOptions = () => {
     const [isDataLoaded, setIsDataLoaded] = useState(false);
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const [expenseResponse, namesResponse, preSelectedOptionsResponse] = await Promise.all([
-                    fetch("/api/getUserExpenseDictionary"),
-                    fetch("/api/getExpansesNamesList"),
-                    fetch("/api/getUserPreSelectedOptions"),
-                ]);
-
-                const expenseData = await expenseResponse.json();
-                let namesData = await namesResponse.json();
-                const preSelectedOptionsData = await preSelectedOptionsResponse.json();
-
-                setPreSelectedOptions(preSelectedOptionsData);
-
-                // Remove pre-selected options from namesData
-                namesData = namesData.filter(name => !preSelectedOptionsData.includes(name));
-
-                setExpenseData(expenseData);
-                setNamesData(namesData);
-
-                // Initialize userExpenseData with pre-selected options
-                const initialUserExpenseData = { ...expenseData };
-                Object.keys(initialUserExpenseData).forEach(key => {
-                    if (Array.isArray(initialUserExpenseData[key])) {
-                        initialUserExpenseData[key] = preSelectedOptionsData;
-                    }
-                });
-                setUserExpenseData(initialUserExpenseData);
-
-                setIsDataLoaded(true);
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        };
-
-        fetchData();
+        fetchInitialData();
     }, []);
 
     useEffect(() => {
         if (isDataLoaded) {
-            updateAvailableOptions(userExpenseData, [...namesData, ...preSelectedOptions]);
+            updateAvailableOptionsEffect();
         }
     }, [isDataLoaded, userExpenseData, namesData, preSelectedOptions]);
 
-    const updateAvailableOptions = (data, names) => {
-        const allSelectedNames = getAllSelectedNames(data);
-        const newAvailableOptions = names.filter(
-            (name) => !allSelectedNames.includes(name)
-        );
+    const fetchInitialData = async () => {
+        try {
+            const [expenseData, namesData, preSelectedOptionsData] = await fetchAllData();
+            processInitialData(expenseData, namesData, preSelectedOptionsData, setExpenseData, setNamesData, setPreSelectedOptions, setUserExpenseData);
+            setIsDataLoaded(true);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+
+    const updateAvailableOptionsEffect = () => {
+        const allNames = [...namesData, ...preSelectedOptions];
+        const newAvailableOptions = updateAvailableOptions(userExpenseData, allNames);
         setAvailableOptions(newAvailableOptions);
     };
 
     const handleDataUpdate = (updatedData) => {
         setUserExpenseData(updatedData);
-        updateAvailableOptions(updatedData, [...namesData, ...preSelectedOptions]);
-
-        console.log(
-            "Updated userExpenseData:",
-            JSON.stringify(updatedData, null, 2)
-        );
+        updateAvailableOptionsEffect();
+        logUpdatedData(updatedData);
     };
 
-    if (!isDataLoaded) {
-        return <div>Loading...</div>;
-    }
+    const logUpdatedData = (data) => {
+        console.log("Updated userExpenseData:", JSON.stringify(data, null, 2));
+    };
 
     return (
         <div className="foldable-list-container">
+            <BulletListLookalikeFoldableList items={namesData} />
+            <h2>Categories</h2>
             <FoldableList
                 data={expenseData}
                 availableOptions={availableOptions}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.css';
+import Button from "../components/Button";
 
 function UploadCsv() {
     const [file, setFile] = useState(null);
@@ -127,7 +128,7 @@ function UploadCsv() {
         <div className="UploadCsv container d-flex flex-column align-items-center justify-content-center vh-100">
             <div className="load-csv mb-3">
                 <input type="file" accept=".csv" onChange={handleFileChange} style={{ display: "none" }} id="csvFile" />
-                <button type="button" className="btn button" onClick={() => document.getElementById('csvFile').click()}>Upload CSV</button>
+                <Button onClick={() => document.getElementById('csvFile').click()}>Upload CSV</Button>
             </div>
             <div className="select-previous-file">
                 <select id="previousFiles" className="form-control" onChange={handleSelectChange}>

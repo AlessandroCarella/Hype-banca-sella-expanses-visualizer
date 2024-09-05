@@ -1,4 +1,5 @@
 from flask import jsonify
+import os
 from os import path
 import json
 import shutil
@@ -8,6 +9,9 @@ def getCategoriesFilePath(app):
 
 def getNamesFilePath(app):
     return path.join (app.config["GENERATED_FILES_OUTPUT_FOLDER"], app.config["NAME_LIST_FILE_NAME"])
+
+def getCategoriesDefaultFilePath(app):
+    return path.join (app.config["DEFAULT_FILES_FOLDER_NAME"], app.config["DEFAULT_USER_CATEGORIES_FILE_NAME"])
 
 def userCategoriesFileAndNamesAndDescriptionsFiles(app):
     def checkForCategoriesFile(categoriesFile, app):
@@ -69,3 +73,11 @@ def save_user_categories(app, categories):
         return jsonify({"error": str(e)}), 500
     return jsonify({"message": "Categories saved successfully"}), 200
 
+def reset_user_options_to_default (app):
+    try:
+        if path.exists(getCategoriesFilePath(app)):
+            os.remove(getCategoriesFilePath(app))
+        shutil.copy(getCategoriesDefaultFilePath(app), getCategoriesFilePath(app))
+        return jsonify({"message": "Categories reset to default successfully"}), 200    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500

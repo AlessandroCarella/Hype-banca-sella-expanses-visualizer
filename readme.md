@@ -46,6 +46,8 @@ pages:
     user settings (done (half of the views i want to implement))
     error page
 
+put in the documentation that the user categories file in backend/default files/user categories.json can be edited since the components are rendered dinamically
+
 ------------------------------------------
 colors:
 the colors used in the app are:

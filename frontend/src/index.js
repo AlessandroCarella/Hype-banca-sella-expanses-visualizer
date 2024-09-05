@@ -30,9 +30,9 @@ root.render(
             <Router>
                 <ColorModeSwitch />
                 <Routes>
-                    <Route path="/" element={<UploadCsv />} />
-                    <Route path="/graphs" element={<Graphs />} />
+                    <Route path="/upload-csv" element={<UploadCsv />} />
                     <Route path="/select-options" element={<SelectOptions />} />
+                    <Route path="/graphs" element={<Graphs />} />
                 </Routes>
             </Router>
         </SelectedOptionsProvider>

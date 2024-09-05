@@ -64,12 +64,14 @@ const SelectOptions = () => {
     const [preSelectedOptions, setPreSelectedOptions] = useState([]);
     const [isDataLoaded, setIsDataLoaded] = useState(false);
     const navigate = useNavigate();
-    const [showConfirm, setShowConfirm] = useState(false);
+    const [showConfirmSaveAndGoToGraphs, setShowConfirmSaveAndGoToGraphs] = useState(false);
+    const [showConfirmReset, setShowConfirmReset] = useState(false);
 
     useEffect(() => {
         const loadData = async () => {
             try {
-                const { expenseData, namesData, preSelectedOptionsData } = await fetchInitialData();
+                const { expenseData, namesData, preSelectedOptionsData } =
+                    await fetchInitialData();
                 setExpenseData(expenseData);
                 setNamesData(namesData);
                 setPreSelectedOptions(preSelectedOptionsData);
@@ -112,15 +114,26 @@ const SelectOptions = () => {
     const handleSaveAndGoToGraphs = async () => {
         // Check if all options are selected
         const allSelectedNames = getAllSelectedNames(userExpenseData);
-        const allOptionsSelected = namesData.every(name => allSelectedNames.includes(name));
-        const nonSelectedOptions = namesData.filter(name => !allSelectedNames.includes(name));
+        const allOptionsSelected = namesData.every((name) =>
+            allSelectedNames.includes(name)
+        );
+        const nonSelectedOptions = namesData.filter(
+            (name) => !allSelectedNames.includes(name)
+        );
 
         if (!allOptionsSelected) {
-            setShowConfirm(true);
+            setShowConfirmSaveAndGoToGraphs(true);
         } else {
-            userExpenseData["Miscellaneous"] = [...userExpenseData["Miscellaneous"], ...nonSelectedOptions];
+            userExpenseData["Miscellaneous"] = [
+                ...userExpenseData["Miscellaneous"],
+                ...nonSelectedOptions,
+            ];
             await saveAndGoToGraphs();
         }
+    };
+
+    const handleResetOptionsToDefault = async () => {
+        setShowConfirmReset(true)
     };
 
     const saveAndGoToGraphs = async () => {
@@ -133,21 +146,44 @@ const SelectOptions = () => {
         }
     };
 
-    const handleConfirmChoice = async (confirmed) => {
-        setShowConfirm(false);
+    const handleConfirmChoiceSaveAndGoToGraphs = async (confirmed) => {
+        setShowConfirmSaveAndGoToGraphs(false);
         if (confirmed) {
             const allSelectedNames = getAllSelectedNames(userExpenseData);
-            const nonSelectedOptions = namesData.filter(name => !allSelectedNames.includes(name));
-            userExpenseData["Miscellaneous"] = [...userExpenseData["Miscellaneous"], ...nonSelectedOptions];
+            const nonSelectedOptions = namesData.filter(
+                (name) => !allSelectedNames.includes(name)
+            );
+            userExpenseData["Miscellaneous"] = [
+                ...userExpenseData["Miscellaneous"],
+                ...nonSelectedOptions,
+            ];
             await saveAndGoToGraphs();
+        }
+    };
+
+    const handleConfirmChoiceReset = async(confirmed) => {
+        setShowConfirmReset(false);
+        if (confirmed) {
+            const response = await fetch("/api/reset-user-options-to-default");
+            
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                console.error("Error resetting options:", response.statusText);
+            }
         }
     };
 
     return (
         <div className="foldable-list-container">
-            <Button onClick={handleSaveAndGoToGraphs} className="mb-3">
-                Save and go to graphs
-            </Button>
+            <div className="mb-3 d-flex ">
+                <Button onClick={handleSaveAndGoToGraphs} className="me-1">
+                    Save and go to graphs
+                </Button>
+                <Button onClick={handleResetOptionsToDefault}>
+                    Reset selection to default
+                </Button>
+            </div>
             <BulletListLookalikeFoldableList items={namesData} />
             <h2>Categories</h2>
             <FoldableList
@@ -156,11 +192,19 @@ const SelectOptions = () => {
                 onDataUpdate={handleDataUpdate}
                 userExpenseData={userExpenseData}
             />
-            {showConfirm && (
+            {showConfirmSaveAndGoToGraphs && (
                 <div className="confirm-choice-overlay">
                     <ConfirmChoice
                         message="Are you sure you want to continue? Some options have not been selected and they will be added to the Miscellaneous category if you confirm."
-                        onConfirm={handleConfirmChoice}
+                        onConfirm={handleConfirmChoiceSaveAndGoToGraphs}
+                    />
+                </div>
+            )}
+            {showConfirmReset && (
+                <div className="confirm-choice-overlay">
+                    <ConfirmChoice
+                        message="Are you sure you want to reset the data? The default configuration will be loaded."
+                        onConfirm={handleConfirmChoiceReset}
                     />
                 </div>
             )}

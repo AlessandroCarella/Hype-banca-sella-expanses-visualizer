@@ -8,7 +8,7 @@ from routes.processCsv import process_file
 from routes.selectPreviousCsv import get_previous_files, get_file
 
 # User categories setted
-from routes.userCategoriesSetted import is_user_categories_setted, get_user_pre_selected_options, save_user_categories
+from routes.userCategoriesSetted import is_user_categories_setted, get_user_pre_selected_options, save_user_categories, reset_user_options_to_default
 from routes.getElementsSettingPage import get_user_expense_dictionary, get_expanses_names_list
 
 app = Flask(__name__)
@@ -55,6 +55,10 @@ def getUserPreSelectedOptions():
 def saveUserCategories():
     data = request.json.get('data')
     return save_user_categories(app, data)
+
+@app.route('/api/reset-user-options-to-default', methods=['GET'])
+def resetUserOptionsToDefault():
+    return reset_user_options_to_default(app)
 
 ########################################################
 

@@ -8,6 +8,7 @@ import UploadCsv from "./pages/UploadCsv";
 import Graphs from "./pages/Graph";
 import SelectOptions, { useSelectedOptions } from './pages/SelectOptions';
 import {SelectedOptionsProvider} from './pages/SelectOptions'
+import RedirectPage from "./pages/RedirectPage";
 //Components
 import { ColorModeSwitch } from "./components/colorModeSwitch";
 
@@ -31,6 +32,7 @@ root.render(
             <Router>
                 <ColorModeSwitch />
                 <Routes>
+                    <Route path="/" element={<RedirectPage />} />
                     <Route path="/upload-csv" element={<UploadCsv />} />
                     <Route path="/select-options" element={<SelectOptions />} />
                     <Route path="/graphs" element={<Graphs />} />

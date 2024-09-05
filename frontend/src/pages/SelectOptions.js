@@ -1,11 +1,9 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import FoldableList from "../components/FoldableList";
 import {
-    updateAvailableOptions,
     getAllSelectedNames,
     fetchInitialData,
     saveDataToFile,
-    saveDataButton,
 } from "./helpers/SelectOptionsHelpers";
 import BulletListLookalikeFoldableList from "../components/BulletListLookalikeFoldableList";
 import Button from "../components/Button";
@@ -69,6 +67,7 @@ const SelectOptions = () => {
     const navigate = useNavigate();
     const [showConfirmSaveAndGoToGraphs, setShowConfirmSaveAndGoToGraphs] = useState(false);
     const [showConfirmReset, setShowConfirmReset] = useState(false);
+    const [unfoldAll, setUnfoldAll] = useState(false); // New state variable
 
     useEffect(() => {
         const loadData = async () => {
@@ -89,7 +88,7 @@ const SelectOptions = () => {
         };
 
         loadData();
-    }, []);
+    }, [setExpenseData, setNamesData, setUserExpenseData]); // Added dependencies
 
     useEffect(() => {
         if (isDataLoaded) {
@@ -184,6 +183,10 @@ const SelectOptions = () => {
         }
     };
 
+    const handleUnfoldAll = () => {
+        setUnfoldAll((prev) => !prev); // Toggle unfoldAll state
+    };
+
     if (loading) {
         return <LoadingPage />; // Show loading page when loading
     }
@@ -197,6 +200,9 @@ const SelectOptions = () => {
                 <Button onClick={handleResetOptionsToDefault}>
                     Reset selection to default
                 </Button>
+                <Button onClick={handleUnfoldAll} className="ms-1"> {/* New button */}
+                    {unfoldAll ? "Collapse All" : "Unfold All"}
+                </Button>
             </div>
             <BulletListLookalikeFoldableList items={namesData} />
             <h2>Categories</h2>
@@ -205,6 +211,7 @@ const SelectOptions = () => {
                 availableOptions={availableOptions}
                 onDataUpdate={handleDataUpdate}
                 userExpenseData={userExpenseData}
+                unfoldAll={unfoldAll} // Pass unfoldAll state
             />
             {showConfirmSaveAndGoToGraphs && (
                 <div className="confirm-choice-overlay">

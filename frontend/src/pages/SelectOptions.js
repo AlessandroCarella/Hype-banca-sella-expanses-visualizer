@@ -1,9 +1,11 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import axios from "axios"; // Add this import
 import FoldableList from "../components/FoldableList";
 import {
     updateAvailableOptions,
     getAllSelectedNames,
+    fetchInitialData,
+    initializeUserExpenseData,
+    saveDataToFile,
 } from "./helpers/SelectOptionsHelpers";
 import BulletListLookalikeFoldableList from "../components/BulletListLookalikeFoldableList";
 
@@ -60,49 +62,23 @@ const SelectOptions = () => {
     const [isDataLoaded, setIsDataLoaded] = useState(false);
 
     useEffect(() => {
-        const fetchData = async () => {
+        const loadData = async () => {
             try {
-                const [
-                    expenseResponse,
-                    namesResponse,
-                    preSelectedOptionsResponse,
-                ] = await Promise.all([
-                    fetch("/api/getUserExpenseDictionary"),
-                    fetch("/api/getExpansesNamesList"),
-                    fetch("/api/getUserPreSelectedOptions"),
-                ]);
-
-                const expenseData = await expenseResponse.json();
-                let namesData = await namesResponse.json();
-                const preSelectedOptionsData =
-                    await preSelectedOptionsResponse.json();
-
-                setPreSelectedOptions(preSelectedOptionsData);
-
-                // Remove pre-selected options from namesData
-                namesData = namesData.filter(
-                    (name) => !preSelectedOptionsData.includes(name)
-                );
-
+                const { expenseData, namesData, preSelectedOptionsData } = await fetchInitialData();
                 setExpenseData(expenseData);
                 setNamesData(namesData);
+                setPreSelectedOptions(preSelectedOptionsData);
 
-                // Initialize userExpenseData with pre-selected options
-                const initialUserExpenseData = { ...expenseData };
-                Object.keys(initialUserExpenseData).forEach((key) => {
-                    if (Array.isArray(initialUserExpenseData[key])) {
-                        initialUserExpenseData[key] = preSelectedOptionsData;
-                    }
-                });
+                const initialUserExpenseData = initializeUserExpenseData(expenseData, preSelectedOptionsData);
                 setUserExpenseData(initialUserExpenseData);
 
                 setIsDataLoaded(true);
             } catch (error) {
-                console.error("Error fetching data:", error);
+                console.error("Error loading data:", error);
             }
         };
 
-        fetchData();
+        loadData();
     }, []);
 
     useEffect(() => {
@@ -129,13 +105,6 @@ const SelectOptions = () => {
             ...preSelectedOptions,
         ]);
         saveDataToFile(updatedData);
-    };
-
-    const saveDataToFile = (data) => {
-        //make an api call to save the data to the user's file
-        axios.post("/api/saveUserCategories", {
-            data: JSON.stringify(data, null, 4),
-        });
     };
 
     return (

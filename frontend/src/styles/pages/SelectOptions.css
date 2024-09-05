@@ -7,6 +7,7 @@
 .select-options-title {
     font-size: 24px;
     margin-bottom: 20px;
+    color: #6d7791; /* Title color for both modes */
 }
 
 /* Dark mode */
@@ -15,8 +16,16 @@
     color: #ffffff;
 }
 
+.dark-mode .select-options-box {
+    background-color: #212121;
+}
+
 /* Light mode */
 .light-mode .select-options-container {
     background-color: #f5f4f7;
-    color: #000;
+    color: #000000;
+}
+
+.light-mode .select-options-box {
+    background-color: #ffffff;
 }

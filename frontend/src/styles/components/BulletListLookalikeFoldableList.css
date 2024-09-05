@@ -1,4 +1,16 @@
-.bullet-list-lookalike-foldable-list-items{
+.bullet-list-lookalike-foldable-list-items {
     list-style-type: disc;
     padding-left: 0px;
+}
+
+/* Dark mode */
+.dark-mode .bullet-list-lookalike-foldable-list-items {
+    color: #ffffff;
+    background-color: #121212;
+}
+
+/* Light mode */
+.bullet-list-lookalike-foldable-list-items {
+    color: #000000;
+    background-color: #f5f4f7;
 }

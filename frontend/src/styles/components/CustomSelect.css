@@ -2,26 +2,26 @@
     position: relative;
     display: inline-block;
     width: 100%; /* This ensures it takes up all of its allocated space */
-  }
-  
-  .select-header {
+}
+
+.select-header {
     cursor: pointer;
-    padding: 10px; /* Increased padding for better touch targets */
+    padding: 10px 10px; /* Increased top and bottom padding */
     border: 1px solid #ccc;
-    border-radius: 0 0 4px 4px;
+    border-radius: 5px;
     white-space: normal; /* Changed from nowrap to normal */
     display: block;
     width: 100%;
     box-sizing: border-box;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-  
-  .select-header.open {
+}
+
+.select-header.open {
     border-top: none;
-  }
-  
-  .options-list {
+}
+
+.options-list {
     position: absolute;
     bottom: 100%;
     left: 0;
@@ -36,51 +36,103 @@
     overflow-y: auto;
     z-index: 1000;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .options-list li {
-    padding: 10px; /* Increased padding for better touch targets */
+}
+
+.options-list li {
+    padding: 7px;
     cursor: pointer;
     white-space: normal; /* Added to allow text wrapping */
     word-break: break-word; /* Added to prevent overflow */
-  }
-  
-  .options-list li:hover {
+}
+
+.options-list li:hover {
     background-color: #f0f0f0;
-  }
-  
-  .options-list li.disabled {
+}
+
+.options-list li.disabled {
     color: #ccc;
     cursor: not-allowed;
-  }
-  
-  .custom-select-container {
+}
+
+.custom-select-container {
     width: 100%;
-  }
-  
-  .selected-options-box {
-    margin-top: 10px;
+}
+
+.selected-options-box {
     padding: 10px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 5px;
     background-color: #f9f9f9;
-  }
-  
-  .selected-option {
+    margin-bottom: 10px;
+}
+
+.selected-option {
     cursor: pointer;
     user-select: none;
     display: inline-block;
-    margin: 2px;
-    padding: 2px 6px;
+    margin: 3px;
+    padding: 5px 5px; /* Increased top and bottom padding */
     background-color: #e0e0e0;
-    border-radius: 3px;
-    font-size: 0.9em;
-  }
-  .remove-option {
+    border-radius: 5px;
+    font-size: 1em;
+}
+.remove-option {
     margin-left: 5px;
     font-weight: bold;
 }
 
 .selected-option:hover {
     opacity: 0.8;
+}
+
+/* Dark mode */
+.dark-mode .select-header {
+    border: 1px solid #6d7791; /* Changed to title of section text color */
+    background-color: #121212; /* Changed to dark mode background */
+    color: #ffffff; /* Changed to dark mode text color */
+}
+
+.dark-mode .options-list {
+    background-color: #212121; /* Changed to box background color */
+    border-color: #6d7791; /* Changed to title of section text color */
+}
+
+.dark-mode .options-list li:hover {
+    background-color: #263036; /* Changed to blue 1 color */
+}
+
+.dark-mode .selected-options-box {
+    border-color: #6d7791; /* Changed to title of section text color */
+    background-color: #212121; /* Changed to box background color */
+}
+
+.dark-mode .selected-option {
+    background-color: #263036; /* Changed to blue 1 color */
+    color: #ffffff; /* Changed to dark mode text color */
+}
+
+/* Light mode */
+.light-mode .select-header {
+    border: 1px solid #284bff; /* Kept main color */
+    background-color: #f5f4f7; /* Changed to light mode background */
+    color: #000000; /* Changed to light mode text color */
+}
+
+.light-mode .options-list {
+    background-color: #ffffff; /* Changed to box background light mode */
+    border-color: #284bff; /* Kept main color */
+}
+
+.light-mode .options-list li:hover {
+    background-color: #8d9fff; /* Changed to second main color */
+}
+
+.light-mode .selected-options-box {
+    border: 1px solid #284bff; /* Kept main color */
+    background-color: #f5f4f7; /* Changed to light mode background */
+}
+
+.light-mode .selected-option {
+    background-color: #8d9fff; /* Changed to second main color */
+    color: #000000; /* Changed to light mode text color */
 }

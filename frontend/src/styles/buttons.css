@@ -1,21 +1,32 @@
 /* Dark mode */
 .dark-mode .button{
     background-color: #323a64;
-    color: #284bff;
+    color: #ffffff;
 }
 
 .dark-mode .button:hover{
-    background-color: rgba(40, 76, 255, 0.632);
-    color: #284bff;
+    background-color: rgba(40, 75, 255, 0.7);
+}
+
+.dark-mode .button:disabled {
+    background-color: #505b7d;
+    color: #6d7791;
 }
 
 /* Light mode */
 .light-mode .button{
-    background-color: #fff;
+    background-color: #f5f4f7;
     color: #284bff;
+    border: 1px solid #284bff;
 }
 
 .light-mode .button:hover{
-    background-color: #ffffff93;
-    color: #284bff;
+    background-color: #8d9fff;
+    color: #ffffff;
+}
+
+.light-mode .button:disabled {
+    background-color: #e0e0e0;
+    color: #6d7791;
+    border: 1px solid #6d7791;
 }

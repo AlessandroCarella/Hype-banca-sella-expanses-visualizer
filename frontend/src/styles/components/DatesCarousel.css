@@ -19,32 +19,32 @@
 
 /* Dark mode */
 .dark-mode .text-capsule {
-    background-color: #323a64;
-    color: #284bff;
+    background-color: #212121; /* box background */
+    color: #284bff; /* blue 2 for text */
 }
 
 .dark-mode .text-capsule:hover {
-    background-color: rgba(40, 76, 255, 0.632);
-    color: #284bff;
+    background-color: rgba(40, 75, 255, 0.2); /* main color with opacity */
+    color: #5cc5ff; /* blue 3 */
 }
 
 .dark-mode .text-capsule.selected {
-    background-color: #284bff;
-    color: #fff;
+    background-color: #284bff; /* main color */
+    color: #ffffff; /* text color */
 }
 
 /* Light mode */
 .light-mode .text-capsule {
-    background-color: #fff;
-    color: #284bff;
+    background-color: #ffffff; /* box background light mode */
+    color: #284bff; /* main color */
 }
 
 .light-mode .text-capsule:hover {
-    background-color: #ffffff93;
-    color: #284bff;
+    background-color: rgba(141, 159, 255, 0.2); /* second main color with opacity */
+    color: #284bff; /* main color */
 }
 
 .light-mode .text-capsule.selected {
-    background-color: #284bff;
-    color: #fff;
+    background-color: #284bff; /* main color */
+    color: #ffffff; /* text color */
 }

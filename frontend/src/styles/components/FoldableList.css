@@ -25,6 +25,7 @@
     padding: 10px; /* Changed padding to be equal on all sides */
     box-sizing: border-box;
     flex-grow: 1;
+    border-radius: 10px;
 }
 
 .foldable-list-toggle .toggle-text {
@@ -35,8 +36,10 @@
 }
 
 .foldable-list-toggle .custom-select {
-    flex: 0 0 70%; /* Fixed width of 70% */
-    max-width: 70%; /* Ensures it doesn't grow beyond 70% */
+    flex: 0 0 100%; /* Fixed width of 70% */
+    max-width: 100%; /* Ensures it doesn't grow beyond 70% */
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .foldable-list-toggle::before {
@@ -76,24 +79,24 @@
 
 /* Dark mode */
 .dark-mode .foldable-list-toggle {
-    background-color: #323a64;
-    color: #284bff;
-    border: 1px solid #284bff;
-    padding: 0 10px; /* Added padding */
+    background-color: #212121; /* Changed to box background color */
+    color: #ffffff; /* Changed to text color */
+    border: 1px solid #284bff; /* Kept main color for border */
+    padding: 0 10px;
 }
 
 .dark-mode .foldable-list-toggle:hover {
-    background-color: rgba(40, 76, 255, 0.632);
+    background-color: #263036; /* Changed to blue 1 for hover effect */
 }
 
 /* Light mode */
 .light-mode .foldable-list-toggle {
-    background-color: #fff;
-    color: #284bff;
-    border: 1px solid #284bff;
-    padding: 0 10px; /* Added padding */
+    background-color: #ffffff; /* Changed to box background light mode color */
+    color: #000000; /* Changed to text light mode color */
+    border: 1px solid #284bff; /* Kept main color for border */
+    padding: 0 10px;
 }
 
 .light-mode .foldable-list-toggle:hover {
-    background-color: #ffffff93;
+    background-color: #f5f4f7; /* Changed to background light mode color for hover effect */
 }

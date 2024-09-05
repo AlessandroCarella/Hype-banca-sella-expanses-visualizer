@@ -17,12 +17,9 @@ C:\Users\alex1\Desktop\Hype-banca-sella-expanses-visualizer\backend\venv\Scripts
 
 ------------------------------------------
 todo:
-in the select-options page put a box similarly looking to the ones to choose the category of the expanses but with a different behavior:
-call it "expanses to categorize" and when the box is unfolded it shows just a list of all the expanses that have not been categorized yet.
-
 implement 2 differnt possible views to set the categories of expanses (and a toggle to switch between them):
     1. the list of the expanses names and a select next to it to choose the category.
-    2. the list of the categories and a select next to it to choose the expanses that are left without a category.
+    2. the list of the categories and a select next to it to choose the expanses that are left without a category. (done)
 
 implement a custom dates interval seleter, the user already has it by the bank app (since it asks for an interval before downloading the csv file) but maybe the user wants to analyze a subinterval
 
@@ -30,8 +27,6 @@ implement more checks on the file type, name (check for bank default), columns i
 The errors must be informative to the user so that they know what to do after and they can correct the error or override it.
 
 fai prelievo da atm per vedere come viene registrato sul csv
-
-everything that is not "Risparmi" in the column tipologia must be personalized by the user to split the type of transaction in various categories (like "fun", "food", "health", etc...)
 
 create install guide for python, node etc (i think only the node installer is necessary because it installs python by default)
 
@@ -46,9 +41,9 @@ one of the view that could be interesting to implement is a regression graph wit
 figma: https://www.figma.com/design/6uIzQVe9Cqjgtw2cy1MzsG/Untitled?node-id=1-7&node-type=FRAME&t=PsfOXF02ORcw27Hc-0
 
 pages:
-    load csv
-    graphs
-    user settings
+    load csv (done)
+    graphs (WIP)
+    user settings (done (half of the views i want to implement))
     error page
 
 ------------------------------------------
@@ -98,3 +93,5 @@ data exploration:
 to remember:
 the csv file given by the bank is kinda currupted, or at least it is if you send it to telegram and download it back.
 just open the file in excel and save it back as a csv file.
+
+the json file with the user categories default is very much scarse because i dont want the user to be more overwhalmed by the amount of choises they have to do by adding stuff they have to remove from the list other then the ones they have to add

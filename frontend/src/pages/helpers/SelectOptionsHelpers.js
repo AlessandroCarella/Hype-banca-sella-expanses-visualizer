@@ -52,16 +52,6 @@ export const fetchInitialData = async () => {
     }
 };
 
-export const initializeUserExpenseData = (expenseData, preSelectedOptions) => {
-    const initialUserExpenseData = { ...expenseData };
-    Object.keys(initialUserExpenseData).forEach((key) => {
-        if (Array.isArray(initialUserExpenseData[key])) {
-            initialUserExpenseData[key] = preSelectedOptions;
-        }
-    });
-    return initialUserExpenseData;
-};
-
 export const saveDataToFile = async (data) => {
     try {
         await axios.post("/api/saveUserCategories", {

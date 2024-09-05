@@ -4,7 +4,6 @@ import {
     updateAvailableOptions,
     getAllSelectedNames,
     fetchInitialData,
-    initializeUserExpenseData,
     saveDataToFile,
 } from "./helpers/SelectOptionsHelpers";
 import BulletListLookalikeFoldableList from "../components/BulletListLookalikeFoldableList";
@@ -68,10 +67,7 @@ const SelectOptions = () => {
                 setExpenseData(expenseData);
                 setNamesData(namesData);
                 setPreSelectedOptions(preSelectedOptionsData);
-
-                const initialUserExpenseData = initializeUserExpenseData(expenseData, preSelectedOptionsData);
-                setUserExpenseData(initialUserExpenseData);
-
+                setUserExpenseData(expenseData);
                 setIsDataLoaded(true);
             } catch (error) {
                 console.error("Error loading data:", error);

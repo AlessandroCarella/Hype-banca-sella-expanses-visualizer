@@ -113,17 +113,19 @@ const SelectOptions = () => {
         // Check if all options are selected
         const allSelectedNames = getAllSelectedNames(userExpenseData);
         const allOptionsSelected = namesData.every(name => allSelectedNames.includes(name));
+        const nonSelectedOptions = namesData.filter(name => !allSelectedNames.includes(name));
 
         if (!allOptionsSelected) {
             setShowConfirm(true);
         } else {
-            await saveAndNavigate();
+            userExpenseData["Miscellaneous"] = [...userExpenseData["Miscellaneous"], ...nonSelectedOptions];
+            await saveAndGoToGraphs();
         }
     };
 
-    const saveAndNavigate = async () => {
+    const saveAndGoToGraphs = async () => {
         try {
-            await saveDataButton(userExpenseData, namesData);
+            await saveDataToFile(userExpenseData);
             navigate("/graphs");
         } catch (error) {
             console.error("Error saving data:", error);
@@ -134,7 +136,10 @@ const SelectOptions = () => {
     const handleConfirmChoice = async (confirmed) => {
         setShowConfirm(false);
         if (confirmed) {
-            await saveAndNavigate();
+            const allSelectedNames = getAllSelectedNames(userExpenseData);
+            const nonSelectedOptions = namesData.filter(name => !allSelectedNames.includes(name));
+            userExpenseData["Miscellaneous"] = [...userExpenseData["Miscellaneous"], ...nonSelectedOptions];
+            await saveAndGoToGraphs();
         }
     };
 
@@ -154,7 +159,7 @@ const SelectOptions = () => {
             {showConfirm && (
                 <div className="confirm-choice-overlay">
                     <ConfirmChoice
-                        message="Are you sure you want to continue? Some options have not been selected."
+                        message="Are you sure you want to continue? Some options have not been selected and they will be added to the Miscellaneous category if you confirm."
                         onConfirm={handleConfirmChoice}
                     />
                 </div>

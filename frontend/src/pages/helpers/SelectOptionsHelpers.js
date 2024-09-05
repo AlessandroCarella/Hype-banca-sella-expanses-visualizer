@@ -62,23 +62,3 @@ export const saveDataToFile = async (data) => {
         throw error;
     }
 };
-
-export const saveDataButton = async (data, namesData) => {
-    try {
-        // Add unused names to the 'miscellaneous' category
-        const allSelectedNames = []; //TODO implement
-        const unusedNames = [] //TODO implement
-        
-        if (!data.miscellaneous) {
-            data.miscellaneous = [];
-        }
-        data.miscellaneous.push(...unusedNames);
-
-        await axios.post("/api/saveUserCategories", {
-            data: JSON.stringify(data, null, 4),
-        });
-    } catch (error) {
-        console.error("Error saving data:", error);
-        throw error;
-    }
-};

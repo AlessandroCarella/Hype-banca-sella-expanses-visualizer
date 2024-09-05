@@ -9,7 +9,9 @@ const FoldableListItem = ({
     handleSelect,
     availableOptions,
     userExpenseData,
-    unfoldAll, // Added unfoldAll prop
+    unfoldAll,
+    setUnfoldAll,
+    onItemToggle, // Add this prop
 }) => {
     return (
         <div className="foldable-list-item">
@@ -22,7 +24,7 @@ const FoldableListItem = ({
                 <span className="toggle-text">{itemKey}</span>
                 {Array.isArray(value) && renderCustomSelect(itemKey, availableOptions, userExpenseData, handleSelect)}
             </div>
-            {renderContent(isOpen || unfoldAll, value, itemKey, handleSelect, availableOptions, userExpenseData, unfoldAll)} {/* Pass unfoldAll to renderContent */}
+            {renderContent(isOpen, value, itemKey, handleSelect, availableOptions, userExpenseData, unfoldAll, setUnfoldAll, onItemToggle)} {/* Pass onItemToggle here */}
         </div>
     );
 };

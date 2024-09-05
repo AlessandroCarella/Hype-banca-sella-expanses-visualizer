@@ -4,7 +4,8 @@ import {
     getAllSelectedNames,
     fetchInitialData,
     saveDataToFile,
-} from "./helpers/SelectOptionsHelpers";
+}
+from "./helpers/SelectOptionsHelpers";
 import BulletListLookalikeFoldableList from "../components/BulletListLookalikeFoldableList";
 import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
@@ -70,7 +71,8 @@ const SelectOptions = () => {
     const [showConfirmSaveAndGoToGraphs, setShowConfirmSaveAndGoToGraphs] =
         useState(false);
     const [showConfirmReset, setShowConfirmReset] = useState(false);
-    const [unfoldAll, setUnfoldAll] = useState(false); // New state variable
+    const [unfoldAll, setUnfoldAll] = useState(false);
+    const [allUnfolded, setAllUnfolded] = useState(false);
 
     useEffect(() => {
         const loadData = async () => {
@@ -179,7 +181,15 @@ const SelectOptions = () => {
     };
 
     const handleUnfoldAll = () => {
-        setUnfoldAll((prev) => !prev); // Toggle unfoldAll state
+        const newUnfoldAll = !unfoldAll;
+        setUnfoldAll(newUnfoldAll);
+        setAllUnfolded(newUnfoldAll);
+    };
+
+    const handleItemToggle = (isOpen) => {
+        if (unfoldAll && !isOpen) {
+            setAllUnfolded(false);
+        }
     };
 
     if (loading) {
@@ -196,9 +206,7 @@ const SelectOptions = () => {
                     Reset selection to default
                 </Button>
                 <Button onClick={handleUnfoldAll} className="ms-1">
-                    {" "}
-                    {/* New button */}
-                    {unfoldAll ? "Collapse All" : "Unfold All"}
+                    {allUnfolded ? "Collapse All" : "Unfold All"}
                 </Button>
                 
                 <ColorModeSwitch />
@@ -211,7 +219,9 @@ const SelectOptions = () => {
                     availableOptions={availableOptions}
                     onDataUpdate={handleDataUpdate}
                     userExpenseData={userExpenseData}
-                    unfoldAll={unfoldAll} // Pass unfoldAll state
+                    unfoldAll={unfoldAll} 
+                    setUnfoldAll={setUnfoldAll}
+                    onItemToggle={handleItemToggle} // Add this line
                 />
                 {showConfirmSaveAndGoToGraphs && (
                     <div className="confirm-choice-overlay">

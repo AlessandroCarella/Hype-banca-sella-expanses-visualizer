@@ -4,7 +4,7 @@ import FoldableList from "../FoldableList";
 export const isLastItem = (value) =>
     typeof value !== "object" || Object.keys(value).length === 0;
 
-export const renderContent = (isOpen, value, itemKey, handleSelect, availableOptions, userExpenseData, unfoldAll) => { // Accept unfoldAll
+export const renderContent = (isOpen, value, itemKey, handleSelect, availableOptions, userExpenseData, unfoldAll, setUnfoldAll, onItemToggle) => {
     if (isOpen && !Array.isArray(value)) {
         return (
             <div className="foldable-list-content">
@@ -13,7 +13,9 @@ export const renderContent = (isOpen, value, itemKey, handleSelect, availableOpt
                     availableOptions={availableOptions}
                     onDataUpdate={(updatedData) => handleSelect(itemKey, updatedData)}
                     userExpenseData={userExpenseData[itemKey] || {}}
-                    unfoldAll={unfoldAll} // Pass unfoldAll to nested FoldableList
+                    unfoldAll={unfoldAll}
+                    setUnfoldAll={setUnfoldAll}
+                    onItemToggle={onItemToggle} // Pass onItemToggle to nested FoldableList
                 />
             </div>
         );

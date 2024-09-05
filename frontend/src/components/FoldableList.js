@@ -2,26 +2,30 @@ import React, { useState, useEffect } from "react";
 import FoldableListItem from "./FoldableListItem";
 import { initializeOpenItems } from "./helpers/FoldableListHelpers";
 
-const FoldableList = ({ data, availableOptions, onDataUpdate, userExpenseData, unfoldAll }) => { // Added unfoldAll prop
+const FoldableList = ({ data, availableOptions, onDataUpdate, userExpenseData, unfoldAll, setUnfoldAll, onItemToggle }) => {
     const [openItems, setOpenItems] = useState({});
+    const [closedItems, setClosedItems] = useState({});
 
     useEffect(() => {
-        setOpenItems(initializeOpenItems(data, Array.isArray(data)));
-    }, [Array.isArray(data), data]);
-
-    useEffect(() => { // New effect to handle unfoldAll
         if (unfoldAll) {
             setOpenItems(Object.keys(data).reduce((acc, key) => ({ ...acc, [key]: true }), {}));
+            setClosedItems({});
         } else {
             setOpenItems(initializeOpenItems(data, Array.isArray(data)));
+            setClosedItems({});
         }
     }, [unfoldAll, data]);
 
     const toggleOpen = (key) => {
-        setOpenItems((prevOpenItems) => ({
-            ...prevOpenItems,
-            [key]: !prevOpenItems[key],
-        }));
+        if (unfoldAll) {
+            setClosedItems(prev => {
+                const newClosedItems = { ...prev, [key]: !prev[key] };
+                onItemToggle(!newClosedItems[key]);
+                return newClosedItems;
+            });
+        } else {
+            setOpenItems(prev => ({ ...prev, [key]: !prev[key] }));
+        }
     };
 
     const handleSelect = (key, selectedOptions) => {
@@ -36,12 +40,14 @@ const FoldableList = ({ data, availableOptions, onDataUpdate, userExpenseData, u
                     key={key}
                     itemKey={key}
                     value={value}
-                    isOpen={openItems[key]}
+                    isOpen={unfoldAll ? !closedItems[key] : openItems[key]}
                     toggleOpen={() => toggleOpen(key)}
                     handleSelect={handleSelect}
                     availableOptions={availableOptions}
                     userExpenseData={userExpenseData}
-                    unfoldAll={unfoldAll} // Pass unfoldAll prop to FoldableListItem
+                    unfoldAll={unfoldAll}
+                    setUnfoldAll={setUnfoldAll}
+                    onItemToggle={onItemToggle} // Pass onItemToggle to FoldableListItem
                 />
             ))}
         </div>

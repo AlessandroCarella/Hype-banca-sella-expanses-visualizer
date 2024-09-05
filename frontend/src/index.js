@@ -21,6 +21,7 @@ import "./styles/pages/SelectOptions.css";
 import "./styles/components/CustomSelect.css";
 import "./styles/components/BulletListLookalikeFoldableList.css";
 import "./styles/components/ConfirmChoice.css";
+import "./styles/pages/loadingPage.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 

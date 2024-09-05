@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.css';
 import Button from "../components/Button";
+import LoadingPage from "./LoadingPage"; // Import LoadingPage
 
 function UploadCsv() {
     const [file, setFile] = useState(null);
     const [previousFiles, setPreviousFiles] = useState([]);
+    const [loading, setLoading] = useState(false); // Add loading state
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -118,11 +120,21 @@ function UploadCsv() {
             if (!selectedFile) return;
         }
 
+        setLoading(true); // Set loading to true
         const uploadResult = await uploadFile(selectedFile);
+        setLoading(false); // Set loading to false
+
         if (!uploadResult) return;
 
+        setLoading(true); // Set loading to true
         await processFile(uploadResult.filepath);
+        setLoading(false); // Set loading to false
+
     };
+
+    if (loading) {
+        return <LoadingPage />; // Show loading page when loading
+    }
 
     return (
         <div className="UploadCsv container d-flex flex-column align-items-center justify-content-center vh-100">

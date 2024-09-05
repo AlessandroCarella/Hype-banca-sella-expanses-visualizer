@@ -11,6 +11,7 @@ import BulletListLookalikeFoldableList from "../components/BulletListLookalikeFo
 import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
 import ConfirmChoice from "../components/ConfirmChoice";
+import LoadingPage from "./LoadingPage"; // Import LoadingPage
 
 // Create the context
 const SelectedOptionsContext = createContext();
@@ -51,6 +52,8 @@ export const useSelectedOptions = () => {
 };
 
 const SelectOptions = () => {
+    const [loading, setLoading] = useState(false);
+    
     const {
         expenseData,
         setExpenseData,
@@ -70,8 +73,11 @@ const SelectOptions = () => {
     useEffect(() => {
         const loadData = async () => {
             try {
+                setLoading(true); // Set loading to true
                 const { expenseData, namesData, preSelectedOptionsData } =
                     await fetchInitialData();
+                setLoading(false); // Set loading to false
+
                 setExpenseData(expenseData);
                 setNamesData(namesData);
                 setPreSelectedOptions(preSelectedOptionsData);
@@ -138,7 +144,9 @@ const SelectOptions = () => {
 
     const saveAndGoToGraphs = async () => {
         try {
+            setLoading(true); // Set loading to true
             await saveDataToFile(userExpenseData);
+            setLoading(false); // Set loading to false
             navigate("/graphs");
         } catch (error) {
             console.error("Error saving data:", error);
@@ -164,8 +172,10 @@ const SelectOptions = () => {
     const handleConfirmChoiceReset = async(confirmed) => {
         setShowConfirmReset(false);
         if (confirmed) {
+            setLoading(true); // Set loading to true
             const response = await fetch("/api/reset-user-options-to-default");
-            
+            setLoading(false); // Set loading to false
+
             if (response.ok) {
                 window.location.reload();
             } else {
@@ -173,6 +183,10 @@ const SelectOptions = () => {
             }
         }
     };
+
+    if (loading) {
+        return <LoadingPage />; // Show loading page when loading
+    }
 
     return (
         <div className="foldable-list-container">

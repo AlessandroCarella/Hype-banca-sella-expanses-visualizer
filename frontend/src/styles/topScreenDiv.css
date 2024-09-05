@@ -1,0 +1,20 @@
+
+.top-position-div {
+    
+}
+
+.top-position-div button{
+    margin: 10px;
+}
+
+/* Dark mode */
+.dark-mode .top-position-div {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+/* Light mode */
+.light-mode .top-position-div {
+    background-color: #f5f4f7;
+    color: #000;
+}

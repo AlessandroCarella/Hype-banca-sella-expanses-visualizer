@@ -23,6 +23,7 @@ import "./styles/components/CustomSelect.css";
 import "./styles/components/BulletListLookalikeFoldableList.css";
 import "./styles/components/ConfirmChoice.css";
 import "./styles/pages/loadingPage.css";
+import "./styles/topScreenDiv.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -30,7 +31,6 @@ root.render(
     <React.StrictMode>
         <SelectedOptionsProvider>
             <Router>
-                <ColorModeSwitch />
                 <Routes>
                     <Route path="/" element={<RedirectPage />} />
                     <Route path="/upload-csv" element={<UploadCsv />} />

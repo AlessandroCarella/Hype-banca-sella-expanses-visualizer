@@ -10,6 +10,8 @@ import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
 import ConfirmChoice from "../components/ConfirmChoice";
 import LoadingPage from "./LoadingPage"; // Import LoadingPage
+import { ColorModeSwitch } from "../components/colorModeSwitch";
+import { updateAvailableOptions } from "./helpers/SelectOptionsHelpers"; // Import the new function
 
 // Create the context
 const SelectedOptionsContext = createContext();
@@ -51,7 +53,7 @@ export const useSelectedOptions = () => {
 
 const SelectOptions = () => {
     const [loading, setLoading] = useState(false);
-    
+
     const {
         expenseData,
         setExpenseData,
@@ -65,7 +67,8 @@ const SelectOptions = () => {
     const [preSelectedOptions, setPreSelectedOptions] = useState([]);
     const [isDataLoaded, setIsDataLoaded] = useState(false);
     const navigate = useNavigate();
-    const [showConfirmSaveAndGoToGraphs, setShowConfirmSaveAndGoToGraphs] = useState(false);
+    const [showConfirmSaveAndGoToGraphs, setShowConfirmSaveAndGoToGraphs] =
+        useState(false);
     const [showConfirmReset, setShowConfirmReset] = useState(false);
     const [unfoldAll, setUnfoldAll] = useState(false); // New state variable
 
@@ -95,24 +98,16 @@ const SelectOptions = () => {
             updateAvailableOptions(userExpenseData, [
                 ...namesData,
                 ...preSelectedOptions,
-            ]);
+            ], setAvailableOptions); // Pass setAvailableOptions as an argument
         }
     }, [isDataLoaded, userExpenseData, namesData, preSelectedOptions]);
-
-    const updateAvailableOptions = (data, names) => {
-        const allSelectedNames = getAllSelectedNames(data);
-        const newAvailableOptions = names.filter(
-            (name) => !allSelectedNames.includes(name)
-        );
-        setAvailableOptions(newAvailableOptions);
-    };
 
     const handleDataUpdate = (updatedData) => {
         setUserExpenseData(updatedData);
         updateAvailableOptions(updatedData, [
             ...namesData,
             ...preSelectedOptions,
-        ]);
+        ], setAvailableOptions); // Pass setAvailableOptions as an argument
         saveDataToFile(updatedData);
     };
 
@@ -138,7 +133,7 @@ const SelectOptions = () => {
     };
 
     const handleResetOptionsToDefault = async () => {
-        setShowConfirmReset(true)
+        setShowConfirmReset(true);
     };
 
     const saveAndGoToGraphs = async () => {
@@ -168,7 +163,7 @@ const SelectOptions = () => {
         }
     };
 
-    const handleConfirmChoiceReset = async(confirmed) => {
+    const handleConfirmChoiceReset = async (confirmed) => {
         setShowConfirmReset(false);
         if (confirmed) {
             setLoading(true); // Set loading to true
@@ -192,43 +187,49 @@ const SelectOptions = () => {
     }
 
     return (
-        <div className="foldable-list-container">
-            <div className="mb-3 d-flex ">
+        <div>
+            <div className="mb-3 d-flex fixed-top top-position-div">
                 <Button onClick={handleSaveAndGoToGraphs} className="me-1">
                     Save and go to graphs
                 </Button>
                 <Button onClick={handleResetOptionsToDefault}>
                     Reset selection to default
                 </Button>
-                <Button onClick={handleUnfoldAll} className="ms-1"> {/* New button */}
+                <Button onClick={handleUnfoldAll} className="ms-1">
+                    {" "}
+                    {/* New button */}
                     {unfoldAll ? "Collapse All" : "Unfold All"}
                 </Button>
+                
+                <ColorModeSwitch />
             </div>
-            <BulletListLookalikeFoldableList items={namesData} />
-            <h2>Categories</h2>
-            <FoldableList
-                data={expenseData}
-                availableOptions={availableOptions}
-                onDataUpdate={handleDataUpdate}
-                userExpenseData={userExpenseData}
-                unfoldAll={unfoldAll} // Pass unfoldAll state
-            />
-            {showConfirmSaveAndGoToGraphs && (
-                <div className="confirm-choice-overlay">
-                    <ConfirmChoice
-                        message="Are you sure you want to continue? Some options have not been selected and they will be added to the Miscellaneous category if you confirm."
-                        onConfirm={handleConfirmChoiceSaveAndGoToGraphs}
-                    />
-                </div>
-            )}
-            {showConfirmReset && (
-                <div className="confirm-choice-overlay">
-                    <ConfirmChoice
-                        message="Are you sure you want to reset the data? The default configuration will be loaded."
-                        onConfirm={handleConfirmChoiceReset}
-                    />
-                </div>
-            )}
+            <div className="foldable-list-container">
+                <BulletListLookalikeFoldableList items={namesData} />
+                <h2>Categories</h2>
+                <FoldableList
+                    data={expenseData}
+                    availableOptions={availableOptions}
+                    onDataUpdate={handleDataUpdate}
+                    userExpenseData={userExpenseData}
+                    unfoldAll={unfoldAll} // Pass unfoldAll state
+                />
+                {showConfirmSaveAndGoToGraphs && (
+                    <div className="confirm-choice-overlay">
+                        <ConfirmChoice
+                            message="Are you sure you want to continue? Some options have not been selected and they will be added to the Miscellaneous category if you confirm."
+                            onConfirm={handleConfirmChoiceSaveAndGoToGraphs}
+                        />
+                    </div>
+                )}
+                {showConfirmReset && (
+                    <div className="confirm-choice-overlay">
+                        <ConfirmChoice
+                            message="Are you sure you want to reset the data? The default configuration will be loaded."
+                            onConfirm={handleConfirmChoiceReset}
+                        />
+                    </div>
+                )}
+            </div>
         </div>
     );
 };

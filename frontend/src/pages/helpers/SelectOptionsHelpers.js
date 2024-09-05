@@ -55,3 +55,11 @@ export const saveDataToFile = async (data) => {
         throw error;
     }
 };
+
+export const updateAvailableOptions = (data, names, setAvailableOptions) => {
+    const allSelectedNames = getAllSelectedNames(data);
+    const newAvailableOptions = names.filter(
+        (name) => !allSelectedNames.includes(name)
+    );
+    setAvailableOptions(newAvailableOptions);
+};

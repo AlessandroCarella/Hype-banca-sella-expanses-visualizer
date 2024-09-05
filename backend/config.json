@@ -8,5 +8,6 @@
     "NAME_LIST_FILE_NAME": "names list.txt",
     "USER_CATEGORIES_FILE_NAME": "user categories.json",
     "DEFAULT_FILES_FOLDER_NAME": "default files",
-    "DEFAULT_USER_CATEGORIES_FILE_NAME": "user categories default.json"
+    "DEFAULT_USER_CATEGORIES_FILE_NAME": "user categories default.json",
+    "USER_BACKUP_CATEGORIES_FILE_FOLDER_NAME": "settings backup"
 }

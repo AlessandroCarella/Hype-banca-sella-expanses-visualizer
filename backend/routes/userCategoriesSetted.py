@@ -3,6 +3,7 @@ import os
 from os import path
 import json
 import shutil
+from datetime import datetime
 
 def getCategoriesFilePath(app):
     return path.join (app.config["ROOT_FROM_BACKEND"], app.config["USER_FILES_FOLDER_NAME"], app.config["USER_CATEGORIES_FILE_NAME"])
@@ -12,6 +13,9 @@ def getNamesFilePath(app):
 
 def getCategoriesDefaultFilePath(app):
     return path.join (app.config["DEFAULT_FILES_FOLDER_NAME"], app.config["DEFAULT_USER_CATEGORIES_FILE_NAME"])
+
+def getUserBackupCategoriesFolderPath(app):
+    return path.join (app.config["ROOT_FROM_BACKEND"], app.config["USER_FILES_FOLDER_NAME"], app.config["USER_BACKUP_CATEGORIES_FILE_FOLDER_NAME"])
 
 def userCategoriesFileAndNamesAndDescriptionsFiles(app):
     def checkForCategoriesFile(categoriesFile, app):
@@ -76,6 +80,11 @@ def save_user_categories(app, categories):
 def reset_user_options_to_default (app):
     try:
         if path.exists(getCategoriesFilePath(app)):
+            backupFolderPath = getUserBackupCategoriesFolderPath(app)
+            os.makedirs(backupFolderPath, exist_ok=True)
+            backupFilePath = path.join(backupFolderPath, str(datetime.now().strftime("%Y-%m-%d_%H-%M-%S")) + " user categories.json")
+            shutil.copy(getCategoriesFilePath(app), backupFilePath)
+
             os.remove(getCategoriesFilePath(app))
         shutil.copy(getCategoriesDefaultFilePath(app), getCategoriesFilePath(app))
         return jsonify({"message": "Categories reset to default successfully"}), 200    

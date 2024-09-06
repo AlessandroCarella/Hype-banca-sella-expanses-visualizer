@@ -1,5 +1,6 @@
-from flask import Flask, request, jsonify
-
+from flask import Flask, request, jsonify, send_from_directory
+from flask_cors import CORS
+import os
 from utils import get_config
 
 # Upload csv page
@@ -11,7 +12,12 @@ from routes.selectPreviousCsv import get_previous_files, get_file
 from routes.userCategoriesSetted import is_user_categories_setted, get_user_pre_selected_options, save_user_categories, reset_user_options_to_default
 from routes.getElementsSettingPage import get_user_expense_dictionary, get_expanses_names_list
 
+# Loading page
+from routes.loadingPage import get_loading_gif
+
+########################################################
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
 app.config.update(get_config())
 
@@ -59,6 +65,12 @@ def saveUserCategories():
 @app.route('/api/reset-user-options-to-default', methods=['GET'])
 def resetUserOptionsToDefault():
     return reset_user_options_to_default(app)
+########################################################
+########################################################
+# Loading page
+@app.route('/api/loading-gif', methods=['GET'])
+def getLoadingGifs():
+    return get_loading_gif(app)
 
 ########################################################
 

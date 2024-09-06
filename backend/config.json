@@ -9,5 +9,8 @@
     "USER_CATEGORIES_FILE_NAME": "user categories.json",
     "DEFAULT_FILES_FOLDER_NAME": "default files",
     "DEFAULT_USER_CATEGORIES_FILE_NAME": "user categories default.json",
-    "USER_BACKUP_CATEGORIES_FILE_FOLDER_NAME": "settings backup"
+    "USER_BACKUP_CATEGORIES_FILE_FOLDER_NAME": "settings backup",
+    "FRONTEND_SOURCE_FOLDER_NAME": "src",
+    "FRONTEND_PAGES_FOLDER_NAME": "pages",
+    "FRONTEND_LOADING_GIFS_FOLDER_NAME": "loading gifs"
 }

@@ -52,7 +52,8 @@
         "Shopping": {
             "Clothing and Accessories": ["Vinted", "Nike"],
             "Electronics": ["Unieuro"],
-            "Home Goods": ["Tiger"]
+            "Home Goods": ["Tiger"],
+            "Various": []
         },
         "Personal Care": {
             "Hair and Beauty": [],

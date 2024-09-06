@@ -1,119 +1,52 @@
 {
-    "Essentials": {
-        "Housing": {
-            "Rent/Mortgage": [],
-            "Property Taxes": [],
-            "Home Insurance": [],
-            "Maintenance and Repairs": []
-        },
-        "Healthcare": {
-            "Insurance Premiums": [],
-            "Doctor Visits": [],
-            "Medications": [],
-            "Dental Care": [],
-            "Vision Care": [],
-            "Mental Health Services": []
-        },
-        "Utilities": {
-            "Electricity": [],
-            "Water": [],
-            "Gas": [],
-            "Internet": [],
-            "Phone": []
-        },
-        "Groceries": [
-            "Lidl",
-            "Auchan",
-            "pam",
-            "Everli",
-            "Conad",
-            "Carrefour Express",
-            "Esselunga",
-            "Carrefour",
-            "Dipiu'"
-        ]
+    "Finanze personali": {
+      "Addebito Carta": [],
+      "Atm": [],
+      "Commissioni": [],
+      "Giroconti": [],
+      "Risparmi": [],
+      "Trasferimenti": []
     },
-    "Transportation": {
-        "Car Payments": [],
-        "Fuel": [],
-        "Public Transit": [],
-        "Ride-sharing Services": [],
-        "Vehicle Maintenance": [],
-        "Parking Fees": [],
-        "Tolls": []
+    "Spese quotidiane": {
+      "Alimentari": [],
+      "Ristoranti e Caffe'": [],
+      "Shopping": [],
+      "Cura del corpo": []
     },
-    "Personal": {
-        "Food and Dining": {
-            "Restaurants": ["kfc", "Mcdonald's"],
-            "Takeout/Delivery": ["Deliveroo", "Glovo", "Just eat"],
-            "Coffee Shops": ["Starbucks"],
-            "Bars": []
-        },
-        "Shopping": {
-            "Clothing and Accessories": ["Vinted", "Nike"],
-            "Electronics": ["Unieuro"],
-            "Home Goods": ["Tiger"],
-            "Various": []
-        },
-        "Personal Care": {
-            "Hair and Beauty": [],
-            "Spa and Massage": [],
-            "Gym Memberships": [],
-            "Personal Hygiene Products": []
-        }
+    "Casa e utenze": {
+      "Casa": [],
+      "Bollette e Abbonamenti": [],
+      "Elettronica e Software": []
     },
-    "Lifestyle and Entertainment": {
-        "Entertainment and Recreation": {
-            "Movies and Shows": [],
-            "Concerts and Events": [],
-            "Hobbies": [],
-            "Sports and Fitness": []
-        },
-        "Travel": {
-            "Carry": ["Ryanair", "Flixbus", "Trenitalia"],
-            "Accommodations": ["Booking.com"],
-            "Car Rentals": [],
-            "Vacation Activities": []
-        },
-        "Subscriptions and Memberships": {
-            "Streaming Services": ["Spotify", "Netflix"],
-            "Digital Subscriptions": [],
-            "Club Memberships": []
-        }
+    "Trasporti e viaggi": {
+      "Veicoli e Trasporti": [],
+      "Viaggi e Vacanze": [],
+      "Ricariche Telefoniche": []
     },
-    "Financial and Professional": {
-        "Education": {
-            "Tuition": [],
-            "Books and Supplies": [],
-            "Online Courses": [],
-            "Professional Development": []
-        },
-        "Investments and Savings": [],
-        "Debt Payments": [],
-        "Insurance": [],
-        "Taxes": [],
-        "Business Expenses": []
+    "Investimenti e finanza": {
+      "Criptovalute": [],
+      "Investimenti": [],
+      "Finanziamenti e Prestiti": []
     },
-    "Family and Social": {
-        "Childcare and Family": {
-            "Daycare": [],
-            "School Expenses": [],
-            "Baby Supplies": []
-        },
-        "Gifts and Donations": {
-            "Charitable Contributions": [],
-            "Birthday/Holiday Gifts": []
-        },
-        "Pet Expenses": {
-            "Food": [],
-            "Veterinary Care": [],
-            "Grooming": []
-        }
+    "Salute e benessere": {
+      "Salute": [],
+      "Sport e Hobbies": [],
+      "Animali": []
     },
-    "Hype special": {
-        "Canone mensile": [],
-        "Ricariche (su conto interno o da altre fonti)": ["Ricarica manuale"],
-        "Prelievo (da conto interno o da altre fonti)": ["Prelievo"]
+    "Istruzione e cultura": {
+      "Istruzione e Cultura": [],
+      "Intrattenimento": [],
+      "Giochi e Scommesse": []
     },
-    "Miscellaneous": ["Rimborso"]
-}
+    "Spese obbligatorie e servizi": {
+      "Tasse e Servizi": [],
+      "Assicurazioni": [],
+      "Lavoro e Stipendio": []
+    },
+    "Varie ed extra": {
+      "Abbigliamento e Accessori": [],
+      "Regali e Donazioni": [],
+      "Famiglia": [],
+      "Varie": []
+    }
+  }

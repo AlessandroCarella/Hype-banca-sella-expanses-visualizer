@@ -6,11 +6,12 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 //Pages
 import UploadCsv from "./pages/UploadCsv";
 import Graphs from "./pages/Graph";
-import SelectOptions, { useSelectedOptions } from './pages/SelectOptions';
+import SelectOptions from './pages/SelectOptions';
 import {SelectedOptionsProvider} from './pages/SelectOptions'
 import RedirectPage from "./pages/RedirectPage";
-//Components
-import { ColorModeSwitch } from "./components/colorModeSwitch";
+
+//Context
+import { ColorModeProvider } from './contexts/ColorModeContext';
 
 //Styles
 import "./styles/main.css";
@@ -24,9 +25,6 @@ import "./styles/components/BulletListLookalikeFoldableList.css";
 import "./styles/components/ConfirmChoice.css";
 import "./styles/pages/loadingPage.css";
 import "./styles/topScreenDiv.css";
-
-//Context
-import { ColorModeProvider } from './contexts/ColorModeContext';
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 

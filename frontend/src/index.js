@@ -25,19 +25,24 @@ import "./styles/components/ConfirmChoice.css";
 import "./styles/pages/loadingPage.css";
 import "./styles/topScreenDiv.css";
 
+//Context
+import { ColorModeProvider } from './contexts/ColorModeContext';
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
     <React.StrictMode>
-        <SelectedOptionsProvider>
-            <Router>
-                <Routes>
-                    <Route path="/" element={<RedirectPage />} />
-                    <Route path="/upload-csv" element={<UploadCsv />} />
-                    <Route path="/select-options" element={<SelectOptions />} />
-                    <Route path="/graphs" element={<Graphs />} />
-                </Routes>
-            </Router>
-        </SelectedOptionsProvider>
+        <ColorModeProvider>
+            <SelectedOptionsProvider>
+                <Router>
+                    <Routes>
+                        <Route path="/" element={<RedirectPage />} />
+                        <Route path="/upload-csv" element={<UploadCsv />} />
+                        <Route path="/select-options" element={<SelectOptions />} />
+                        <Route path="/graphs" element={<Graphs />} />
+                    </Routes>
+                </Router>
+            </SelectedOptionsProvider>
+        </ColorModeProvider>
     </React.StrictMode>
 );

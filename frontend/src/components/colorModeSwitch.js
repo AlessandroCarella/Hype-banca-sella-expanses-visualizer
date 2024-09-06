@@ -1,30 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { setDarkMode, setLightMode } from "./helpers/colorModeSwitchHelpers";
+import React from "react";
+import { useColorMode } from "../contexts/ColorModeContext";
 
 export function ColorModeSwitch() {
-    const [isDarkMode, setIsDarkMode] = useState(false);
-
-    useEffect(() => {
-        // Set initial state based on user preference or system setting
-        if (
-            window.matchMedia &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches
-        ) {
-            setIsDarkMode(true);
-            setDarkMode();
-        } else {
-            setLightMode();
-        }
-    }, []);
-
-    const toggleColorMode = () => {
-        setIsDarkMode(!isDarkMode);
-        if (!isDarkMode) {
-            setDarkMode();
-        } else {
-            setLightMode();
-        }
-    };
+    const { isDarkMode, toggleColorMode } = useColorMode();
 
     return (
         <div className="color-mode-switch position-absolute top-0 end-0 p-3">

@@ -97,3 +97,12 @@ the csv file given by the bank is kinda currupted, or at least it is if you send
 just open the file in excel and save it back as a csv file.
 
 the json file with the user categories default is very much scarse because i dont want the user to be more overwhalmed by the amount of choises they have to do by adding stuff they have to remove from the list other then the ones they have to add
+
+------------------------------------------
+notes:
+credits for the gifs
+https://it.pinterest.com/pin/4855512090833214/
+https://it.pinterest.com/pin/483996291225614319/
+https://it.pinterest.com/pin/662521795206314329/
+https://it.pinterest.com/pin/308778118188102700/
+https://it.pinterest.com/pin/860469072592115920/

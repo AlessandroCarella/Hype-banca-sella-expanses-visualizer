@@ -10,10 +10,12 @@ function Graphs() {
     const [dates, setDates] = useFetchDates();
     const [selectedDate, setSelectedDate] = useState(null);
     const [isMonthView, setIsMonthView] = useState(false);
+    const [currentYear, setCurrentYear] = useState(null);
 
     useEffect(() => {
         if (dates.length > 0) {
             setSelectedDate(dates[dates.length - 1]);
+            setCurrentYear(dates[dates.length - 1]);
         }
     }, [dates]);
 
@@ -22,12 +24,25 @@ function Graphs() {
         if (newIsMonthView) {
             const months = await fetchMonths(year);
             setDates(months);
-            setSelectedDate(month ? `${month} ${year}` : months[0]);
+            // Update selectedDate here
+            setSelectedDate(month || months[0]);
+            setCurrentYear(year);
         } else {
-            // Fetch years again
-            const years = await fetchMonths(); // This will fetch years as it has no parameter
+            const years = await fetchMonths();
             setDates(years);
             setSelectedDate(years[years.length - 1]);
+            setCurrentYear(years[years.length - 1]);
+        }
+    };
+
+    const handleDateSelect = (date) => {
+        setSelectedDate(date);
+        if (isMonthView) {
+            // If it's month view, we need to extract the year from the selected date
+            const year = date.split(" ")[1];
+            setCurrentYear(year);
+        } else {
+            setCurrentYear(date);
         }
     };
 
@@ -37,7 +52,7 @@ function Graphs() {
 
             <DatesCarousel
                 dates={dates}
-                onDateSelect={setSelectedDate}
+                onDateSelect={handleDateSelect}
                 selectedDate={selectedDate}
             />
 

@@ -84,6 +84,9 @@ const ExpensePlot = ({ selectedDate, isMonthView, onViewChange }) => {
         // Ensure data is an array
         const chartData = Array.isArray(data) ? data : data[Object.keys(data)[0]];
 
+        // Sort the chartData from highest to lowest amount
+        chartData.sort((a, b) => b.amount - a.amount);
+
         const x = d3.scaleBand()
             .range([0, width])
             .domain(chartData.map((d) => d.category))

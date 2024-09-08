@@ -1,52 +1,52 @@
 {
     "Finanze personali": {
-      "Addebito Carta": [],
-      "Atm": [],
-      "Commissioni": [],
-      "Giroconti": [],
-      "Risparmi": [],
-      "Trasferimenti": []
+        "Addebito Carta": [],
+        "Atm": [],
+        "Commissioni": [],
+        "Giroconti": [],
+        "Risparmi": [],
+        "Trasferimenti": []
     },
     "Spese quotidiane": {
-      "Alimentari": [],
-      "Ristoranti e Caffe'": [],
-      "Shopping": [],
-      "Cura del corpo": []
+        "Alimentari": [],
+        "Ristoranti e Caffe'": [],
+        "Shopping": [],
+        "Cura del corpo": []
     },
     "Casa e utenze": {
-      "Casa": [],
-      "Bollette e Abbonamenti": [],
-      "Elettronica e Software": []
+        "Casa": [],
+        "Bollette e Abbonamenti": [],
+        "Elettronica e Software": []
     },
     "Trasporti e viaggi": {
-      "Veicoli e Trasporti": [],
-      "Viaggi e Vacanze": [],
-      "Ricariche Telefoniche": []
+        "Veicoli e Trasporti": [],
+        "Viaggi e Vacanze": [],
+        "Ricariche Telefoniche": []
     },
     "Investimenti e finanza": {
-      "Criptovalute": [],
-      "Investimenti": [],
-      "Finanziamenti e Prestiti": []
+        "Criptovalute": [],
+        "Investimenti": [],
+        "Finanziamenti e Prestiti": []
     },
     "Salute e benessere": {
-      "Salute": [],
-      "Sport e Hobbies": [],
-      "Animali": []
+        "Salute": [],
+        "Sport e Hobbies": [],
+        "Animali": []
     },
     "Istruzione e cultura": {
-      "Istruzione e Cultura": [],
-      "Intrattenimento": [],
-      "Giochi e Scommesse": []
+        "Istruzione e Cultura": [],
+        "Intrattenimento": [],
+        "Giochi e Scommesse": []
     },
     "Spese obbligatorie e servizi": {
-      "Tasse e Servizi": [],
-      "Assicurazioni": [],
-      "Lavoro e Stipendio": []
+        "Tasse e Servizi": [],
+        "Assicurazioni": [],
+        "Lavoro e Stipendio": []
     },
     "Varie ed extra": {
-      "Abbigliamento e Accessori": [],
-      "Regali e Donazioni": [],
-      "Famiglia": [],
-      "Varie": []
+        "Abbigliamento e Accessori": [],
+        "Regali e Donazioni": [],
+        "Famiglia": [],
+        "Varie": []
     }
-  }
+}

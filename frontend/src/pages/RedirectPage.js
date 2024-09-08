@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const RedirectPage = () => {
-    const mainPage = "/upload-csv";
+    const mainPage = "/graphs";
 
     const navigate = useNavigate();
 

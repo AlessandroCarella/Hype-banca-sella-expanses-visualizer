@@ -15,6 +15,9 @@ from routes.getElementsSettingPage import get_user_expense_dictionary, get_expan
 # Loading page
 from routes.loadingPage import get_loading_gif
 
+# Graphs page
+from routes.graphs import get_month_year_dates
+
 ########################################################
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -71,6 +74,12 @@ def resetUserOptionsToDefault():
 @app.route('/api/loading-gif', methods=['GET'])
 def getLoadingGifs():
     return get_loading_gif(app)
+########################################################
+########################################################
+# Graphs page
+@app.route('/api/getMonthYearDates', methods=['GET'])
+def getMonthYearDates():
+    return get_month_year_dates(app)
 
 ########################################################
 

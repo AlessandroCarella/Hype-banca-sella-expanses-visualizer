@@ -1,14 +1,24 @@
-export const getInitialSelectedDate = (dates) => {
-    return dates.length > 0 ? dates[dates.length - 1] : null;
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+export const useFetchDates = () => {
+  const [dates, setDates] = useState([]);
+
+  useEffect(() => {
+    const fetchDates = async () => {
+      try {
+        const response = await axios.get('/api/getMonthYearDates');
+        setDates(response.data);
+      } catch (error) {
+        console.error("Error fetching dates:", error);
+        // Optionally, set some default dates or show an error message
+      }
+    };
+
+    fetchDates();
+  }, []);
+
+  return dates;
 };
 
-// Mock dates for testing purposes
-export const mockDates = [
-    "2023-01-15",
-    "2023-02-28",
-    "2023-03-10",
-    "2023-04-22",
-    "2023-05-05",
-    "2023-06-18",
-    "2023-07-30",
-];
+// ... existing code (if any) ...

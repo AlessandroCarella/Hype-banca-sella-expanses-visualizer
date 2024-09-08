@@ -16,7 +16,7 @@ from routes.getElementsSettingPage import get_user_expense_dictionary, get_expan
 from routes.loadingPage import get_loading_gif
 
 # Graphs page
-from routes.graphs import get_month_year_dates
+from routes.graphs import get_years, get_months
 
 ########################################################
 app = Flask(__name__)
@@ -77,9 +77,14 @@ def getLoadingGifs():
 ########################################################
 ########################################################
 # Graphs page
-@app.route('/api/getMonthYearDates', methods=['GET'])
-def getMonthYearDates():
-    return get_month_year_dates(app)
+@app.route('/api/get-years', methods=['GET'])
+def getMonthYear():
+    return get_years(app)
+
+@app.route('/api/get-months', methods=['GET'])
+def getMonths():
+    year = request.args.get('year')
+    return get_months(app, year)
 
 ########################################################
 

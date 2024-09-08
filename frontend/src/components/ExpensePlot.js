@@ -1,169 +1,132 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
+import axios from 'axios';
 
-const ExpensePlot = () => {
-  const [input1, setInput1] = useState('');
-  const [input2, setInput2] = useState('');
-  const [data, setData] = useState(null);
-  const [isMonthView, setIsMonthView] = useState(false);
+const ExpensePlot = ({ selectedDate, isMonthView, onViewChange }) => {
   const svgRef = useRef();
-
-  // Mock data
-  const mockYearlyData = [
-    { month: 'Jan', food: 300, transport: 150, entertainment: 100 },
-    { month: 'Feb', food: 280, transport: 160, entertainment: 90 },
-    // ... add more months
-  ];
-
-  const mockMonthlyData = [
-    { category: 'Food', amount: 300 },
-    { category: 'Transport', amount: 150 },
-    { category: 'Entertainment', amount: 100 },
-  ];
+  const [data, setData] = useState(null);
 
   useEffect(() => {
-    if (input1 && input2) {
-      // Commented API call
-      /*
-      const fetchData = async () => {
-        try {
-          const response = await fetch(`/api/expenses?param1=${input1}&param2=${input2}`);
-          const result = await response.json();
-          setData(result);
-        } catch (error) {
-          console.error('Error fetching data:', error);
-        }
-      };
-      fetchData();
-      */
+    // Fetch data based on selectedDate
+    // const fetchData = async () => {
+    //   try {
+    //     const response = await axios.get('/api/get-expense-data', {
+    //       params: { date: selectedDate, isMonthView }
+    //     });
+    //     setData(response.data);
+    //   } catch (error) {
+    //     console.error("Error fetching expense data:", error);
+    //   }
+    // };
+    // fetchData();
 
-      // Using mock data instead
-      setData(mockYearlyData);
-    }
-  }, [input1, input2]);
+    // Mock data for now
+    const mockData = isMonthView
+      ? [
+          { category: 'Food', amount: 300 },
+          { category: 'Transport', amount: 150 },
+          { category: 'Entertainment', amount: 200 },
+          { category: 'Utilities', amount: 100 },
+        ]
+      : [
+          { month: 'Jan', Food: 300, Transport: 150, Entertainment: 200, Utilities: 100 },
+          { month: 'Feb', Food: 280, Transport: 160, Entertainment: 180, Utilities: 110 },
+          { month: 'Mar', Food: 320, Transport: 140, Entertainment: 220, Utilities: 90 },
+          // ... more months
+        ];
+    setData(mockData);
+  }, [selectedDate, isMonthView]);
 
   useEffect(() => {
-    if (data) {
-      createPlot();
-    }
-  }, [data, isMonthView]);
+    if (!data) return;
 
-  const createPlot = () => {
-    d3.select(svgRef.current).selectAll('*').remove();
+    const svg = d3.select(svgRef.current);
+    svg.selectAll("*").remove(); // Clear previous chart
 
     const width = 600;
     const height = 400;
     const margin = { top: 20, right: 30, bottom: 40, left: 40 };
 
-    const svg = d3.select(svgRef.current)
-      .attr('width', width)
-      .attr('height', height);
-
-    const chart = svg.append('g')
+    const chart = svg
+      .attr('width', width + margin.left + margin.right)
+      .attr('height', height + margin.top + margin.bottom)
+      .append('g')
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
     if (isMonthView) {
-      createBarPlot(chart, width, height, margin);
-    } else {
-      createStackedBarPlot(chart, width, height, margin);
-    }
-  };
+      // Bar plot for month view
+      const x = d3.scaleBand()
+        .range([0, width])
+        .domain(data.map(d => d.category))
+        .padding(0.1);
 
-  const createStackedBarPlot = (chart, width, height, margin) => {
-    const stack = d3.stack().keys(['food', 'transport', 'entertainment']);
-    const series = stack(data);
+      const y = d3.scaleLinear()
+        .range([height, 0])
+        .domain([0, d3.max(data, d => d.amount)]);
 
-    const x = d3.scaleBand()
-      .domain(data.map(d => d.month))
-      .range([0, width - margin.left - margin.right])
-      .padding(0.1);
-
-    const y = d3.scaleLinear()
-      .domain([0, d3.max(series, d => d3.max(d, d => d[1]))])
-      .range([height - margin.top - margin.bottom, 0]);
-
-    const color = d3.scaleOrdinal()
-      .domain(['food', 'transport', 'entertainment'])
-      .range(['#98abc5', '#8a89a6', '#7b6888']);
-
-    chart.append('g')
-      .selectAll('g')
-      .data(series)
-      .enter().append('g')
-        .attr('fill', d => color(d.key))
-      .selectAll('rect')
-      .data(d => d)
-      .enter().append('rect')
-        .attr('x', d => x(d.data.month))
-        .attr('y', d => y(d[1]))
-        .attr('height', d => y(d[0]) - y(d[1]))
-        .attr('width', x.bandwidth())
-        .on('click', (event, d) => {
-          setIsMonthView(true);
-          setData(mockMonthlyData);
-        });
-
-    chart.append('g')
-      .attr('transform', `translate(0,${height - margin.top - margin.bottom})`)
-      .call(d3.axisBottom(x));
-
-    chart.append('g')
-      .call(d3.axisLeft(y));
-  };
-
-  const createBarPlot = (chart, width, height, margin) => {
-    const x = d3.scaleBand()
-      .domain(data.map(d => d.category))
-      .range([0, width - margin.left - margin.right])
-      .padding(0.1);
-
-    const y = d3.scaleLinear()
-      .domain([0, d3.max(data, d => d.amount)])
-      .range([height - margin.top - margin.bottom, 0]);
-
-    chart.selectAll('.bar')
-      .data(data)
-      .enter().append('rect')
+      chart.selectAll('.bar')
+        .data(data)
+        .enter().append('rect')
         .attr('class', 'bar')
         .attr('x', d => x(d.category))
-        .attr('y', d => y(d.amount))
         .attr('width', x.bandwidth())
-        .attr('height', d => height - margin.top - margin.bottom - y(d.amount))
-        .attr('fill', '#69b3a2');
+        .attr('y', d => y(d.amount))
+        .attr('height', d => height - y(d.amount))
+        .attr('fill', 'steelblue');
 
-    chart.append('g')
-      .attr('transform', `translate(0,${height - margin.top - margin.bottom})`)
-      .call(d3.axisBottom(x));
+      chart.append('g')
+        .attr('transform', `translate(0,${height})`)
+        .call(d3.axisBottom(x));
 
-    chart.append('g')
-      .call(d3.axisLeft(y));
-  };
+      chart.append('g')
+        .call(d3.axisLeft(y));
 
-  return (
-    <div>
-      <input
-        type="number"
-        value={input1}
-        onChange={(e) => setInput1(e.target.value)}
-        placeholder="Enter first number"
-      />
-      <input
-        type="number"
-        value={input2}
-        onChange={(e) => setInput2(e.target.value)}
-        placeholder="Enter second number"
-      />
-      <svg ref={svgRef}></svg>
-      {isMonthView && (
-        <button onClick={() => {
-          setIsMonthView(false);
-          setData(mockYearlyData);
-        }}>
-          Back to Year View
-        </button>
-      )}
-    </div>
-  );
+    } else {
+      // Stacked bar plot for year view
+      const categories = Object.keys(data[0]).filter(key => key !== 'month');
+      const stack = d3.stack().keys(categories);
+      const stackedData = stack(data);
+
+      const x = d3.scaleBand()
+        .range([0, width])
+        .domain(data.map(d => d.month))
+        .padding(0.1);
+
+      const y = d3.scaleLinear()
+        .range([height, 0])
+        .domain([0, d3.max(stackedData[stackedData.length - 1], d => d[1])]);
+
+      const color = d3.scaleOrdinal()
+        .domain(categories)
+        .range(d3.schemeCategory10);
+
+      chart.selectAll('g')
+        .data(stackedData)
+        .enter().append('g')
+          .attr('fill', d => color(d.key))
+        .selectAll('rect')
+        .data(d => d)
+        .enter().append('rect')
+          .attr('x', d => x(d.data.month))
+          .attr('y', d => y(d[1]))
+          .attr('height', d => y(d[0]) - y(d[1]))
+          .attr('width', x.bandwidth())
+          .on('click', (event, d) => {
+            const clickedMonth = d.data.month;
+            const clickedYear = selectedDate;
+            onViewChange(true, clickedYear, clickedMonth);
+          });
+
+      chart.append('g')
+        .attr('transform', `translate(0,${height})`)
+        .call(d3.axisBottom(x));
+
+      chart.append('g')
+        .call(d3.axisLeft(y));
+    }
+  }, [data, isMonthView, selectedDate, onViewChange]);
+
+  return <svg ref={svgRef}></svg>;
 };
 
 export default ExpensePlot;

@@ -7,18 +7,27 @@ export const useFetchDates = () => {
   useEffect(() => {
     const fetchDates = async () => {
       try {
-        const response = await axios.get('/api/getMonthYearDates');
+        const response = await axios.get('/api/get-years');
         setDates(response.data);
       } catch (error) {
         console.error("Error fetching dates:", error);
-        // Optionally, set some default dates or show an error message
       }
     };
 
     fetchDates();
   }, []);
 
-  return dates;
+  return [dates, setDates]; // Return both the state and the setter
 };
 
-// ... existing code (if any) ...
+export const fetchMonths = async (year) => {
+  try {
+    const endpoint = year ? '/api/get-months' : '/api/get-years';
+    const params = year ? { year } : {};
+    const response = await axios.get(endpoint, { params });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching dates:", error);
+    return [];
+  }
+};

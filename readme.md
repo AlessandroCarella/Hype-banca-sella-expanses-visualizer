@@ -48,6 +48,11 @@ pages:
 
 put in the documentation that the user categories file in backend/default files/user categories.json can be edited since the components are rendered dinamically
 
+implement switch of view of the graphs to circular plot
+for the single months it's pretty straight forward since you are displaying the same exact data but now you use a circle instead of a bar plot.
+for the years, instead of showing the stack bar plot of each month you sum up all the categories of each month and show a view similar to the month one. Basically a year becomes a month of length 12 months.
+"in the year bar plot view you are displaying how much you spent in each month and how much you spent in each category for that month. in the year circular plot you are displaying how which percentage of spending do each category occupy in the year" 
+
 ------------------------------------------
 colors:
 the colors used in the app are:

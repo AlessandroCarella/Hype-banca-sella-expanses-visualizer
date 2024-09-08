@@ -9,19 +9,25 @@ def numberToMonth(number):
     months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     return months[number-1]
 
-def get_month_year_dates(app):
-    monthYearDates = []
-    folderNames = [folder for folder in os.listdir(app.config['GENERATED_FILES_OUTPUT_FOLDER']) 
-                   if os.path.isdir(os.path.join(app.config['GENERATED_FILES_OUTPUT_FOLDER'], folder))]
-    for year in folderNames:#year is the name of the year folder
-        yearFolderPath = path.join(app.config['GENERATED_FILES_OUTPUT_FOLDER'], year)
-        for monthFileName in os.listdir(yearFolderPath):
-            monthYearDates.append(
-                numberToMonth(int(monthFileName.replace(".csv", "")))
-                + 
-                " " 
-                + 
-                str(year)
-            )
+def get_months(app, year):
+    months = []
+    for monthFileName in os.listdir(
+        path.join(
+            app.config['GENERATED_FILES_OUTPUT_FOLDER'], 
+            year
+        )):
+        months.append(
+            numberToMonth(int(monthFileName.replace(".csv", "")))
+            + 
+            " " 
+            + 
+            str(year)
+        )
 
-    return jsonify(monthYearDates)
+    return jsonify(months)
+
+def get_years(app):
+    years = [folder for folder in os.listdir(app.config['GENERATED_FILES_OUTPUT_FOLDER']) 
+                   if os.path.isdir(os.path.join(app.config['GENERATED_FILES_OUTPUT_FOLDER'], folder))]
+    return jsonify(years)
+

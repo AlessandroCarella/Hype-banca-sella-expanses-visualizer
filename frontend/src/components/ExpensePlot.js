@@ -13,8 +13,8 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
 
     const getAspectRatio = (width) => {
         // Formula to approximate the desired aspect ratio
-        const minAspectRatio = 0.4;
-        const maxAspectRatio = 0.5;
+        const minAspectRatio = 0.45;
+        const maxAspectRatio = 0.55;
         const minWidth = 800;
         const maxWidth = 2000;
         
@@ -58,7 +58,12 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
         const svg = d3.select(svgRef.current);
         svg.selectAll("*").remove();
 
-        const margin = { top: 20, right: 30, bottom: 40, left: 40 };
+        const margin = {
+            top: 20,
+            right: 30,
+            bottom: isMonthView ? 80 : 40, // Increase bottom margin for month view
+            left: 60 // Slightly increase left margin for y-axis labels
+        };
         const width = dimensions.width - margin.left - margin.right;
         const height = dimensions.height - margin.top - margin.bottom;
 

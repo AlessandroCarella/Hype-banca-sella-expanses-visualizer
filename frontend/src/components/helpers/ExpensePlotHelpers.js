@@ -80,7 +80,12 @@ export const renderMonthView = (chart, data, width, height, scalesRef) => {
     chart
         .append("g")
         .attr("transform", `translate(0,${height})`)
-        .call(d3.axisBottom(x));
+        .call(d3.axisBottom(x))
+        .selectAll("text")
+        .style("text-anchor", "end")
+        .attr("dx", "-.8em")
+        .attr("dy", ".15em")
+        .attr("transform", "rotate(-45)");
 
     chart.append("g").call(d3.axisLeft(y));
 };
@@ -160,7 +165,7 @@ export const renderYearView = (chart, data, width, height, scalesRef, onViewChan
                             .duration(500)
                             .attr("y", height)
                             .attr("height", 0)
-                            .on("end", (_, i, nodes) => {
+                            .on("end", (d, i, nodes) => {
                                 if (i === nodes.length - 1) {
                                     onViewChange(true, d.month);
                                     isTransitioning = false;

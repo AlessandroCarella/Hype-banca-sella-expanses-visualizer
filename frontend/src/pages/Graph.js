@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import DatesCarousel from "../components/DatesCarousel";
 import ExpensePlot from "../components/ExpensePlot";
 import { fetchMonths, useFetchYears } from "./helpers/GraphHelpers";
+import { ColorModeSwitch } from "../components/colorModeSwitch";
 
 const Graph = () => {
     const [dates, setDates] = useFetchYears();
@@ -42,6 +43,7 @@ const Graph = () => {
 
     return (
         <div>
+            <ColorModeSwitch />
             <DatesCarousel
                 dates={dates}
                 onDateSelect={handleDateSelect}

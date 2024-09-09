@@ -99,8 +99,7 @@ def getMonthData(app, month, year, expenditureOrRevenue):
     df = pd.read_csv(dfPath)
 
     #filter the dataset based on if the "Importo" column is negative or positive
-    df = df[df["Importo"] < 0] if expenditureOrRevenue == "expenditure" else df[df["Importo"] > 0]
-
+    df = df[df["Importo"] < 0] if expenditureOrRevenue == "Expenditure" else df[df["Importo"] > 0]
     #create the structure using the df and knowing that you can get the category of a name (in the column "Nome") using the categoriesNamesDict and you can get the supercategory of a category using the categoriesToSuperCategories
     out = []
     for name in df["Nome"].unique():

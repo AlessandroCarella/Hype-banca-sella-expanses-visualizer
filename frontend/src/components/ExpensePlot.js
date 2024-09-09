@@ -1,22 +1,24 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import * as d3 from "d3";
 import axios from "axios";
+import { transition } from 'd3-transition';
 
 const ExpensePlot = ({ selectedDate, onViewChange, isMonthView }) => {
     const svgRef = useRef();
     const [data, setData] = useState(null);
+    const scalesRef = useRef({ x: null, y: null });
 
-    const generateShade = (baseColor, index, total) => {
+    const generateShade = useCallback((baseColor, index, total) => {
         const color = d3.color(baseColor);
         const lightenFactor = 0.1 + (index / total) * 1;
         return color.brighter(lightenFactor);
-    };
+    }, []);
 
     // Assign colors to supercategories
     const supercategoryColors = {
         "Living Expenses": "#FF6384",
-        Transportation: "#36A2EB",
-        Personal: "#FFCE56",
+        "Transportation": "#36A2EB",
+        "Personal": "#FFCE56",
         "Health & Education": "#A020F0",
     };
 
@@ -114,7 +116,7 @@ const ExpensePlot = ({ selectedDate, onViewChange, isMonthView }) => {
         setData(processedData);
     }, [selectedDate, isMonthView]);
 
-    const renderMonthView = (chart, data, width, height) => {
+    const renderMonthView = useCallback((chart, data, width, height) => {
         // Ensure data is an array
         const chartData = Array.isArray(data)
             ? data
@@ -134,6 +136,8 @@ const ExpensePlot = ({ selectedDate, onViewChange, isMonthView }) => {
             .range([height, 0])
             .domain([0, d3.max(chartData, (d) => d.amount)]);
 
+        scalesRef.current = { x, y };
+
         const supercategories = [
             ...new Set(chartData.map((d) => d.supercategory)),
         ];
@@ -146,25 +150,31 @@ const ExpensePlot = ({ selectedDate, onViewChange, isMonthView }) => {
                 )
             );
 
-        chart
-            .selectAll(".bar")
+        chart.selectAll(".bar")
             .data(chartData)
-            .enter()
-            .append("rect")
-            .attr("class", "bar")
-            .attr("x", (d) => x(d.category))
-            .attr("width", x.bandwidth())
+            .join(
+                enter => enter.append("rect")
+                    .attr("class", "bar")
+                    .attr("x", (d) => x(d.category))
+                    .attr("width", x.bandwidth())
+                    .attr("y", height)
+                    .attr("height", 0)
+                    .attr("fill", (d, i) => {
+                        const supercategoryItems = chartData.filter(
+                            (item) => item.supercategory === d.supercategory
+                        );
+                        const index = supercategoryItems.findIndex(
+                            (item) => item.category === d.category
+                        );
+                        return generateShade(d.color, index, supercategoryItems.length);
+                    }),
+                update => update,
+                exit => exit.remove()
+            )
+            .transition()
+            .duration(1000)
             .attr("y", (d) => y(d.amount) || 0)
-            .attr("height", (d) => height - y(d.amount) || 0)
-            .attr("fill", (d, i) => {
-                const supercategoryItems = chartData.filter(
-                    (item) => item.supercategory === d.supercategory
-                );
-                const index = supercategoryItems.findIndex(
-                    (item) => item.category === d.category
-                );
-                return generateShade(d.color, index, supercategoryItems.length);
-            });
+            .attr("height", (d) => height - y(d.amount) || 0);
 
         chart
             .append("g")
@@ -172,9 +182,9 @@ const ExpensePlot = ({ selectedDate, onViewChange, isMonthView }) => {
             .call(d3.axisBottom(x));
 
         chart.append("g").call(d3.axisLeft(y));
-    };
+    }, [generateShade]);
 
-    const renderYearView = (chart, data, width, height) => {
+    const renderYearView = useCallback((chart, data, width, height) => {
         const months = Object.keys(data);
         const categories = data[months[0]].map((item) => item.category);
 
@@ -197,6 +207,8 @@ const ExpensePlot = ({ selectedDate, onViewChange, isMonthView }) => {
                 d3.max(stackedData[stackedData.length - 1], (d) => d[1]),
             ]);
 
+        scalesRef.current = { x, y };
+
         const color = d3
             .scaleOrdinal()
             .domain(categories)
@@ -216,27 +228,51 @@ const ExpensePlot = ({ selectedDate, onViewChange, isMonthView }) => {
                 })
             );
 
-        chart
-            .selectAll("g")
+        let isTransitioning = false;
+
+        chart.selectAll("g.category")
             .data(stackedData)
-            .enter()
-            .append("g")
-            .attr("fill", (d) => color(d.key))
-            .selectAll("rect")
-            .data((d) => d.map((v, i) => ({...v, month: months[i]}))) // Add month to each data point
-            .enter()
-            .append("rect")
-            .attr("x", (d) => x(d.month))
+            .join(
+                enter => enter.append("g")
+                    .attr("class", "category")
+                    .attr("fill", (d) => color(d.key))
+                    .selectAll("rect")
+                    .data(d => d.map((v, i) => ({...v, month: months[i]})))
+                    .join("rect")
+                    .attr("x", (d) => x(d.month))
+                    .attr("y", height)
+                    .attr("height", 0)
+                    .attr("width", x.bandwidth())
+                    .attr("data-month", (d) => d.month)
+                    .on("click", (event, d) => {
+                        if (isTransitioning) return;
+                        isTransitioning = true;
+
+                        console.log("Clicked month:", d.month);
+                        const monthYear = d.month;
+                        console.log("Selected date from graph:", monthYear);                
+
+                        // Add exit animation for all bars
+                        chart.selectAll("rect")
+                            .transition()
+                            .duration(500)
+                            .attr("y", height)
+                            .attr("height", 0)
+                            .on("end", (d, i, nodes) => {
+                                if (i === nodes.length - 1) {
+                                    // Call onViewChange only after the last bar's animation is complete
+                                    onViewChange(true, monthYear);
+                                    isTransitioning = false;
+                                }
+                            });
+                    }),
+                update => update,
+                exit => exit.remove()
+            )
+            .transition()
+            .duration(1000)
             .attr("y", (d) => y(d[1]))
-            .attr("height", (d) => y(d[0]) - y(d[1]))
-            .attr("width", x.bandwidth())
-            .attr("data-month", (d) => d.month) // Store month as a data attribute
-            .on("click", (event, d) => {
-                console.log("Clicked month:", d.month);
-                const monthYear = d.month;
-                console.log("Selected date from graph:", monthYear);
-                onViewChange(true, monthYear);
-            });
+            .attr("height", (d) => y(d[0]) - y(d[1]));
 
         chart
             .append("g")
@@ -244,7 +280,7 @@ const ExpensePlot = ({ selectedDate, onViewChange, isMonthView }) => {
             .call(d3.axisBottom(x));
 
         chart.append("g").call(d3.axisLeft(y));
-    };
+    }, [generateShade, onViewChange]);
 
     useEffect(() => {
         if (!data) return;
@@ -262,12 +298,17 @@ const ExpensePlot = ({ selectedDate, onViewChange, isMonthView }) => {
             .append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`);
 
+        // Add a key to the chart group to prevent unnecessary re-renders
+        chart.attr("key", isMonthView ? "month" : "year");
+
         if (isMonthView) {
             renderMonthView(chart, data, width, height);
         } else {
             renderYearView(chart, data, width, height);
         }
-    }, [data, isMonthView, selectedDate, onViewChange]);
+
+        // Remove the return function to prevent unnecessary transitions
+    }, [data, isMonthView, selectedDate, renderMonthView, renderYearView]);
 
     return <svg ref={svgRef}></svg>;
 };

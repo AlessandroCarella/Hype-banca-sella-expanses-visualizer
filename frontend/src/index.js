@@ -25,6 +25,7 @@ import "./styles/components/BulletListLookalikeFoldableList.css";
 import "./styles/components/ConfirmChoice.css";
 import "./styles/pages/loadingPage.css";
 import "./styles/topScreenDiv.css";
+import "./styles/components/ExpensePlot.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 

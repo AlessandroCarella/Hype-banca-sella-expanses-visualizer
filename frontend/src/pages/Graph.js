@@ -17,12 +17,14 @@ const Graph = () => {
         }
     }, [years]);
 
-    const handleDateSelect = (yearOrMonth) => {
-        if (isMonthView) {
+    const handleDateSelect = (yearOrMonth, carouselType) => {
+        if (carouselType === 'month') {
             setSelectedMonth(yearOrMonth);
+            setIsMonthView(true)
         } else {
             setSelectedYear(yearOrMonth);
-            setSelectedMonth("");
+            setSelectedMonth("")
+            setIsMonthView(false)
         }
     };
 
@@ -32,28 +34,25 @@ const Graph = () => {
         console.log("selectedMonth:", selectedMonth);
     }, [selectedYear, selectedMonth]);
 
-    const handleViewChange = (toMonthView, yearOrMonth) => {
-        setIsMonthView(toMonthView);
-        if (toMonthView) {
-            setSelectedMonth(yearOrMonth);
-        } else {
-            setSelectedYear(yearOrMonth);
-            setSelectedMonth("");
-        }
-    };
-
     return (
         <div>
-            <ColorModeSwitch />
+            <div style={{ marginBottom: '20px' }}>
+                <ColorModeSwitch />
+            </div>
             <DatesCarousel
-                dates={isMonthView ? months : years}
-                onDateSelect={handleDateSelect}
-                selectedDate={isMonthView ? selectedMonth : selectedYear}
+                dates={years}
+                onDateSelect={(date) => handleDateSelect(date, 'year')}
+                selectedDate={selectedYear}
+            />
+            <DatesCarousel
+                dates={months}
+                onDateSelect={(date) => handleDateSelect(date, 'month')}
+                selectedDate={selectedMonth}
             />
             <ExpensePlot
                 year={selectedYear}
                 month={selectedMonth}
-                onViewChange={handleViewChange}
+                onViewChange={handleDateSelect}
                 isMonthView={isMonthView}
             />
         </div>

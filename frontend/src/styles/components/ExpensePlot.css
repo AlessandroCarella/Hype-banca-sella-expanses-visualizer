@@ -1,0 +1,7 @@
+.bar-plot-container-div{
+    display: flex;
+    scroll-behavior: smooth;
+    overflow-x: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}

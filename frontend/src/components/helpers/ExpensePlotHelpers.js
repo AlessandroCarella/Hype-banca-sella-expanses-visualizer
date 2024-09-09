@@ -92,6 +92,11 @@ export const renderMonthView = (chart, data, width, height, scalesRef) => {
 
 export const renderYearView = (chart, data, width, height, scalesRef, onViewChange) => {
     const months = Object.keys(data);
+    if (!months.length || !Array.isArray(data[months[0]])) {
+        console.error("Invalid data format for year view");
+        return;
+    }
+
     const categories = data[months[0]].map((item) => item.category);
 
     const stack = d3
@@ -155,9 +160,6 @@ export const renderYearView = (chart, data, width, height, scalesRef, onViewChan
                         if (isTransitioning) return;
                         isTransitioning = true;
 
-                        console.log("Clicked month:", d.month);
-                        console.log("Clicked category:", d.category);
-
                         // Add exit animation for all bars
                         chart
                             .selectAll("rect")
@@ -165,9 +167,9 @@ export const renderYearView = (chart, data, width, height, scalesRef, onViewChan
                             .duration(500)
                             .attr("y", height)
                             .attr("height", 0)
-                            .on("end", (d, i, nodes) => {
+                            .on("end", (x, i, nodes) => {
                                 if (i === nodes.length - 1) {
-                                    onViewChange(true, d.month);
+                                    onViewChange(d.month, 'month');
                                     isTransitioning = false;
                                 }
                             });

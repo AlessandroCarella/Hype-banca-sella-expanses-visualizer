@@ -78,12 +78,14 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
         if (isMonthView) {
             renderMonthView(chart, data, width, height, scalesRef);
         } else {
-            renderYearView(chart, data, width, height, scalesRef, onViewChange);
+            // Ensure data is in the correct format for year view
+            const yearData = Array.isArray(data) ? { [year]: data } : data;
+            renderYearView(chart, yearData, width, height, scalesRef, onViewChange);
         }
     }, [data, isMonthView, year, month, onViewChange, dimensions]);
 
     return (
-        <div style={{ width: '100%', overflowX: 'auto' }}>
+        <div className="bar-plot-container-div">
             <div ref={containerRef} style={{ width: '100%', minWidth: `${minWidth}px` }}>
                 <svg ref={svgRef} width={dimensions.width} height={dimensions.height}></svg>
             </div>

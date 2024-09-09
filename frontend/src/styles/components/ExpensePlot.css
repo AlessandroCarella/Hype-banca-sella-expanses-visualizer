@@ -9,8 +9,8 @@
 }
 
 .select-type-money {
-    position: absolute;
-    top: 10px;
+    position: fixed;
+    top: 150px;
     right: 30px;
     z-index: 5;
 }
@@ -42,4 +42,18 @@
 
 .light-mode .select-type-money select:hover {
     background-color: #f5f4f7;
+}
+
+.bar-plot-container-div svg {
+    position: relative;
+    z-index: 1;
+}
+
+.bar, rect {
+    transition: filter 0.3s;
+}
+
+.bar.hovered, rect.hovered {
+    filter: brightness(1.5);
+    z-index: 10;
 }

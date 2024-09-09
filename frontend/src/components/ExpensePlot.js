@@ -83,6 +83,16 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
             const yearData = Array.isArray(data) ? { [year]: data } : data;
             renderYearView(chart, yearData, width, height, scalesRef, onViewChange);
         }
+
+        // Add hover effect
+        chart.selectAll(".bar, rect")
+            .on("mouseover", function() {
+                d3.select(this).raise().classed("hovered", true);
+            })
+            .on("mouseout", function() {
+                d3.select(this).classed("hovered", false);
+            });
+
     }, [data, isMonthView, year, month, onViewChange, dimensions]);
 
     return (

@@ -1,6 +1,9 @@
 import { supercategoryColors } from "./ExpensePlotHelpers";
 
-export const generateMockData = (isMonthView, year, month) => {
+export const generateMockData = (isMonthView, year, month, dataType) => {
+    console.log("generate mock data");
+    console.log(year, month, dataType);
+    
     const mockData = isMonthView
         ? [
               {

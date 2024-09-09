@@ -10,6 +10,7 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
     const scalesRef = useRef({ x: null, y: null });
     const minWidth = 600; // Set your desired minimum width here
+    const [dataType, setDataType] = useState("Expenditure"); // New state for data type
 
     const getAspectRatio = (width) => {
         // Formula to approximate the desired aspect ratio
@@ -27,9 +28,9 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
     };
 
     useEffect(() => {
-        const processedData = generateMockData(isMonthView, year, month);
+        const processedData = generateMockData(isMonthView, year, month, dataType);
         setData(processedData);
-    }, [year, month, isMonthView]);
+    }, [year, month, isMonthView, dataType]); // Add dataType to dependencies
 
     useEffect(() => {
         const resizeObserver = new ResizeObserver(entries => {
@@ -85,9 +86,18 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
     }, [data, isMonthView, year, month, onViewChange, dimensions]);
 
     return (
-        <div className="bar-plot-container-div">
+        <div className="bar-plot-container-div" style={{ position: 'relative' }}>
             <div ref={containerRef} style={{ width: '100%', minWidth: `${minWidth}px` }}>
                 <svg ref={svgRef} width={dimensions.width} height={dimensions.height}></svg>
+            </div>
+            <div className="select-type-money">
+                <select
+                    value={dataType}
+                    onChange={(e) => setDataType(e.target.value)}
+                >
+                    <option value="Expenditure">Expenditure</option>
+                    <option value="Revenue">Revenue</option>
+                </select>
             </div>
         </div>
     );

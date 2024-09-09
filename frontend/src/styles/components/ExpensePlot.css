@@ -1,7 +1,45 @@
-.bar-plot-container-div{
+.bar-plot-container-div {
+    position: relative;
+    z-index: 1;
     display: flex;
     scroll-behavior: smooth;
     overflow-x: scroll;
     scrollbar-width: none;
     -ms-overflow-style: none;
+}
+
+.select-type-money {
+    position: absolute;
+    top: 10px;
+    right: 30px;
+    z-index: 5;
+}
+
+.select-type-money select {
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    /* transition: background-color 0.3s, color 0.3s; */
+}
+
+/* Dark mode */
+.dark-mode .select-type-money select {
+    background-color: #212121;
+    color: #ffffff;
+    border: 1px solid #284bff;
+}
+
+.dark-mode .select-type-money select:hover {
+    background-color: #263036;
+}
+
+/* Light mode */
+.light-mode .select-type-money select {
+    background-color: #ffffff;
+    color: #000000;
+    border: 1px solid #284bff;
+}
+
+.light-mode .select-type-money select:hover {
+    background-color: #f5f4f7;
 }

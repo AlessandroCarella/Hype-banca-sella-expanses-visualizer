@@ -2,19 +2,22 @@ import * as d3 from "d3";
 
 export const generateShade = (baseColor, index, total) => {
     const color = d3.color(baseColor);
+    if (!color) {
+        console.error(`Invalid color: ${baseColor}`);
+        return '#CCCCCC'; // Return a default color
+    }
     const lightenFactor = 0.1 + (index / total) * 1;
     return color.brighter(lightenFactor);
 };
 
-export const supercategoryColors = {
-    "Living Expenses": "#FF6384",
-    Transportation: "#36A2EB",
-    Personal: "#FFCE56",
-    "Health & Education": "#A020F0",
+export const loadSupercategoryColors = async () => {
+    const response = await fetch("/api/get-supercategory-colors");
+    const data = await response.json();
+    return data;
 };
 
 // Add renderMonthView and renderYearView functions here
-export const renderMonthView = (chart, data, width, height, scalesRef) => {
+export const renderMonthView = (chart, data, width, height, scalesRef, supercategoryColors) => {
     const chartData = data;
     // Sort the chartData from highest to lowest amount
     chartData.sort((a, b) => b.amount - a.amount);
@@ -36,11 +39,7 @@ export const renderMonthView = (chart, data, width, height, scalesRef) => {
     const colorScale = d3
         .scaleOrdinal()
         .domain(supercategories)
-        .range(
-            supercategories.map(
-                (sc) => chartData.find((d) => d.supercategory === sc).color
-            )
-        );
+        .range(supercategories.map(sc => supercategoryColors[sc]));
 
     chart
         .selectAll(".bar")
@@ -62,7 +61,7 @@ export const renderMonthView = (chart, data, width, height, scalesRef) => {
                             (item) => item.category === d.category
                         );
                         return generateShade(
-                            d.color,
+                            supercategoryColors[d.supercategory],
                             index,
                             supercategoryItems.length
                         );
@@ -88,7 +87,7 @@ export const renderMonthView = (chart, data, width, height, scalesRef) => {
     chart.append("g").call(d3.axisLeft(y));
 };
 
-export const renderYearView = (chart, data, width, height, scalesRef, onViewChange) => {
+export const renderYearView = (chart, data, width, height, scalesRef, onViewChange, supercategoryColors) => {
     const months = Object.keys(data);
     if (!months.length || !Array.isArray(data[months[0]])) {
         console.error("Invalid data format for year view");
@@ -127,7 +126,7 @@ export const renderYearView = (chart, data, width, height, scalesRef, onViewChan
                     (d) => d.category === item.category
                 );
                 return generateShade(
-                    item.color,
+                    supercategoryColors[item.supercategory],
                     index,
                     supercategoryItems.length
                 );

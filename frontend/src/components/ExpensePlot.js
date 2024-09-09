@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
-import { generateShade, supercategoryColors, renderMonthView, renderYearView } from "./helpers/ExpensePlotHelpers";
+import { generateShade, renderMonthView, renderYearView, loadSupercategoryColors } from "./helpers/ExpensePlotHelpers";
 import { getData } from "./helpers/getData";
 
 const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
@@ -11,6 +11,15 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
     const scalesRef = useRef({ x: null, y: null });
     const minWidth = 600; // Set your desired minimum width here
     const [dataType, setDataType] = useState("Expenditure"); // New state for data type
+    const [supercategoryColors, setSupercategoryColors] = useState({});
+
+    useEffect(() => {
+        const fetchColors = async () => {
+            const colors = await loadSupercategoryColors();
+            setSupercategoryColors(colors);
+        };
+        fetchColors();
+    }, []);
 
     const getAspectRatio = (width) => {
         // Formula to approximate the desired aspect ratio
@@ -29,8 +38,7 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const processedData = await getData(isMonthView, year, month, dataType);
-            console.log("processedData", processedData);
+            const processedData = await getData(isMonthView, year, month, dataType, supercategoryColors);
             setData(processedData);
         };
         fetchData();
@@ -83,11 +91,11 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
         if (isMonthView) {
             // Ensure data is in the correct format for month view
             const monthData = Array.isArray(data) ? data : [data];
-            renderMonthView(chart, monthData, width, height, scalesRef);
+            renderMonthView(chart, monthData, width, height, scalesRef, supercategoryColors);
         } else {
             // Ensure data is in the correct format for year view
             const yearData = Array.isArray(data) ? { [year]: data } : data;
-            renderYearView(chart, yearData, width, height, scalesRef, onViewChange);
+            renderYearView(chart, yearData, width, height, scalesRef, onViewChange, supercategoryColors);
         }
 
         // Add hover effect

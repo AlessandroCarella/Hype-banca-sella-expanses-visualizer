@@ -3,8 +3,8 @@ from os import path
 import os
 import json
 from flask import jsonify
-import calendar
 import math
+import shutil
 
 months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 def numberToMonth(number):
@@ -34,6 +34,19 @@ def get_years(app):
     years = [folder for folder in os.listdir(app.config['GENERATED_FILES_OUTPUT_FOLDER']) 
                    if os.path.isdir(os.path.join(app.config['GENERATED_FILES_OUTPUT_FOLDER'], folder))]
     return jsonify(years)
+
+def getSupercategoryColors(app):
+    supercategoryColorsFilePath = path.join(app.config['ROOT_FROM_BACKEND'], app.config['USER_FILES_FOLDER_NAME'], app.config['USER_CATEGORIES_COLORS_FILE_NAME'])
+    if not path.exists(supercategoryColorsFilePath):
+        shutil.copy(
+            path.join(app.config['DEFAULT_FILES_FOLDER_NAME'], app.config['DEFAULT_USER_CATEGORIES_COLORS_FILE_NAME']), 
+            supercategoryColorsFilePath
+        )
+    
+    with open(supercategoryColorsFilePath, 'r') as file:
+        supercategoryColors = json.load(file)
+
+    return jsonify(supercategoryColors)
 
 #data fetching
 def getUserCategoriesStuff(app):

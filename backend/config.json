@@ -12,5 +12,7 @@
     "USER_BACKUP_CATEGORIES_FILE_FOLDER_NAME": "settings backup",
     "FRONTEND_SOURCE_FOLDER_NAME": "src",
     "FRONTEND_PAGES_FOLDER_NAME": "pages",
-    "FRONTEND_LOADING_GIFS_FOLDER_NAME": "loading gifs"
+    "FRONTEND_LOADING_GIFS_FOLDER_NAME": "loading gifs",
+    "DEFAULT_USER_CATEGORIES_COLORS_FILE_NAME": "categories colors default.json",
+    "USER_CATEGORIES_COLORS_FILE_NAME": "user categories colors.json"
 }

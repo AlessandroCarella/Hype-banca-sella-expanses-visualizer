@@ -16,7 +16,7 @@ from routes.getElementsSettingPage import get_user_expense_dictionary, get_expan
 from routes.loadingPage import get_loading_gif
 
 # Graphs page
-from routes.graphs import get_years, get_months, getMonthData, getYearData
+from routes.graphs import get_years, get_months, getSupercategoryColors, getMonthData, getYearData
 
 ########################################################
 app = Flask(__name__)
@@ -85,6 +85,10 @@ def getMonthYear():
 def getMonths():
     year = request.args.get('year')
     return get_months(app, year)
+
+@app.route('/api/get-supercategory-colors', methods=['GET'])
+def get_supercategory_colors():
+    return getSupercategoryColors(app)
 
 @app.route('/api/get-month-data', methods=['GET'])
 def get_month_data():

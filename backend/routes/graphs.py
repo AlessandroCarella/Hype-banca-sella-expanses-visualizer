@@ -51,7 +51,6 @@ def getSupercategoryColors(app):
 #data fetching
 def getUserCategoriesStuff(app):
     userCategoriesFilePath = path.join(app.config['ROOT_FROM_BACKEND'], app.config['USER_FILES_FOLDER_NAME'], app.config['USER_CATEGORIES_FILE_NAME'])
-    # userCategoriesFilePath = r'C:\Users\alex1\Desktop\Hype-banca-sella-expanses-visualizer\user files\user categories.json'
     with open (userCategoriesFilePath, 'r') as file:
         userCategories = json.load(file)
 
@@ -95,10 +94,8 @@ def getMonthData(app, month, year, expenditureOrRevenue):
     ]
     """
     superCategories, categories, categoriesNamesDict, superCategoriesToCategories, categoriesToSuperCategories, categoriesNamesDict = getUserCategoriesStuff(app)
-    # superCategories, categories, categoriesNamesDict, superCategoriesToCategories, categoriesToSuperCategories, categoriesNamesDict = getUserCategoriesStuff([])
 
     dfPath = path.join(app.config['GENERATED_FILES_OUTPUT_FOLDER'], str(year), f"{monthToNumber(month):02d}.csv")
-    # dfPath = path.join(r'C:\Users\alex1\Desktop\Hype-banca-sella-expanses-visualizer\backend\generated files', str(year), f"{monthToNumber(month):02d}.csv")
     df = pd.read_csv(dfPath)
 
     #filter the dataset based on if the "Importo" column is negative or positive
@@ -116,33 +113,37 @@ def getMonthData(app, month, year, expenditureOrRevenue):
             "amount": math.fabs(float(total_amount))
         })
 
-    return jsonify(out)
-    # return out
-
-# for k in (getMonthData([], "January", "2024", "expenditure")):
-#     print (k)
-#     print ("======================================")
+    # return jsonify(out)
+    return out
 
 def getYearData(app, year, expenditureOrRevenue):
-    # expenditureOrRevenue is to tell if to select the in flows of money or the out flows of money
-    # output structure:
-    # {
-    #     January: [
-    #         {
-    #             supercategory: "Living Expenses",
-    #             category: "Food",
-    #             amount: 300,
-    #         },
-    #         ...
-    #     ]
-    #     February: [
-    #         {
-    #             supercategory: "Living Expenses",
-    #             category: "Food",
-    #             amount: 300,
-    #         },
-    #         ...
-    #     ]
-    #     ...
-    # }
-    pass
+    """    
+    expenditureOrRevenue is to tell if to select the in flows of money or the out flows of money
+    output structure:
+    {
+        January: [
+            {
+                supercategory: "Living Expenses",
+                category: "Food",
+                amount: 300,
+            },
+            ...
+        ]
+        February: [
+            {
+                supercategory: "Living Expenses",
+                category: "Food",
+                amount: 300,
+            },
+            ...
+        ]
+        ...
+    }
+    """    
+    out = {}
+    for month in months:
+        if path.exists(path.join(app.config['GENERATED_FILES_OUTPUT_FOLDER'], str(year), f"{monthToNumber(month):02d}.csv")):
+            out[month] = getMonthData(app, month, year, expenditureOrRevenue)
+        
+    return jsonify(out)
+

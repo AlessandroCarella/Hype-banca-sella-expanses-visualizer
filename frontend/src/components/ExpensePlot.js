@@ -11,6 +11,21 @@ const ExpensePlot = ({ selectedDate, onViewChange, isMonthView }) => {
     const scalesRef = useRef({ x: null, y: null });
     const minWidth = 600; // Set your desired minimum width here
 
+    const getAspectRatio = (width) => {
+        // Formula to approximate the desired aspect ratio
+        const minAspectRatio = 0.4;
+        const maxAspectRatio = 0.5;
+        const minWidth = 800;
+        const maxWidth = 2000;
+        
+        if (width <= minWidth) return maxAspectRatio;
+        if (width >= maxWidth) return minAspectRatio;
+        
+        // Linear interpolation between min and max aspect ratios
+        const ratio = (width - minWidth) / (maxWidth - minWidth);
+        return maxAspectRatio - ratio * (maxAspectRatio - minAspectRatio);
+    };
+
     useEffect(() => {
         const processedData = generateMockData(isMonthView);
         setData(processedData);
@@ -19,8 +34,11 @@ const ExpensePlot = ({ selectedDate, onViewChange, isMonthView }) => {
     useEffect(() => {
         const resizeObserver = new ResizeObserver(entries => {
             if (!entries || !entries.length) return;
-            const { width, height } = entries[0].contentRect;
-            setDimensions({ width: Math.max(width, minWidth), height });
+            const { width } = entries[0].contentRect;
+            const adjustedWidth = Math.max(width, minWidth);
+            const aspectRatio = getAspectRatio(adjustedWidth);
+            const height = adjustedWidth * aspectRatio;
+            setDimensions({ width: adjustedWidth, height });
         });
 
         if (containerRef.current) {
@@ -60,9 +78,9 @@ const ExpensePlot = ({ selectedDate, onViewChange, isMonthView }) => {
     }, [data, isMonthView, selectedDate, onViewChange, dimensions]);
 
     return (
-        <div style={{ width: '100%', height: '500px', overflowX: 'auto' }}>
-            <div ref={containerRef} style={{ width: '100%', minWidth: `${minWidth}px`, height: '100%' }}>
-                <svg ref={svgRef}></svg>
+        <div style={{ width: '100%', overflowX: 'auto' }}>
+            <div ref={containerRef} style={{ width: '100%', minWidth: `${minWidth}px` }}>
+                <svg ref={svgRef} width={dimensions.width} height={dimensions.height}></svg>
             </div>
         </div>
     );

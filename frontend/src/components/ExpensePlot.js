@@ -28,9 +28,13 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
     };
 
     useEffect(() => {
-        const processedData = getData (isMonthView, year, month, dataType);
-        setData(processedData);
-    }, [year, month, isMonthView, dataType]); // Add dataType to dependencies
+        const fetchData = async () => {
+            const processedData = await getData(isMonthView, year, month, dataType);
+            console.log("processedData", processedData);
+            setData(processedData);
+        };
+        fetchData();
+    }, [year, month, isMonthView, dataType]);
 
     useEffect(() => {
         const resizeObserver = new ResizeObserver(entries => {
@@ -77,7 +81,9 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
         chart.attr("key", isMonthView ? "month" : "year");
 
         if (isMonthView) {
-            renderMonthView(chart, data, width, height, scalesRef);
+            // Ensure data is in the correct format for month view
+            const monthData = Array.isArray(data) ? data : [data];
+            renderMonthView(chart, monthData, width, height, scalesRef);
         } else {
             // Ensure data is in the correct format for year view
             const yearData = Array.isArray(data) ? { [year]: data } : data;

@@ -1,14 +1,33 @@
 import { supercategoryColors } from "./ExpensePlotHelpers";
 
-export const getData = (isMonthView, year, month, dataType) => {
- 
-    
-    return getMockData(isMonthView, year, month, dataType);
-}
-export const getMockData = (isMonthView, year, month, dataType) => {
-    console.log("generate mock data");
-    console.log(year, month, dataType);
+export const getData = async (isMonthView, year, month, dataType) => {
+    //encapsulate this in a try catch
+    try {
+        if (isMonthView) {
+            const response = await fetch(
+                `/api/get-month-data?month=${month}&year=${year}&dataType=${dataType}`
+            );
+            const data = await response.json();
+            console.log("data in getData", data);
+            // Add color information to the data
+            return data.map((item) => ({
+                ...item,
+                color: supercategoryColors[item.supercategory] || '#000000', // Default to black if no color found
+            }));
+        } else {
+            const response = await fetch(
+                `/api/get-year-data?year=${year}&dataType=${dataType}`
+            );
+            const data = await response.json();
+            return data;
+        }
+    } catch (error) {
+        //leaving this here just in case of when the api doesnt work
+        return getMockData(isMonthView, year, month, dataType);
+    }
+};
 
+export const getMockData = (isMonthView, year, month, dataType) => {
     const mockData = isMonthView
         ? [
               {

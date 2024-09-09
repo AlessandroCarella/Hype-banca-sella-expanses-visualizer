@@ -15,9 +15,7 @@ export const supercategoryColors = {
 
 // Add renderMonthView and renderYearView functions here
 export const renderMonthView = (chart, data, width, height, scalesRef) => {
-    // Ensure data is an array
-    const chartData = Array.isArray(data) ? data : data[Object.keys(data)[0]];
-
+    const chartData = data;
     // Sort the chartData from highest to lowest amount
     chartData.sort((a, b) => b.amount - a.amount);
 

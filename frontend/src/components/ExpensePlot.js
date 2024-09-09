@@ -134,13 +134,6 @@ const ExpensePlot = ({ selectedDate, onViewChange, isMonthView }) => {
             .range([height, 0])
             .domain([0, d3.max(chartData, (d) => d.amount)]);
 
-        // Generate shades for subcategories
-        const generateShade = (baseColor, index, total) => {
-            const color = d3.color(baseColor);
-            const lightenFactor = 0.7 + (index / total) * 0.3;
-            return color.brighter(lightenFactor);
-        };
-
         const supercategories = [
             ...new Set(chartData.map((d) => d.supercategory)),
         ];
@@ -230,17 +223,18 @@ const ExpensePlot = ({ selectedDate, onViewChange, isMonthView }) => {
             .append("g")
             .attr("fill", (d) => color(d.key))
             .selectAll("rect")
-            .data((d) => d)
+            .data((d) => d.map((v, i) => ({...v, month: months[i]}))) // Add month to each data point
             .enter()
             .append("rect")
-            .attr("x", (d, i) => x(months[i]))
+            .attr("x", (d) => x(d.month))
             .attr("y", (d) => y(d[1]))
             .attr("height", (d) => y(d[0]) - y(d[1]))
             .attr("width", x.bandwidth())
+            .attr("data-month", (d) => d.month) // Store month as a data attribute
             .on("click", (event, d) => {
-                const clickedMonth = months[d.index];
-                const monthYear = `${clickedMonth}`;
-                console.log("Selected date from graph:", monthYear); // New log
+                console.log("Clicked month:", d.month);
+                const monthYear = d.month;
+                console.log("Selected date from graph:", monthYear);
                 onViewChange(true, monthYear);
             });
 

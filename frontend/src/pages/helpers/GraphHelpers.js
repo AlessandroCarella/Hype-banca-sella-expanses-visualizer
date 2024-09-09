@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-export const useFetchDates = () => {
+export const useFetchYears = () => {
     const [dates, setDates] = useState([]);
 
     useEffect(() => {

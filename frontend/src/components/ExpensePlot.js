@@ -3,7 +3,7 @@ import * as d3 from "d3";
 import { generateShade, supercategoryColors, renderMonthView, renderYearView } from "./helpers/ExpensePlotHelpers";
 import { generateMockData } from "./helpers/plotMockData";
 
-const ExpensePlot = ({ selectedDate, onViewChange, isMonthView }) => {
+const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
     const svgRef = useRef();
     const containerRef = useRef();
     const [data, setData] = useState(null);
@@ -27,9 +27,9 @@ const ExpensePlot = ({ selectedDate, onViewChange, isMonthView }) => {
     };
 
     useEffect(() => {
-        const processedData = generateMockData(isMonthView);
+        const processedData = generateMockData(isMonthView, year, month);
         setData(processedData);
-    }, [selectedDate, isMonthView]);
+    }, [year, month, isMonthView]);
 
     useEffect(() => {
         const resizeObserver = new ResizeObserver(entries => {
@@ -75,7 +75,7 @@ const ExpensePlot = ({ selectedDate, onViewChange, isMonthView }) => {
         } else {
             renderYearView(chart, data, width, height, scalesRef, onViewChange);
         }
-    }, [data, isMonthView, selectedDate, onViewChange, dimensions]);
+    }, [data, isMonthView, year, month, onViewChange, dimensions]);
 
     return (
         <div style={{ width: '100%', overflowX: 'auto' }}>

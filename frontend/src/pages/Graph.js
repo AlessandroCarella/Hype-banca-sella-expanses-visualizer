@@ -1,43 +1,44 @@
 import React, { useState, useEffect } from "react";
 import DatesCarousel from "../components/DatesCarousel";
 import ExpensePlot from "../components/ExpensePlot";
-import { fetchMonths, useFetchYears } from "./helpers/GraphHelpers";
+import { useFetchYears, useFetchMonths } from "./helpers/GraphHelpers";
 import { ColorModeSwitch } from "../components/colorModeSwitch";
 
 const Graph = () => {
-    const [dates, setDates] = useFetchYears();
-    const [selectedDate, setSelectedDate] = useState("");
+    const [years, setYears] = useFetchYears();
+    const [selectedYear, setSelectedYear] = useState("");
+    const months = useFetchMonths(selectedYear);
+    const [selectedMonth, setSelectedMonth] = useState("");
     const [isMonthView, setIsMonthView] = useState(false);
 
     useEffect(() => {
-        if (!selectedDate) {
-            setSelectedDate(dates[dates.length - 1]);
+        if (years.length > 0 && !selectedYear) {
+            setSelectedYear(years[years.length - 1]);
         }
-    }, [dates]);
+    }, [years]);
 
-    const handleDateSelect = async (date) => {
-        console.log("handleDateSelect", date);
-        if (!isMonthView) {
-            const months = await fetchMonths(date);
-            setDates(months);
-            setIsMonthView(true);
+    const handleDateSelect = (yearOrMonth) => {
+        if (isMonthView) {
+            setSelectedMonth(yearOrMonth);
+        } else {
+            setSelectedYear(yearOrMonth);
+            setSelectedMonth("");
         }
-        setSelectedDate(date);
     };
 
-    const handleViewChange = async (toMonthView, date) => {
-        console.log("handleViewChange, toMonthView", toMonthView, "date", date);
+    //print the selected year and month when they are updated
+    useEffect(() => {
+        console.log("selectedYear:", selectedYear);
+        console.log("selectedMonth:", selectedMonth);
+    }, [selectedYear, selectedMonth]);
+
+    const handleViewChange = (toMonthView, yearOrMonth) => {
+        setIsMonthView(toMonthView);
         if (toMonthView) {
-            const year = date.split(' ')[1];
-            const months = await fetchMonths(year);
-            setDates(months);
-            setSelectedDate(date);
-            setIsMonthView(true);
+            setSelectedMonth(yearOrMonth);
         } else {
-            const years = await fetchMonths(); // This will fetch years as per your API
-            setDates(years);
-            setSelectedDate(years[0]);
-            setIsMonthView(false);
+            setSelectedYear(yearOrMonth);
+            setSelectedMonth("");
         }
     };
 
@@ -45,12 +46,13 @@ const Graph = () => {
         <div>
             <ColorModeSwitch />
             <DatesCarousel
-                dates={dates}
+                dates={isMonthView ? months : years}
                 onDateSelect={handleDateSelect}
-                selectedDate={selectedDate}
+                selectedDate={isMonthView ? selectedMonth : selectedYear}
             />
             <ExpensePlot
-                selectedDate={selectedDate}
+                year={selectedYear}
+                month={selectedMonth}
                 onViewChange={handleViewChange}
                 isMonthView={isMonthView}
             />

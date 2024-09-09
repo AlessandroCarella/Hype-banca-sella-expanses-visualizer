@@ -18,10 +18,10 @@ def get_months(app, year):
         )):
         months.append(
             numberToMonth(int(monthFileName.replace(".csv", "")))
-            + 
-            " " 
-            + 
-            str(year)
+            # + 
+            # " " 
+            # + 
+            # str(year)
         )
 
     return jsonify(months)

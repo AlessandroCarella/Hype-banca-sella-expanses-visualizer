@@ -138,20 +138,20 @@ export const renderYearView = (chart, data, width, height, scalesRef, onViewChan
                     .attr("class", "category")
                     .attr("fill", (d) => color(d.key))
                     .selectAll("rect")
-                    .data((d) => d.map((v, i) => ({ ...v, month: months[i] })))
+                    .data((d) => d.map((v, i) => ({ ...v, month: months[i], category: d.key })))
                     .join("rect")
                     .attr("x", (d) => x(d.month))
                     .attr("y", height)
                     .attr("height", 0)
                     .attr("width", x.bandwidth())
                     .attr("data-month", (d) => d.month)
+                    .attr("data-category", (d) => d.category)
                     .on("click", (event, d) => {
                         if (isTransitioning) return;
                         isTransitioning = true;
 
                         console.log("Clicked month:", d.month);
-                        const monthYear = d.month;
-                        console.log("Selected date from graph:", monthYear);
+                        console.log("Clicked category:", d.category);
 
                         // Add exit animation for all bars
                         chart
@@ -160,10 +160,9 @@ export const renderYearView = (chart, data, width, height, scalesRef, onViewChan
                             .duration(500)
                             .attr("y", height)
                             .attr("height", 0)
-                            .on("end", (d, i, nodes) => {
+                            .on("end", (_, i, nodes) => {
                                 if (i === nodes.length - 1) {
-                                    // Call onViewChange only after the last bar's animation is complete
-                                    onViewChange(true, monthYear);
+                                    onViewChange(true, d.month);
                                     isTransitioning = false;
                                 }
                             });

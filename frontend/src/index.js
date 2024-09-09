@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 //Pages
 import UploadCsv from "./pages/UploadCsv";
-import Graphs from "./pages/Graph";
+import Graph from "./pages/Graph";
 import SelectOptions from './pages/SelectOptions';
 import {SelectedOptionsProvider} from './pages/SelectOptions'
 import RedirectPage from "./pages/RedirectPage";
@@ -37,7 +37,7 @@ root.render(
                         <Route path="/" element={<RedirectPage />} />
                         <Route path="/upload-csv" element={<UploadCsv />} />
                         <Route path="/select-options" element={<SelectOptions />} />
-                        <Route path="/graphs" element={<Graphs />} />
+                        <Route path="/graphs" element={<Graph />} />
                     </Routes>
                 </Router>
             </SelectedOptionsProvider>

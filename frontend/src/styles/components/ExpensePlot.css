@@ -4,8 +4,20 @@
     display: flex;
     scroll-behavior: smooth;
     overflow-x: scroll;
-    scrollbar-width: none;
+    /* scrollbar-width: none; */
     -ms-overflow-style: none;
+}
+
+.bar-plot-container-div::-webkit-scrollbar {
+    height: 4px;
+}
+
+.bar-plot-container-div::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.bar-plot-container-div::-webkit-scrollbar-thumb {
+    border-radius: 2px;
 }
 
 .select-type-money {
@@ -22,11 +34,32 @@
     /* transition: background-color 0.3s, color 0.3s; */
 }
 
+.bar-plot-container-div svg {
+    position: relative;
+    z-index: 1;
+}
+
+.bar,
+rect {
+    transition: filter 0.3s;
+}
+
+.bar.hovered,
+rect.hovered {
+    filter: brightness(1.5);
+    z-index: 10;
+}
+
+
 /* Dark mode */
 .dark-mode .select-type-money select {
     background-color: #212121;
     color: #ffffff;
     border: 1px solid #284bff;
+}
+
+.dark-mode .bar-plot-container-div::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3);
 }
 
 .dark-mode .select-type-money select:hover {
@@ -44,16 +77,6 @@
     background-color: #f5f4f7;
 }
 
-.bar-plot-container-div svg {
-    position: relative;
-    z-index: 1;
-}
-
-.bar, rect {
-    transition: filter 0.3s;
-}
-
-.bar.hovered, rect.hovered {
-    filter: brightness(1.5);
-    z-index: 10;
+.light-mode .bar-plot-container-div::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3);
 }

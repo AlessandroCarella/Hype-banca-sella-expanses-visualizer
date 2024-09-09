@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import { generateShade, supercategoryColors, renderMonthView, renderYearView } from "./helpers/ExpensePlotHelpers";
-import { generateMockData } from "./helpers/plotMockData";
+import { getData } from "./helpers/getData";
 
 const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
     const svgRef = useRef();
@@ -28,7 +28,7 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
     };
 
     useEffect(() => {
-        const processedData = generateMockData(isMonthView, year, month, dataType);
+        const processedData = getData (isMonthView, year, month, dataType);
         setData(processedData);
     }, [year, month, isMonthView, dataType]); // Add dataType to dependencies
 

@@ -1,4 +1,4 @@
-import { monthData, yearData } from "./mockData";
+import { monthData, yearData } from "./mockDataExpensePlot";
 
 const addColorToData = (data, supercategoryColors, isMonthView) => {
     if (isMonthView) {

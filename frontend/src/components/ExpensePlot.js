@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import { generateShade, renderMonthView, renderYearView, loadSupercategoryColors } from "./helpers/ExpensePlotHelpers";
-import { getData } from "./helpers/getData";
+import { getData } from "./helpers/getDataExpensePlot";
 
 const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
     const svgRef = useRef();
@@ -12,6 +12,7 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
     const minWidth = 600; // Set your desired minimum width here
     const [dataType, setDataType] = useState("Expenditure"); // New state for data type
     const [supercategoryColors, setSupercategoryColors] = useState({});
+    const [hoveredItem, setHoveredItem] = useState(null);
 
     useEffect(() => {
         const fetchColors = async () => {
@@ -20,6 +21,10 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
         };
         fetchColors();
     }, []);
+
+    useEffect(() => {
+        console.log("Hovered item changed:", hoveredItem);
+    }, [hoveredItem]);
 
     const getAspectRatio = (width) => {
         // Formula to approximate the desired aspect ratio
@@ -91,21 +96,12 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
         if (isMonthView) {
             // Ensure data is in the correct format for month view
             const monthData = Array.isArray(data) ? data : [data];
-            renderMonthView(chart, monthData, width, height, scalesRef, supercategoryColors);
+            renderMonthView(chart, monthData, width, height, scalesRef, supercategoryColors, setHoveredItem);
         } else {
             // Ensure data is in the correct format for year view
             const yearData = Array.isArray(data) ? { [year]: data } : data;
-            renderYearView(chart, yearData, width, height, scalesRef, onViewChange, supercategoryColors);
+            renderYearView(chart, yearData, width, height, scalesRef, onViewChange, supercategoryColors, setHoveredItem);
         }
-
-        // Add hover effect
-        chart.selectAll(".bar, rect")
-            .on("mouseover", function() {
-                d3.select(this).raise().classed("hovered", true);
-            })
-            .on("mouseout", function() {
-                d3.select(this).classed("hovered", false);
-            });
 
     }, [data, isMonthView, year, month, onViewChange, dimensions]);
 
@@ -123,6 +119,14 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
                     <option value="Revenue">Revenue</option>
                 </select>
             </div>
+            {hoveredItem && (
+                <div className="tooltip-bar-plot">
+                    <p><strong>Category:</strong> {hoveredItem.category}</p>
+                    <p><strong>Supercategory:</strong> {hoveredItem.supercategory}</p>
+                    <p><strong>Amount:</strong> ${hoveredItem.amount.toFixed(2)}</p>
+                    {hoveredItem.month && <p><strong>Month:</strong> {hoveredItem.month}</p>}
+                </div>
+            )}
         </div>
     );
 };

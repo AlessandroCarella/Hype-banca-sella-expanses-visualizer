@@ -36,7 +36,6 @@
 
 .bar-plot-container-div svg {
     position: relative;
-    z-index: 1;
 }
 
 .bar,
@@ -44,12 +43,19 @@ rect {
     transition: filter 0.3s;
 }
 
-.bar.hovered,
-rect.hovered {
+.bar:hover, rect:hover {
     filter: brightness(1.5);
     z-index: 10;
 }
 
+.tooltip-bar-plot {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 10;
+}
 
 /* Dark mode */
 .dark-mode .select-type-money select {
@@ -66,6 +72,13 @@ rect.hovered {
     background-color: #263036;
 }
 
+.dark-mode .tooltip-bar-plot {
+    background-color: #2a2a2a;
+    color: #ffffff;
+    border: 1px solid #444444;
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+
 /* Light mode */
 .light-mode .select-type-money select {
     background-color: #ffffff;
@@ -79,4 +92,11 @@ rect.hovered {
 
 .light-mode .bar-plot-container-div::-webkit-scrollbar-thumb {
     background-color: rgba(0, 0, 0, 0.3);
+}
+
+.light-mode .tooltip-bar-plot {
+    background-color: #f0f0f0;
+    color: #000000;
+    border: 1px solid #cccccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }

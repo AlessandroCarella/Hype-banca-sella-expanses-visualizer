@@ -94,16 +94,37 @@ export const renderYearView = (chart, data, width, height, scalesRef, onViewChan
         return;
     }
 
-    const categories = data[months[0]].map((item) => item.category);
+    // Sort categories by supercategory and then by category
+    const sortedCategories = data[months[0]]
+        .sort((a, b) => {
+            if (a.supercategory !== b.supercategory) {
+                return a.supercategory.localeCompare(b.supercategory);
+            }
+            return a.category.localeCompare(b.category);
+        })
+        .map((item) => item.category);
 
     const stack = d3
         .stack()
-        .keys(categories)
+        .keys(sortedCategories)
         .value(
             (d, key) => d.find((item) => item.category === key)?.amount || 0
         );
 
-    const stackedData = stack(Object.values(data));
+    // Sort data within each month
+    const sortedData = Object.fromEntries(
+        Object.entries(data).map(([month, monthData]) => [
+            month,
+            monthData.sort((a, b) => {
+                if (a.supercategory !== b.supercategory) {
+                    return a.supercategory.localeCompare(b.supercategory);
+                }
+                return a.category.localeCompare(b.category);
+            })
+        ])
+    );
+
+    const stackedData = stack(Object.values(sortedData));
 
     const x = d3.scaleBand().range([0, width]).domain(months).padding(0.1);
 
@@ -116,10 +137,10 @@ export const renderYearView = (chart, data, width, height, scalesRef, onViewChan
 
     const color = d3
         .scaleOrdinal()
-        .domain(categories)
+        .domain(sortedCategories)
         .range(
-            data[months[0]].map((item) => {
-                const supercategoryItems = data[months[0]].filter(
+            sortedData[months[0]].map((item) => {
+                const supercategoryItems = sortedData[months[0]].filter(
                     (d) => d.supercategory === item.supercategory
                 );
                 const index = supercategoryItems.findIndex(

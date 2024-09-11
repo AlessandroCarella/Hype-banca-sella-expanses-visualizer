@@ -13,6 +13,7 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
     const [dataType, setDataType] = useState("Expenditure"); // New state for data type
     const [supercategoryColors, setSupercategoryColors] = useState({});
     const [hoveredItem, setHoveredItem] = useState(null);
+    const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
 
     useEffect(() => {
         const fetchColors = async () => {
@@ -96,17 +97,21 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
         if (isMonthView) {
             // Ensure data is in the correct format for month view
             const monthData = Array.isArray(data) ? data : [data];
-            renderMonthView(chart, monthData, width, height, scalesRef, supercategoryColors, setHoveredItem);
+            renderMonthView(chart, monthData, width, height, scalesRef, supercategoryColors, setHoveredItem, setTooltipPosition);
         } else {
             // Ensure data is in the correct format for year view
             const yearData = Array.isArray(data) ? { [year]: data } : data;
-            renderYearView(chart, yearData, width, height, scalesRef, onViewChange, supercategoryColors, setHoveredItem);
+            renderYearView(chart, yearData, width, height, scalesRef, onViewChange, supercategoryColors, setHoveredItem, setTooltipPosition);
         }
 
     }, [data, isMonthView, year, month, onViewChange, dimensions]);
 
+    const handleMouseMove = (event) => {
+        setTooltipPosition({ x: event.clientX, y: event.clientY });
+    };
+
     return (
-        <div className="bar-plot-container-div" style={{ position: 'relative' }}>
+        <div className="bar-plot-container-div" style={{ position: 'relative' }} onMouseMove={handleMouseMove}>
             <div ref={containerRef} style={{ width: '100%', minWidth: `${minWidth}px` }}>
                 <svg ref={svgRef} width={dimensions.width} height={dimensions.height}></svg>
             </div>
@@ -120,11 +125,10 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
                 </select>
             </div>
             {hoveredItem && (
-                <div className="tooltip-bar-plot">
+                <div className="tooltip-bar-plot" style={{ left: `${tooltipPosition.x + 10}px`, top: `${tooltipPosition.y + 10}px` }}>
                     <p><strong>Category:</strong> {hoveredItem.category}</p>
                     <p><strong>Supercategory:</strong> {hoveredItem.supercategory}</p>
-                    <p><strong>Amount:</strong> ${hoveredItem.amount.toFixed(2)}</p>
-                    {hoveredItem.month && <p><strong>Month:</strong> {hoveredItem.month}</p>}
+                    <p><strong>Amount:</strong> €{hoveredItem.amount.toFixed(2)}</p>
                 </div>
             )}
         </div>

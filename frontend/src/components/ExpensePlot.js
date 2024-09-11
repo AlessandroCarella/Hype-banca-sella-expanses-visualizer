@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import * as d3 from "d3";
 import { generateShade, renderMonthView, renderYearView, loadSupercategoryColors } from "./helpers/ExpensePlotHelpers";
 import { getData } from "./helpers/getDataExpensePlot";
@@ -14,6 +14,7 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
     const [supercategoryColors, setSupercategoryColors] = useState({});
     const [hoveredItem, setHoveredItem] = useState(null);
     const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+    const [isTouchDevice, setIsTouchDevice] = useState(false);
 
     useEffect(() => {
         const fetchColors = async () => {
@@ -21,6 +22,12 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
             setSupercategoryColors(colors);
         };
         fetchColors();
+        setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
+    }, []);
+
+    const handleInteraction = useCallback((event) => {
+        const { clientX, clientY } = event.touches ? event.touches[0] : event;
+        setTooltipPosition({ x: clientX, y: clientY });
     }, []);
 
     useEffect(() => {
@@ -104,14 +111,38 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
             renderYearView(chart, yearData, width, height, scalesRef, onViewChange, supercategoryColors, setHoveredItem, setTooltipPosition);
         }
 
-    }, [data, isMonthView, year, month, onViewChange, dimensions]);
+        const interactionHandler = (event) => {
+            handleInteraction(event);
+            // Add logic here to update hoveredItem based on the interaction
+            // This will depend on how you're currently setting hoveredItem in your chart
+        };
+
+        if (isTouchDevice) {
+            svg.on('touchstart', interactionHandler);
+            svg.on('touchmove', interactionHandler);
+        } else {
+            svg.on('mousemove', interactionHandler);
+        }
+
+        return () => {
+            svg.on('touchstart', null);
+            svg.on('touchmove', null);
+            svg.on('mousemove', null);
+        };
+    }, [data, isMonthView, year, month, onViewChange, dimensions, isTouchDevice, handleInteraction]);
 
     const handleMouseMove = (event) => {
         setTooltipPosition({ x: event.clientX, y: event.clientY });
     };
 
     return (
-        <div className="bar-plot-container-div" style={{ position: 'relative' }} onMouseMove={handleMouseMove}>
+        <div 
+            className="bar-plot-container-div" 
+            style={{ position: 'relative' }}
+            onMouseMove={!isTouchDevice ? handleInteraction : undefined}
+            onTouchStart={isTouchDevice ? handleInteraction : undefined}
+            onTouchMove={isTouchDevice ? handleInteraction : undefined}
+        >
             <div ref={containerRef} style={{ width: '100%', minWidth: `${minWidth}px` }}>
                 <svg ref={svgRef} width={dimensions.width} height={dimensions.height}></svg>
             </div>
@@ -125,7 +156,14 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
                 </select>
             </div>
             {hoveredItem && (
-                <div className="tooltip-bar-plot" style={{ left: `${tooltipPosition.x + 10}px`, top: `${tooltipPosition.y + 10}px` }}>
+                <div 
+                    className="tooltip-bar-plot" 
+                    style={{ 
+                        left: `${tooltipPosition.x + 10}px`, 
+                        top: `${tooltipPosition.y + 10}px`, 
+                        display: hoveredItem ? 'block' : 'none'
+                    }}
+                >
                     <p><strong>Category:</strong> {hoveredItem.category}</p>
                     <p><strong>Supercategory:</strong> {hoveredItem.supercategory}</p>
                     <p><strong>Amount:</strong> €{hoveredItem.amount.toFixed(2)}</p>

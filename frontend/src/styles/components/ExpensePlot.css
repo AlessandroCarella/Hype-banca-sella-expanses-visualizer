@@ -54,6 +54,15 @@ rect {
     border-radius: 5px;
     z-index: 1000;
     pointer-events: none;
+    max-width: 80%; /* Limit width on small screens */
+    word-wrap: break-word; /* Allow long words to break */
+}
+
+@media (max-width: 768px) {
+    .tooltip-bar-plot {
+        font-size: 14px; /* Smaller font size on mobile */
+        padding: 8px;
+    }
 }
 
 /* Dark mode */

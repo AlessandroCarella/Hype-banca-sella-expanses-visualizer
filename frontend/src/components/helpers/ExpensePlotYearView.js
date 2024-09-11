@@ -108,7 +108,15 @@ function enterBars(enter, data, x, y, height, categories, supercategoryColors, s
         .attr("fill", d => getBarColor(d, data, categories, supercategoryColors))
         .on("mouseover", (event, d) => handleBarMouseOver(d, data, setHoveredItem))
         .on("mouseout", () => setHoveredItem(null))
-        .on("click", (event, d) => handleBarClick(d, chart, height, onViewChange, isTransitioning));
+        .on("click", (event, d) => handleBarClick(d, chart, height, onViewChange, isTransitioning))
+        .on("touchstart", (event, d) => {
+            event.preventDefault();
+            handleBarMouseOver(d, data, setHoveredItem);
+        })
+        .on("touchend", (event) => {
+            event.preventDefault();
+            setHoveredItem(null);
+        });
 }
 
 function getBarColor(d, data, categories, supercategoryColors) {

@@ -37,10 +37,6 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
         setTooltipPosition({ x, y });
     }, []);
 
-    useEffect(() => {
-        console.log("Hovered item changed:", hoveredItem);
-    }, [hoveredItem]);
-
     const getAspectRatio = (width) => {
         // Formula to approximate the desired aspect ratio
         const minAspectRatio = 0.45;

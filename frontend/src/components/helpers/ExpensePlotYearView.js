@@ -122,8 +122,8 @@ function enterBars(enter, data, x, y, height, categories, supercategoryColors, s
 function getBarColor(d, data, categories, supercategoryColors) {
     const item = data[d.data.month].find(item => item.category === d.category);
     if (!item || !item.supercategory) {
-        console.warn(`Missing supercategory for category: ${d.category}`);
-        return "#CCCCCC"; // Default color for items without supercategory
+        //console.warn(`Missing supercategory for category: ${d.category}`);
+        return "#FF0000"; // Default color for items without supercategory
     }
     const supercategoryColor = supercategoryColors[item.supercategory];
     const supercategoryItems = categories.filter(cat => {

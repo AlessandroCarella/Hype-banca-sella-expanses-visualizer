@@ -28,12 +28,6 @@ const Graph = () => {
         }
     };
 
-    //print the selected year and month when they are updated
-    useEffect(() => {
-        console.log("selectedYear:", selectedYear);
-        console.log("selectedMonth:", selectedMonth);
-    }, [selectedYear, selectedMonth]);
-
     return (
         <div>
             <div style={{ marginBottom: '20px' }}>

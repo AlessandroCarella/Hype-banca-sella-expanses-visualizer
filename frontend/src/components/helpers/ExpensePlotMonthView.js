@@ -15,6 +15,8 @@ const createScales = (chartData, width, height) => {
 };
 
 const renderBars = (chart, chartData, x, y, height, supercategoryColors, setHoveredItem) => {
+    const minBarHeight = 10; // Define the minimum bar height
+
     chart.selectAll(".bar")
         .data(chartData)
         .join(
@@ -32,9 +34,16 @@ const renderBars = (chart, chartData, x, y, height, supercategoryColors, setHove
         )
         .transition()
         .duration(1000)
-        .attr("y", (d) => y(d.amount) || 0)
-        .attr("height", (d) => height - y(d.amount) || 0);
+        .attr("y", (d) => {
+            const barHeight = height - y(d.amount);
+            return barHeight < minBarHeight ? height - minBarHeight : y(d.amount);
+        })
+        .attr("height", (d) => {
+            const barHeight = height - y(d.amount);
+            return barHeight < minBarHeight ? minBarHeight : barHeight;
+        });
 };
+
 
 const calculateBarColor = (item, chartData, supercategoryColors) => {
     const supercategoryColor = supercategoryColors[item.supercategory];

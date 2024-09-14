@@ -16,6 +16,7 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView, includeRisparmi }
     const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
     const [isTouchDevice, setIsTouchDevice] = useState(false);
     const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0, item: null });
+    const [selectedExpenses, setSelectedExpenses] = useState([]); // New state for selected expenses
 
     useEffect(() => {
         const fetchColors = async () => {
@@ -108,7 +109,7 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView, includeRisparmi }
         if (isMonthView) {
             // Ensure data is in the correct format for month view
             const monthData = Array.isArray(data) ? data : [data];
-            renderMonthView(chart, monthData, width, height, scalesRef, supercategoryColors, setHoveredItem, setContextMenu); // Pass setContextMenu
+            renderMonthView(chart, monthData, width, height, scalesRef, supercategoryColors, setHoveredItem, setContextMenu, handleBarClick); // Pass handleBarClick
         } else {
             // Ensure data is in the correct format for year view
             const yearData = Array.isArray(data) ? { [year]: data } : data;
@@ -149,6 +150,10 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView, includeRisparmi }
             document.removeEventListener("click", handleClickOutside);
         };
     }, [contextMenu]);
+
+    const handleBarClick = (expenses) => {
+        setSelectedExpenses(expenses); // Set the selected expenses when a bar is clicked
+    };
 
     return (
         <div 
@@ -192,6 +197,16 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView, includeRisparmi }
                     <p>ciao</p>
                 </div>
             )}
+            {/* {selectedExpenses.length > 0 && (
+                <div className="selected-expenses-print">
+                    <h4>The selected bar is composed of:</h4>
+                    <ul>
+                        {selectedExpenses.map((expense, index) => (
+                            <li key={index}>{expense.description}: €{expense.amount.toFixed(2)}</li>
+                        ))}
+                    </ul>
+                </div>
+            )} */}
         </div>
     );
 };

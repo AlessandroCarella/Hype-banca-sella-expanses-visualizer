@@ -24,7 +24,8 @@ const renderBars = (
     height,
     supercategoryColors,
     setHoveredItem,
-    setContextMenu // New parameter for context menu state
+    setContextMenu,
+    handleBarClick 
 ) => {
     const minBarHeight = 10; // Define the minimum bar height
 
@@ -48,6 +49,10 @@ const renderBars = (
                         console.log(item); // Log the item to the console
                         setContextMenu({ visible: true, x: event.pageX, y: event.pageY, item });
                     })
+                    .on("click", (event, item) => {
+                        const expenses = chartData.filter(d => d.category === item.category); // Get expenses for the clicked category
+                        handleBarClick(expenses); // Call the handleBarClick function with the expenses
+                    })
                     .attr("fill", (item) =>
                         calculateBarColor(item, chartData, supercategoryColors)
                     ),
@@ -59,7 +64,6 @@ const renderBars = (
         .attr("y", (d) => {
             const barHeight = height - y(d.amount);
             if (isNaN(barHeight)) {
-                //console.error("Invalid bar height for amount:", d.amount);
                 return height; // Fallback to default position
             }
             return barHeight < minBarHeight ? height - minBarHeight : y(d.amount);
@@ -67,7 +71,6 @@ const renderBars = (
         .attr("height", (d) => {
             const barHeight = height - y(d.amount);
             if (isNaN(barHeight)) {
-                //console.error("Invalid bar height for amount:", d.amount);
                 return minBarHeight; // Fallback to minimum height
             }
             return barHeight < minBarHeight ? minBarHeight : barHeight;
@@ -107,20 +110,10 @@ export const renderMonthView = (
     scalesRef,
     supercategoryColors,
     setHoveredItem,
-    setContextMenu
+    setContextMenu,
+    handleBarClick 
 ) => {
-    // Aggregate data by category and supercategory
-    const aggregatedData = data.reduce((acc, curr) => {
-        const key = `${curr.category}-${curr.supercategory}`;
-        if (!acc[key]) {
-            acc[key] = { ...curr };
-        } else {
-            acc[key].amount += curr.amount; // Sum amounts for the same category and supercategory
-        }
-        return acc;
-    }, {});
-
-    const chartData = Object.values(aggregatedData).sort((a, b) => b.amount - a.amount);
+    const chartData = [...data].sort((a, b) => b.amount - a.amount);
     const { x, y } = createScales(chartData, width, height);
     scalesRef.current = { x, y };
 
@@ -132,7 +125,8 @@ export const renderMonthView = (
         height,
         supercategoryColors,
         setHoveredItem,
-        setContextMenu // New parameter for context menu state
+        setContextMenu, // New parameter for context menu state
+        handleBarClick // Pass the handleBarClick function
     );
     renderAxes(chart, x, y, height);
 };

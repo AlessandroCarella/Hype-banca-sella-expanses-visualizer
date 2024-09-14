@@ -27,7 +27,14 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
 
     const handleInteraction = useCallback((event) => {
         const { clientX, clientY } = event.touches ? event.touches[0] : event;
-        setTooltipPosition({ x: clientX, y: clientY });
+        const tooltipWidth = 300; // Adjust based on your tooltip width
+        const tooltipHeight = 200; // Adjust based on your tooltip height
+    
+        // Calculate new positions to keep the tooltip within the viewport
+        const x = Math.min(clientX + 10, window.innerWidth - tooltipWidth);
+        const y = Math.min(clientY + 10, window.innerHeight - tooltipHeight);
+    
+        setTooltipPosition({ x, y });
     }, []);
 
     useEffect(() => {
@@ -166,7 +173,7 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
                 >
                     <p><strong>Category:</strong> {hoveredItem.category}</p>
                     <p><strong>Supercategory:</strong> {hoveredItem.supercategory}</p>
-                    <p><strong>Amount:</strong> €{hoveredItem.amount.toFixed(2)}</p>
+                    <p><strong>Category amount:</strong> €{hoveredItem.amount.toFixed(2)}</p>
                 </div>
             )}
         </div>

@@ -15,7 +15,8 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView, includeRisparmi }
     const [hoveredItem, setHoveredItem] = useState(null);
     const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
     const [isTouchDevice, setIsTouchDevice] = useState(false);
-    
+    const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0, item: null });
+
     useEffect(() => {
         const fetchColors = async () => {
             const colors = await loadSupercategoryColors();
@@ -107,7 +108,7 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView, includeRisparmi }
         if (isMonthView) {
             // Ensure data is in the correct format for month view
             const monthData = Array.isArray(data) ? data : [data];
-            renderMonthView(chart, monthData, width, height, scalesRef, supercategoryColors, setHoveredItem, setTooltipPosition);
+            renderMonthView(chart, monthData, width, height, scalesRef, supercategoryColors, setHoveredItem, setContextMenu); // Pass setContextMenu
         } else {
             // Ensure data is in the correct format for year view
             const yearData = Array.isArray(data) ? { [year]: data } : data;
@@ -137,6 +138,17 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView, includeRisparmi }
     const handleMouseMove = (event) => {
         setTooltipPosition({ x: event.clientX, y: event.clientY });
     };
+
+    useEffect(() => {
+        const handleClickOutside = () => {
+            setContextMenu({ ...contextMenu, visible: false });
+        };
+
+        document.addEventListener("click", handleClickOutside);
+        return () => {
+            document.removeEventListener("click", handleClickOutside);
+        };
+    }, [contextMenu]);
 
     return (
         <div 
@@ -170,6 +182,14 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView, includeRisparmi }
                     <p><strong>Category:</strong> {hoveredItem.category}</p>
                     <p><strong>Supercategory:</strong> {hoveredItem.supercategory}</p>
                     <p><strong>Category amount:</strong> €{hoveredItem.amount.toFixed(2)}</p>
+                </div>
+            )}
+            {contextMenu.visible && (
+                <div 
+                className="context-menu" 
+                style={{ position: 'absolute', left: contextMenu.x, top: contextMenu.y }}
+                >
+                    <p>ciao</p>
                 </div>
             )}
         </div>

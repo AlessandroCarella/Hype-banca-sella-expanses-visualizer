@@ -23,7 +23,8 @@ const renderBars = (
     y,
     height,
     supercategoryColors,
-    setHoveredItem
+    setHoveredItem,
+    setContextMenu // New parameter for context menu state
 ) => {
     const minBarHeight = 10; // Define the minimum bar height
 
@@ -41,6 +42,12 @@ const renderBars = (
                     .attr("height", 0)
                     .on("mouseover", (event, item) => setHoveredItem(item))
                     .on("mouseout", () => setHoveredItem(null))
+                    .on("contextmenu", (event, item) => {
+                        event.preventDefault(); // Prevent default context menu
+                        setHoveredItem(null); // Hide tooltip
+                        console.log(item); // Log the item to the console
+                        setContextMenu({ visible: true, x: event.pageX, y: event.pageY, item });
+                    })
                     .attr("fill", (item) =>
                         calculateBarColor(item, chartData, supercategoryColors)
                     ),
@@ -99,7 +106,8 @@ export const renderMonthView = (
     height,
     scalesRef,
     supercategoryColors,
-    setHoveredItem
+    setHoveredItem,
+    setContextMenu
 ) => {
     // Aggregate data by category and supercategory
     const aggregatedData = data.reduce((acc, curr) => {
@@ -123,7 +131,8 @@ export const renderMonthView = (
         y,
         height,
         supercategoryColors,
-        setHoveredItem
+        setHoveredItem,
+        setContextMenu // New parameter for context menu state
     );
     renderAxes(chart, x, y, height);
 };

@@ -101,7 +101,18 @@ export const renderMonthView = (
     supercategoryColors,
     setHoveredItem
 ) => {
-    const chartData = [...data].sort((a, b) => b.amount - a.amount);
+    // Aggregate data by category and supercategory
+    const aggregatedData = data.reduce((acc, curr) => {
+        const key = `${curr.category}-${curr.supercategory}`;
+        if (!acc[key]) {
+            acc[key] = { ...curr };
+        } else {
+            acc[key].amount += curr.amount; // Sum amounts for the same category and supercategory
+        }
+        return acc;
+    }, {});
+
+    const chartData = Object.values(aggregatedData).sort((a, b) => b.amount - a.amount);
     const { x, y } = createScales(chartData, width, height);
     scalesRef.current = { x, y };
 

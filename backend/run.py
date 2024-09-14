@@ -95,13 +95,15 @@ def get_month_data():
     month = request.args.get('month')
     year = request.args.get('year')
     expenditureOrRevenue = request.args.get('expenditure-or-revenue')
-    return getMonthData(app, month, year, expenditureOrRevenue)
+    includeRisparmi = request.args.get('include-risparmi')
+    return getMonthData(app, month, year, expenditureOrRevenue, includeRisparmi)
 
 @app.route('/api/get-year-data', methods=['GET'])
 def get_year_data():
     year = request.args.get('year')
     expenditureOrRevenue = request.args.get('expenditure-or-revenue')
-    return getYearData(app, year, expenditureOrRevenue)
+    includeRisparmi = request.args.get('include-risparmi')
+    return getYearData(app, year, expenditureOrRevenue, includeRisparmi)
 ########################################################
 
 if __name__ == '__main__':

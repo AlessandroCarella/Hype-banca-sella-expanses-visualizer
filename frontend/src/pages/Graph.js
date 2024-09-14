@@ -10,6 +10,7 @@ const Graph = () => {
     const months = useFetchMonths(selectedYear);
     const [selectedMonth, setSelectedMonth] = useState("");
     const [isMonthView, setIsMonthView] = useState(false);
+    const [includeRisparmi, setIncludeRisparmi] = useState(false); // New state for includeRisparmi
 
     useEffect(() => {
         if (years.length > 0 && !selectedYear) {
@@ -32,6 +33,14 @@ const Graph = () => {
         <div>
             <div style={{ marginBottom: '20px' }}>
                 <ColorModeSwitch />
+                <div className="select-top-left-risparmi">                    <select
+                        value={includeRisparmi ? "true" : "false"}
+                        onChange={(e) => setIncludeRisparmi(e.target.value === "true")}
+                    >
+                        <option value="false">Exclude Risparmi</option>
+                        <option value="true">Include Risparmi</option>
+                    </select>
+                </div>
             </div>
             <DatesCarousel
                 dates={years}
@@ -48,6 +57,7 @@ const Graph = () => {
                 month={selectedMonth}
                 onViewChange={handleDateSelect}
                 isMonthView={isMonthView}
+                includeRisparmi={includeRisparmi} // Pass the state to ExpensePlot
             />
         </div>
     );

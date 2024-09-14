@@ -20,11 +20,11 @@ const fetchData = async (url) => {
     return response.json();
 };
 
-export const getData = async (isMonthView, year, month, dataType, supercategoryColors) => {
+export const getData = async (isMonthView, year, month, dataType, supercategoryColors, includeRisparmi) => {
     try {
         const url = isMonthView
-            ? `/api/get-month-data?month=${month}&year=${year}&expenditure-or-revenue=${dataType}`
-            : `/api/get-year-data?year=${year}&expenditure-or-revenue=${dataType}`;
+            ? `/api/get-month-data?month=${month}&year=${year}&expenditure-or-revenue=${dataType}&include-risparmi=${includeRisparmi}`
+            : `/api/get-year-data?year=${year}&expenditure-or-revenue=${dataType}&include-risparmi=${includeRisparmi}`;
 
         const data = await fetchData(url);
         return addColorToData(data, supercategoryColors, isMonthView);

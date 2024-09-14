@@ -81,7 +81,7 @@ def getUserCategoriesStuff(app):
 
     return outSuperCategories, outCategories, categoriesNamesDict, superCategoriesToCategories, categoriesToSuperCategories, namesToCategories
 
-def getMonthData(app, month, year, expenditureOrRevenue):
+def getMonthData(app, month, year, expenditureOrRevenue, includeRisparmi = False):
     """
     expenditureOrRevenue is to tell if to select the in flows of money or the out flows of money
     output structure:
@@ -93,6 +93,9 @@ def getMonthData(app, month, year, expenditureOrRevenue):
         }
     ]
     """
+    if isinstance(includeRisparmi, str):  # Check if includeRisparmi is a string
+        includeRisparmi = includeRisparmi.lower() == "true"  # Set to True if it equals "true"
+    
     superCategories, categories, categoriesNamesDict, superCategoriesToCategories, categoriesToSuperCategories, categoriesNamesDict = getUserCategoriesStuff(app)
 
     dfPath = path.join(app.config['GENERATED_FILES_OUTPUT_FOLDER'], str(year), f"{monthToNumber(month):02d}.csv")
@@ -100,7 +103,10 @@ def getMonthData(app, month, year, expenditureOrRevenue):
 
     #filter the dataset based on if the "Importo" column is negative or positive
     df = df[df["Importo"] < 0] if expenditureOrRevenue == "Expenditure" else df[df["Importo"] > 0]
-    #create the structure using the df and knowing that you can get the category of a name (in the column "Nome") using the categoriesNamesDict and you can get the supercategory of a category using the categoriesToSuperCategories
+
+    if not includeRisparmi:
+        df = df[df["Tipologia"] != "Risparmi"]
+
     out = []
     for name in df["Nome"].unique():
         category = categoriesNamesDict[name]
@@ -115,7 +121,7 @@ def getMonthData(app, month, year, expenditureOrRevenue):
     # return jsonify(out)
     return out
 
-def getYearData(app, year, expenditureOrRevenue):
+def getYearData(app, year, expenditureOrRevenue, includeRisparmi):
     """    
     expenditureOrRevenue is to tell if to select the in flows of money or the out flows of money
     output structure:
@@ -142,7 +148,7 @@ def getYearData(app, year, expenditureOrRevenue):
     out = {}
     for month in months:
         if path.exists(path.join(app.config['GENERATED_FILES_OUTPUT_FOLDER'], str(year), f"{monthToNumber(month):02d}.csv")):
-            out[month] = getMonthData(app, month, year, expenditureOrRevenue)
+            out[month] = getMonthData(app, month, year, expenditureOrRevenue, includeRisparmi)
         
     return jsonify(out)
 

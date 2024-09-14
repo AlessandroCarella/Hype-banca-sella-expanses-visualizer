@@ -3,7 +3,7 @@ import * as d3 from "d3";
 import { generateShade, renderMonthView, renderYearView, loadSupercategoryColors } from "./helpers/ExpensePlotHelpers";
 import { getData } from "./helpers/getDataExpensePlot";
 
-const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
+const ExpensePlot = ({ year, month, onViewChange, isMonthView, includeRisparmi }) => {
     const svgRef = useRef();
     const containerRef = useRef();
     const [data, setData] = useState(null);
@@ -15,7 +15,7 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
     const [hoveredItem, setHoveredItem] = useState(null);
     const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
     const [isTouchDevice, setIsTouchDevice] = useState(false);
-
+    
     useEffect(() => {
         const fetchColors = async () => {
             const colors = await loadSupercategoryColors();
@@ -54,11 +54,11 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView }) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const processedData = await getData(isMonthView, year, month, dataType, supercategoryColors);
+            const processedData = await getData(isMonthView, year, month, dataType, supercategoryColors, includeRisparmi);
             setData(processedData);
         };
         fetchData();
-    }, [year, month, isMonthView, dataType]);
+    }, [year, month, isMonthView, dataType, includeRisparmi]); // Add includeRisparmi to dependencies
 
     useEffect(() => {
         const resizeObserver = new ResizeObserver(entries => {

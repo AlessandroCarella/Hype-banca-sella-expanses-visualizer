@@ -1,34 +1,49 @@
 import * as d3 from "d3";
-import { generateShade } from './ExpensePlotHelpers';
+import { generateShade } from "./ExpensePlotHelpers";
 
 const createScales = (chartData, width, height) => {
-    const x = d3.scaleBand()
+    const x = d3
+        .scaleBand()
         .range([0, width])
         .domain(chartData.map((d) => d.category))
         .padding(0.1);
 
-    const y = d3.scaleLinear()
+    const y = d3
+        .scaleLinear()
         .range([height, 0])
         .domain([0, d3.max(chartData, (d) => d.amount)]);
 
     return { x, y };
 };
 
-const renderBars = (chart, chartData, x, y, height, supercategoryColors, setHoveredItem) => {
+const renderBars = (
+    chart,
+    chartData,
+    x,
+    y,
+    height,
+    supercategoryColors,
+    setHoveredItem
+) => {
     const minBarHeight = 10; // Define the minimum bar height
 
-    chart.selectAll(".bar")
+    chart
+        .selectAll(".bar")
         .data(chartData)
         .join(
-            (enter) => enter.append("rect")
-                .attr("class", "bar")
-                .attr("x", (d) => x(d.category))
-                .attr("width", x.bandwidth())
-                .attr("y", height)
-                .attr("height", 0)
-                .on("mouseover", (event, item) => setHoveredItem(item))
-                .on("mouseout", () => setHoveredItem(null))
-                .attr("fill", (item) => calculateBarColor(item, chartData, supercategoryColors)),
+            (enter) =>
+                enter
+                    .append("rect")
+                    .attr("class", "bar")
+                    .attr("x", (d) => x(d.category))
+                    .attr("width", x.bandwidth())
+                    .attr("y", height)
+                    .attr("height", 0)
+                    .on("mouseover", (event, item) => setHoveredItem(item))
+                    .on("mouseout", () => setHoveredItem(null))
+                    .attr("fill", (item) =>
+                        calculateBarColor(item, chartData, supercategoryColors)
+                    ),
             (update) => update,
             (exit) => exit.remove()
         )
@@ -36,14 +51,21 @@ const renderBars = (chart, chartData, x, y, height, supercategoryColors, setHove
         .duration(1000)
         .attr("y", (d) => {
             const barHeight = height - y(d.amount);
+            if (isNaN(barHeight)) {
+                //console.error("Invalid bar height for amount:", d.amount);
+                return height; // Fallback to default position
+            }
             return barHeight < minBarHeight ? height - minBarHeight : y(d.amount);
         })
         .attr("height", (d) => {
             const barHeight = height - y(d.amount);
+            if (isNaN(barHeight)) {
+                //console.error("Invalid bar height for amount:", d.amount);
+                return minBarHeight; // Fallback to minimum height
+            }
             return barHeight < minBarHeight ? minBarHeight : barHeight;
         });
 };
-
 
 const calculateBarColor = (item, chartData, supercategoryColors) => {
     const supercategoryColor = supercategoryColors[item.supercategory];
@@ -53,15 +75,12 @@ const calculateBarColor = (item, chartData, supercategoryColors) => {
     const index = supercategoryItems.findIndex(
         (d) => d.category === item.category
     );
-    return generateShade(
-        supercategoryColor,
-        index,
-        supercategoryItems.length
-    );
+    return generateShade(supercategoryColor, index, supercategoryItems.length);
 };
 
 const renderAxes = (chart, x, y, height) => {
-    chart.append("g")
+    chart
+        .append("g")
         .attr("transform", `translate(0,${height})`)
         .call(d3.axisBottom(x))
         .selectAll("text")
@@ -86,6 +105,14 @@ export const renderMonthView = (
     const { x, y } = createScales(chartData, width, height);
     scalesRef.current = { x, y };
 
-    renderBars(chart, chartData, x, y, height, supercategoryColors, setHoveredItem);
+    renderBars(
+        chart,
+        chartData,
+        x,
+        y,
+        height,
+        supercategoryColors,
+        setHoveredItem
+    );
     renderAxes(chart, x, y, height);
 };

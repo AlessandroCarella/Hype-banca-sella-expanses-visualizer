@@ -169,7 +169,8 @@ def getExpansesListForMonthYearAndCategory(app, month, year, category, expenditu
                 "descrizione":row["Descrizione"],
                 "importo":row["Importo"],
                 "nome":row["Nome"],
+                "tipologia":row["Tipologia"],
                 "dataOperazione":row["Data operazione"]
             })
-            
+
     return jsonify(out)

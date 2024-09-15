@@ -62,8 +62,8 @@ const ExpensePlot = ({
         // Formula to approximate the desired aspect ratio
         const minAspectRatio = 0.45;
         const maxAspectRatio = 0.55;
-        const minWidth = 800;
-        const maxWidth = 2000;
+        const minWidth = 700;
+        const maxWidth = 1700;
 
         if (width <= minWidth) return maxAspectRatio;
         if (width >= maxWidth) return minAspectRatio;
@@ -290,8 +290,7 @@ const ExpensePlot = ({
                     <ul>
                         {expandedExpenses.map((exp, idx) => (
                             <li key={idx}>
-                                {exp.descrizione}: €{exp.importo} - {exp.nome} (
-                                {exp.tipologia}) on {exp.dataOperazione}
+                                {exp.nome}: €{(Math.abs(parseFloat(exp.importo))).toString()} - Descrizione: {exp.descrizione} (nella tipologia {exp.tipologia}), effettuata il giorno {exp.dataOperazione}
                             </li>
                         ))}
                     </ul>

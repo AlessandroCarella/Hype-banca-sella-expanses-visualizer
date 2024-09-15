@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react"; // Import memo
 import DatesCarousel from "../components/DatesCarousel";
 import ExpensePlot from "../components/ExpensePlot";
 import { useFetchYears, useFetchMonths } from "./helpers/GraphHelpers";
 import { ColorModeSwitch } from "../components/colorModeSwitch";
 
-const Graph = () => {
+const Graph = memo(() => { // Wrap component with memo
     const [years, setYears] = useFetchYears();
     const [selectedYear, setSelectedYear] = useState("");
     const months = useFetchMonths(selectedYear);
@@ -61,6 +61,6 @@ const Graph = () => {
             />
         </div>
     );
-};
+});
 
 export default Graph;

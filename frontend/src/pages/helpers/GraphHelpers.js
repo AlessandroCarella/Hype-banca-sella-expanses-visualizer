@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react"; // Import useCallback
 import axios from "axios";
 
 export const useFetchYears = () => {
@@ -23,21 +23,22 @@ export const useFetchYears = () => {
 export const useFetchMonths = (year) => {
     const [months, setMonths] = useState([]);
 
-    useEffect(() => {
-        const fetchMonths = async () => {
-            try {
-                const response = await axios.get("/api/get-months", { params: { year } });
-                setMonths(response.data);
-            } catch (error) {
-                console.error("Error fetching months:", error);
-                setMonths([]);
-            }
-        };
+    const fetchMonths = useCallback(async () => {
+        try {
+            const response = await axios.get("/api/get-months", { params: { year } });
+            setMonths(response.data);
+        } catch (error) {
+            console.error("Error fetching months:", error);
+            // Consider handling error differently, e.g., retain previous months
+            // setMonths([]); // This might clear previous months
+        }
+    }, [year]);
 
+    useEffect(() => {
         if (year) {
             fetchMonths();
         }
-    }, [year]);
+    }, [year, fetchMonths]);
 
     return months;
 };

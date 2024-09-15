@@ -16,7 +16,7 @@ from routes.getElementsSettingPage import get_user_expense_dictionary, get_expan
 from routes.loadingPage import get_loading_gif
 
 # Graphs page
-from routes.graphs import get_years, get_months, getSupercategoryColors, getMonthData, getYearData
+from routes.graphs import get_years, get_months, getSupercategoryColors, getMonthData, getYearData, getExpansesListForMonthYearAndCategory
 
 ########################################################
 app = Flask(__name__)
@@ -104,6 +104,15 @@ def get_year_data():
     expenditureOrRevenue = request.args.get('expenditure-or-revenue')
     includeRisparmi = request.args.get('include-risparmi')
     return getYearData(app, year, expenditureOrRevenue, includeRisparmi)
+
+@app.route('/api/getExpansesListForMonthYearAndCategory', methods=['GET'])
+def get_expanses_list_for_month_year_and_category():
+    month = request.args.get('month')
+    year = request.args.get('year')
+    category = request.args.get('category')
+    expenditureOrRevenue = request.args.get('expenditure-or-revenue')
+    includeRisparmi = request.args.get('include-risparmi')
+    return getExpansesListForMonthYearAndCategory(app, month, year, category, expenditureOrRevenue, includeRisparmi)
 ########################################################
 
 if __name__ == '__main__':

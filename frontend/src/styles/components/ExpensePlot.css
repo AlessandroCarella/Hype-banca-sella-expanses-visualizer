@@ -87,6 +87,15 @@ rect:hover {
     /* transition: background-color 0.3s, color 0.3s; */
 }
 
+.selected-expenses-print {
+    margin-top: 20px;
+    z-index: 5;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 /* Dark mode */
 .dark-mode .select-type-money select {
     background-color: #212121;
@@ -113,6 +122,12 @@ rect:hover {
     background-color: #212121;
     color: #ffffff;
     border: 1px solid #284bff;
+}
+
+.dark-mode .selected-expenses-print {
+    background-color: #2a2a2a; /* Dark background */
+    color: #ffffff; /* Text color */
+    border: 1px solid #444444; /* Dark border */
 }
 
 /* Light mode */
@@ -143,3 +158,8 @@ rect:hover {
     border: 1px solid #284bff;
 }
 
+.light-mode .selected-expenses-print {
+    background-color: #ffffff; /* Light background */
+    color: #000000; /* Text color */
+    border: 1px solid #cccccc; /* Light border */
+}

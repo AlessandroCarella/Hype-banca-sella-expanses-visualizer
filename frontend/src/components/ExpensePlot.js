@@ -1,9 +1,20 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import * as d3 from "d3";
-import { generateShade, renderMonthView, renderYearView, loadSupercategoryColors } from "./helpers/ExpensePlotHelpers";
+import {
+    generateShade,
+    renderMonthView,
+    renderYearView,
+    loadSupercategoryColors,
+} from "./helpers/ExpensePlotHelpers";
 import { getData } from "./helpers/getDataExpensePlot";
 
-const ExpensePlot = ({ year, month, onViewChange, isMonthView, includeRisparmi }) => {
+const ExpensePlot = ({
+    year,
+    month,
+    onViewChange,
+    isMonthView,
+    includeRisparmi,
+}) => {
     const svgRef = useRef();
     const containerRef = useRef();
     const [data, setData] = useState(null);
@@ -15,8 +26,14 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView, includeRisparmi }
     const [hoveredItem, setHoveredItem] = useState(null);
     const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
     const [isTouchDevice, setIsTouchDevice] = useState(false);
-    const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0, item: null });
+    const [contextMenu, setContextMenu] = useState({
+        visible: false,
+        x: 0,
+        y: 0,
+        item: null,
+    });
     const [selectedExpenses, setSelectedExpenses] = useState([]); // New state for selected expenses
+    const [expandedExpenses, setExpandedExpenses] = useState([]); // New state for expanded expenses
 
     useEffect(() => {
         const fetchColors = async () => {
@@ -24,18 +41,20 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView, includeRisparmi }
             setSupercategoryColors(colors);
         };
         fetchColors();
-        setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
+        setIsTouchDevice(
+            "ontouchstart" in window || navigator.maxTouchPoints > 0
+        );
     }, []);
 
     const handleInteraction = useCallback((event) => {
         const { clientX, clientY } = event.touches ? event.touches[0] : event;
         const tooltipWidth = 300; // Adjust based on your tooltip width
         const tooltipHeight = 200; // Adjust based on your tooltip height
-    
+
         // Calculate new positions to keep the tooltip within the viewport
         const x = Math.min(clientX + 10, window.innerWidth - tooltipWidth);
         const y = Math.min(clientY + 10, window.innerHeight - tooltipHeight);
-    
+
         setTooltipPosition({ x, y });
     }, []);
 
@@ -45,10 +64,10 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView, includeRisparmi }
         const maxAspectRatio = 0.55;
         const minWidth = 800;
         const maxWidth = 2000;
-        
+
         if (width <= minWidth) return maxAspectRatio;
         if (width >= maxWidth) return minAspectRatio;
-        
+
         // Linear interpolation between min and max aspect ratios
         const ratio = (width - minWidth) / (maxWidth - minWidth);
         return maxAspectRatio - ratio * (maxAspectRatio - minAspectRatio);
@@ -56,14 +75,21 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView, includeRisparmi }
 
     useEffect(() => {
         const fetchData = async () => {
-            const processedData = await getData(isMonthView, year, month, dataType, supercategoryColors, includeRisparmi);
+            const processedData = await getData(
+                isMonthView,
+                year,
+                month,
+                dataType,
+                supercategoryColors,
+                includeRisparmi
+            );
             setData(processedData);
         };
         fetchData();
     }, [year, month, isMonthView, dataType, includeRisparmi]); // Add includeRisparmi to dependencies
 
     useEffect(() => {
-        const resizeObserver = new ResizeObserver(entries => {
+        const resizeObserver = new ResizeObserver((entries) => {
             if (!entries || !entries.length) return;
             const { width } = entries[0].contentRect;
             const adjustedWidth = Math.max(width, minWidth);
@@ -93,7 +119,7 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView, includeRisparmi }
             top: 20,
             right: 30,
             bottom: isMonthView ? 80 : 40, // Increase bottom margin for month view
-            left: 60 // Slightly increase left margin for y-axis labels
+            left: 60, // Slightly increase left margin for y-axis labels
         };
         const width = dimensions.width - margin.left - margin.right;
         const height = dimensions.height - margin.top - margin.bottom;
@@ -109,11 +135,31 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView, includeRisparmi }
         if (isMonthView) {
             // Ensure data is in the correct format for month view
             const monthData = Array.isArray(data) ? data : [data];
-            renderMonthView(chart, monthData, width, height, scalesRef, supercategoryColors, setHoveredItem, setContextMenu, handleBarClick); // Pass handleBarClick
+            renderMonthView(
+                chart,
+                monthData,
+                width,
+                height,
+                scalesRef,
+                supercategoryColors,
+                setHoveredItem,
+                setContextMenu,
+                handleBarClick
+            );
         } else {
             // Ensure data is in the correct format for year view
             const yearData = Array.isArray(data) ? { [year]: data } : data;
-            renderYearView(chart, yearData, width, height, scalesRef, onViewChange, supercategoryColors, setHoveredItem, setTooltipPosition);
+            renderYearView(
+                chart,
+                yearData,
+                width,
+                height,
+                scalesRef,
+                onViewChange,
+                supercategoryColors,
+                setHoveredItem,
+                setTooltipPosition
+            );
         }
 
         const interactionHandler = (event) => {
@@ -123,18 +169,27 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView, includeRisparmi }
         };
 
         if (isTouchDevice) {
-            svg.on('touchstart', interactionHandler);
-            svg.on('touchmove', interactionHandler);
+            svg.on("touchstart", interactionHandler);
+            svg.on("touchmove", interactionHandler);
         } else {
-            svg.on('mousemove', interactionHandler);
+            svg.on("mousemove", interactionHandler);
         }
 
         return () => {
-            svg.on('touchstart', null);
-            svg.on('touchmove', null);
-            svg.on('mousemove', null);
+            svg.on("touchstart", null);
+            svg.on("touchmove", null);
+            svg.on("mousemove", null);
         };
-    }, [data, isMonthView, year, month, onViewChange, dimensions, isTouchDevice, handleInteraction]);
+    }, [
+        data,
+        isMonthView,
+        year,
+        month,
+        onViewChange,
+        dimensions,
+        isTouchDevice,
+        handleInteraction,
+    ]);
 
     const handleMouseMove = (event) => {
         setTooltipPosition({ x: event.clientX, y: event.clientY });
@@ -151,62 +206,97 @@ const ExpensePlot = ({ year, month, onViewChange, isMonthView, includeRisparmi }
         };
     }, [contextMenu]);
 
+    const fetchExpandedExpenses = async (category) => {
+        const response = await fetch(
+            `/api/getExpansesListForMonthYearAndCategory?year=${year}&month=${month}&category=${category}&expenditure-or-revenue=${dataType}&include-risparmi=${includeRisparmi}`
+        );
+        const data = await response.json();
+        setExpandedExpenses(data);
+    };
+
     const handleBarClick = (expenses) => {
         setSelectedExpenses(expenses); // Set the selected expenses when a bar is clicked
+        if (expenses.length > 0) {
+            fetchExpandedExpenses(expenses[0].category); // Fetch expenses for the first selected category
+        }
     };
 
     return (
-        <div 
-            className="bar-plot-container-div" 
-            style={{ position: 'relative' }}
-            onMouseMove={!isTouchDevice ? handleInteraction : undefined}
-            onTouchStart={isTouchDevice ? handleInteraction : undefined}
-            onTouchMove={isTouchDevice ? handleInteraction : undefined}
-        >
-            <div ref={containerRef} style={{ width: '100%', minWidth: `${minWidth}px` }}>
-                <svg ref={svgRef} width={dimensions.width} height={dimensions.height}></svg>
-            </div>
-            <div className="select-type-money">
-                <select
-                    value={dataType}
-                    onChange={(e) => setDataType(e.target.value)}
+        <div>
+            <div
+                className="bar-plot-container-div"
+                style={{ position: "relative" }}
+                onMouseMove={!isTouchDevice ? handleInteraction : undefined}
+                onTouchStart={isTouchDevice ? handleInteraction : undefined}
+                onTouchMove={isTouchDevice ? handleInteraction : undefined}
+            >
+                <div
+                    ref={containerRef}
+                    style={{ width: "100%", minWidth: `${minWidth}px` }}
                 >
-                    <option value="Expenditure">Expenditure</option>
-                    <option value="Revenue">Revenue</option>
-                </select>
-            </div>
-            {hoveredItem && (
-                <div 
-                    className="tooltip-bar-plot" 
-                    style={{ 
-                        left: `${tooltipPosition.x + 10}px`, 
-                        top: `${tooltipPosition.y + 10}px`, 
-                        display: hoveredItem ? 'block' : 'none'
-                    }}
-                >
-                    <p><strong>Category:</strong> {hoveredItem.category}</p>
-                    <p><strong>Supercategory:</strong> {hoveredItem.supercategory}</p>
-                    <p><strong>Category amount:</strong> €{hoveredItem.amount.toFixed(2)}</p>
+                    <svg
+                        ref={svgRef}
+                        width={dimensions.width}
+                        height={dimensions.height}
+                    ></svg>
                 </div>
-            )}
-            {contextMenu.visible && (
-                <div 
-                className="context-menu" 
-                style={{ position: 'absolute', left: contextMenu.x, top: contextMenu.y }}
-                >
-                    <p>ciao</p>
+                <div className="select-type-money">
+                    <select
+                        value={dataType}
+                        onChange={(e) => setDataType(e.target.value)}
+                    >
+                        <option value="Expenditure">Expenditure</option>
+                        <option value="Revenue">Revenue</option>
+                    </select>
                 </div>
-            )}
-            {/* {selectedExpenses.length > 0 && (
+                {hoveredItem && (
+                    <div
+                        className="tooltip-bar-plot"
+                        style={{
+                            left: `${tooltipPosition.x + 10}px`,
+                            top: `${tooltipPosition.y + 10}px`,
+                            display: hoveredItem ? "block" : "none",
+                        }}
+                    >
+                        <p>
+                            <strong>Category:</strong> {hoveredItem.category}
+                        </p>
+                        <p>
+                            <strong>Supercategory:</strong>{" "}
+                            {hoveredItem.supercategory}
+                        </p>
+                        <p>
+                            <strong>Category amount:</strong> €
+                            {hoveredItem.amount.toFixed(2)}
+                        </p>
+                    </div>
+                )}
+                {contextMenu.visible && (
+                    <div
+                        className="context-menu"
+                        style={{
+                            position: "absolute",
+                            left: contextMenu.x,
+                            top: contextMenu.y,
+                        }}
+                    >
+                        <p>ciao</p>
+                    </div>
+                )}
+            </div>
+            {isMonthView && (
                 <div className="selected-expenses-print">
-                    <h4>The selected bar is composed of:</h4>
+                    <h4>Expanses in the select bar:</h4>
                     <ul>
-                        {selectedExpenses.map((expense, index) => (
-                            <li key={index}>{expense.description}: €{expense.amount.toFixed(2)}</li>
+                        {expandedExpenses.map((exp, idx) => (
+                            <li key={idx}>
+                                {exp.descrizione}: €{exp.importo} - {exp.nome} (
+                                {exp.tipologia}) on {exp.dataOperazione}
+                            </li>
                         ))}
                     </ul>
                 </div>
-            )} */}
+            )}
         </div>
     );
 };

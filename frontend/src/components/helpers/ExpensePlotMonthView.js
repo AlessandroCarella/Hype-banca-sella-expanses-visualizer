@@ -25,7 +25,8 @@ const renderBars = (
     supercategoryColors,
     setHoveredItem,
     setContextMenu,
-    handleBarClick 
+    handleBarClick,
+    setExpandedExpenses
 ) => {
     const minBarHeight = 10; // Define the minimum bar height
 
@@ -46,12 +47,11 @@ const renderBars = (
                     .on("contextmenu", (event, item) => {
                         event.preventDefault(); // Prevent default context menu
                         setHoveredItem(null); // Hide tooltip
-                        console.log(item); // Log the item to the console
                         setContextMenu({ visible: true, x: event.pageX, y: event.pageY, item });
                     })
                     .on("click", (event, item) => {
                         const expenses = chartData.filter(d => d.category === item.category); // Get expenses for the clicked category
-                        handleBarClick(expenses); // Call the handleBarClick function with the expenses
+                        handleBarClick(expenses, item.category); // Pass category to handleBarClick
                     })
                     .attr("fill", (item) =>
                         calculateBarColor(item, chartData, supercategoryColors)
@@ -111,7 +111,8 @@ export const renderMonthView = (
     supercategoryColors,
     setHoveredItem,
     setContextMenu,
-    handleBarClick 
+    handleBarClick,
+    setExpandedExpenses
 ) => {
     const chartData = [...data].sort((a, b) => b.amount - a.amount);
     const { x, y } = createScales(chartData, width, height);
@@ -125,8 +126,9 @@ export const renderMonthView = (
         height,
         supercategoryColors,
         setHoveredItem,
-        setContextMenu, // New parameter for context menu state
-        handleBarClick // Pass the handleBarClick function
+        setContextMenu,
+        handleBarClick,
+        setExpandedExpenses // Pass the setExpandedExpenses function
     );
     renderAxes(chart, x, y, height);
 };

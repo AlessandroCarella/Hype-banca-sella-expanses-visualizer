@@ -36,7 +36,6 @@ def clean_csv(df: pd.DataFrame, filePathsToSaveAt: List[str]) -> pd.DataFrame:
 
     # Save the cleaned DataFrame to the specified output paths
     for filePath in filePathsToSaveAt:
-        print ("saved at", filePath)
         df.to_csv(filePath, index=False)
     
     return df

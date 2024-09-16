@@ -162,7 +162,6 @@ def getExpansesListForMonthYearAndCategory(app, month, year, category, expenditu
 
     out = []
     for index, row in df.iterrows():
-        print ("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", row)
         rowCategory = namesToCategories[row["Nome"]]
         if rowCategory == category:
             out.append({

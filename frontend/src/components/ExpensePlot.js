@@ -311,6 +311,7 @@ const ExpensePlot = ({
                 >
                     <div
                         className="selected-expenses-print"
+                        style={{ width: `${dimensions.width *80/100}px` }} // Match width to bar plot container
                     >
                         <h4>Expanses in the select bar:</h4>
                         <ul>

@@ -94,6 +94,16 @@ rect:hover {
     border-radius: 5px;
     padding: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    position: relative;
+    max-width: 1500px;
+    width: 55%;
+    text-align: center; /* Center the text */
+}
+
+.selected-expenses-print ul {
+    list-style-position: inside; /* Move the bullet points inside */
+    padding: 0; /* Remove default padding */
 }
 
 /* Dark mode */

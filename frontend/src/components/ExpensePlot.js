@@ -21,6 +21,8 @@ const ExpensePlot = ({
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
     const scalesRef = useRef({ x: null, y: null });
     const minWidth = 600; // Set your desired minimum width here
+    const maxWidth = 1500;
+    const maxHeight = 700;
     const [dataType, setDataType] = useState("Expenditure"); // New state for data type
     const [supercategoryColors, setSupercategoryColors] = useState({});
     const [hoveredItem, setHoveredItem] = useState(null);
@@ -91,11 +93,13 @@ const ExpensePlot = ({
     useEffect(() => {
         const resizeObserver = new ResizeObserver((entries) => {
             if (!entries || !entries.length) return;
-            const { width } = entries[0].contentRect;
-            const adjustedWidth = Math.max(width, minWidth);
-            const aspectRatio = getAspectRatio(adjustedWidth);
-            const height = adjustedWidth * aspectRatio;
-            setDimensions({ width: adjustedWidth, height });
+            let { width } = entries[0].contentRect;
+            width = Math.max(width, minWidth);
+            width = Math.min(width, maxWidth);
+            const aspectRatio = getAspectRatio(width);
+            let height = width * aspectRatio;
+            height = Math.min(height, maxHeight);
+            setDimensions({ width: width, height });
         });
 
         if (containerRef.current) {
@@ -224,76 +228,107 @@ const ExpensePlot = ({
     return (
         <div>
             <div
-                className="bar-plot-container-div"
-                style={{ position: "relative" }}
-                onMouseMove={!isTouchDevice ? handleInteraction : undefined}
-                onTouchStart={isTouchDevice ? handleInteraction : undefined}
-                onTouchMove={isTouchDevice ? handleInteraction : undefined}
+                style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    width: "100%",
+                }}
             >
                 <div
-                    ref={containerRef}
-                    style={{ width: "100%", minWidth: `${minWidth}px` }}
+                    className="bar-plot-container-div"
+                    style={{
+                        position: "relative",
+                        maxWidth: `${maxWidth}px`,
+                        width: "100%",
+                    }}
+                    onMouseMove={!isTouchDevice ? handleInteraction : undefined}
+                    onTouchStart={isTouchDevice ? handleInteraction : undefined}
+                    onTouchMove={isTouchDevice ? handleInteraction : undefined}
                 >
-                    <svg
-                        ref={svgRef}
-                        width={dimensions.width}
-                        height={dimensions.height}
-                    ></svg>
-                </div>
-                <div className="select-type-money">
-                    <select
-                        value={dataType}
-                        onChange={(e) => setDataType(e.target.value)}
-                    >
-                        <option value="Expenditure">Expenditure</option>
-                        <option value="Revenue">Revenue</option>
-                    </select>
-                </div>
-                {hoveredItem && (
                     <div
-                        className="tooltip-bar-plot"
-                        style={{
-                            left: `${tooltipPosition.x + 10}px`,
-                            top: `${tooltipPosition.y + 10}px`,
-                            display: hoveredItem ? "block" : "none",
-                        }}
+                        ref={containerRef}
+                        style={{ width: "100%", minWidth: `${minWidth}px` }}
                     >
-                        <p>
-                            <strong>Category:</strong> {hoveredItem.category}
-                        </p>
-                        <p>
-                            <strong>Supercategory:</strong>{" "}
-                            {hoveredItem.supercategory}
-                        </p>
-                        <p>
-                            <strong>Category amount:</strong> €
-                            {hoveredItem.amount.toFixed(2)}
-                        </p>
+                        <svg
+                            ref={svgRef}
+                            width={dimensions.width}
+                            height={dimensions.height}
+                        ></svg>
                     </div>
-                )}
-                {contextMenu.visible && (
-                    <div
-                        className="context-menu"
-                        style={{
-                            position: "absolute",
-                            left: contextMenu.x,
-                            top: contextMenu.y,
-                        }}
-                    >
-                        <p>ciao</p>
+                    <div className="select-type-money">
+                        <select
+                            value={dataType}
+                            onChange={(e) => setDataType(e.target.value)}
+                        >
+                            <option value="Expenditure">Expenditure</option>
+                            <option value="Revenue">Revenue</option>
+                        </select>
                     </div>
-                )}
+                    {hoveredItem && (
+                        <div
+                            className="tooltip-bar-plot"
+                            style={{
+                                left: `${tooltipPosition.x + 10}px`,
+                                top: `${tooltipPosition.y + 10}px`,
+                                display: hoveredItem ? "block" : "none",
+                            }}
+                        >
+                            <p>
+                                <strong>Category:</strong>{" "}
+                                {hoveredItem.category}
+                            </p>
+                            <p>
+                                <strong>Supercategory:</strong>{" "}
+                                {hoveredItem.supercategory}
+                            </p>
+                            <p>
+                                <strong>Category amount:</strong> €
+                                {hoveredItem.amount.toFixed(2)}
+                            </p>
+                        </div>
+                    )}
+                    {contextMenu.visible && (
+                        <div
+                            className="context-menu"
+                            style={{
+                                position: "absolute",
+                                left: contextMenu.x,
+                                top: contextMenu.y,
+                            }}
+                        >
+                            <p>ciao</p>
+                        </div>
+                    )}
+                </div>
             </div>
             {isMonthView && (
-                <div className="selected-expenses-print">
-                    <h4>Expanses in the select bar:</h4>
-                    <ul>
-                        {expandedExpenses.map((exp, idx) => (
-                            <li key={idx}>
-                                {exp.nome}: €{(Math.abs(parseFloat(exp.importo))).toString()} - Descrizione: {exp.descrizione} (nella tipologia {exp.tipologia}), effettuata il giorno {exp.dataOperazione}
-                            </li>
-                        ))}
-                    </ul>
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        width: "100%",
+                    }}
+                >
+                    <div
+                        className="selected-expenses-print"
+                    >
+                        <h4>Expanses in the select bar:</h4>
+                        <ul>
+                            {expandedExpenses.map((exp, idx) => (
+                                <li key={idx}>
+                                    {exp.nome}: €
+                                    {Math.abs(
+                                        parseFloat(exp.importo)
+                                    ).toString()}{" "}
+                                    - Descrizione: {exp.descrizione}{" "}
+                                    {exp.tipologia !== "Pagamento" && (
+                                        <> ({exp.tipologia}), </>
+                                    )}
+                                    effettuata il giorno {exp.dataOperazione}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
                 </div>
             )}
         </div>
